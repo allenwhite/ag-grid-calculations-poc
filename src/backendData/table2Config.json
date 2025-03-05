@@ -1,0 +1,36 @@
+{
+  "id": "t2",
+  "description": "Calculation Methodology 1, Table 2",
+  "columnDefinitions": [
+    {
+      "headerName": "A",
+      "field": "a",
+      "editable": false
+    },
+    {
+      "headerName": "B",
+      "field": "b",
+      "editable": false,
+      "calculations": {
+        "excel": "=IF(t1.a=\"\",\"\",t1.a)",
+        "if": {
+          "check": "any",
+          "conditions": [
+            { "field": "t1.a", "equals": null },
+            { "field": "t1.a", "equals": "" }
+          ],
+          "then": "",
+          "else": "t1.a"
+        }
+      }
+    },
+    {
+      "headerName": "c",
+      "field": "c",
+      "editable": false,
+      "calculations": {
+        "excel": "t1.a"
+      }
+    }
+  ]
+}
