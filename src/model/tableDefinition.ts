@@ -176,6 +176,7 @@ function doCalculation(
     condition: IfCondition,
     rowData: RowData[]
   ): CalculationResult {
+    console.log(11, condition);
     const conditionsMet = evaluateConditions(
       condition.conditions,
       condition.check
@@ -183,14 +184,14 @@ function doCalculation(
 
     if (conditionsMet) {
       // Recursively evaluate if the 'then' part is another condition
-      if (instanceOfIfCondition(condition.then)) {
-        return evaluateIfCondition(params, condition.then, rowData);
+      if (instanceOfIfCondition(condition.then.if)) {
+        return evaluateIfCondition(params, condition.then.if, rowData);
       }
-      return condition.then;
+      return condition.then.toString();
     } else {
       // Recursively evaluate if the 'else' part is another condition
-      if (instanceOfIfCondition(condition.else)) {
-        return evaluateIfCondition(params, condition.else, rowData);
+      if (instanceOfIfCondition(condition.else.if)) {
+        return evaluateIfCondition(params, condition.else.if, rowData);
       }
       return condition.else;
     }
@@ -198,24 +199,25 @@ function doCalculation(
 
   // Evaluate the 'if' condition
   if (calc.if) {
-    return evaluateIfCondition(params, calc.if, rowData);
+    let test = evaluateIfCondition(params, calc.if, rowData);
+    return JSON.stringify(test);
   }
 
   // Default return if no conditions are met
   // return "Unsupported calculation";
 
   // Handle the 'averageIf' condition
-  if (calc.averageIf) {
-    const { range, criteria, averageRange } = calc.averageIf;
-    const criteriaValue = params.data[criteria];
-    const valuesToAverage = rowData
-      .filter((row) => row[range] === criteriaValue)
-      .map((row) => row[averageRange]);
+  // if (calc.averageIf) {
+  //   const { range, criteria, averageRange } = calc.averageIf;
+  //   const criteriaValue = params.data[criteria];
+  //   const valuesToAverage = rowData
+  //     .filter((row) => row[range] === criteriaValue)
+  //     .map((row) => row[averageRange]);
 
-    const sum = valuesToAverage.reduce((acc, val) => acc + val, 0);
-    console.log(3, calc, rowData, params);
-    return valuesToAverage.length ? sum / valuesToAverage.length : 0;
-  }
+  //   const sum = valuesToAverage.reduce((acc, val) => acc + val, 0);
+  //   console.log(3, calc, rowData, params);
+  //   return valuesToAverage.length ? sum / valuesToAverage.length : 0;
+  // }
 
   return "hm";
 }

@@ -65,14 +65,12 @@ const SimpleTable: React.FC = () => {
         : { backgroundColor: "lightgray" };
     },
   };
-
-  // i think we could autogenerate this to be the correct size
-  const rowData = [
+  const [rowData, setRowData] = useState<any[]>([
     { a: "", b: "", c: 22, d: 44 },
     { a: "", b: "", c: 33, d: 44 },
     { a: "", b: "", c: 11, d: 44 },
-  ];
-
+  ]);
+  // i think we could autogenerate this to be the correct size
   return (
     <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
       <AgGridReact

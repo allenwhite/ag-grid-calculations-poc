@@ -40,13 +40,13 @@
             { "field": "a", "equals": "No" },
             { "field": "a", "equals": "" }
           ],
-          "then": "empty",
+          "then": "a is no or empty",
           "else": {
             "if": {
-              "check": "any",
+              "check": "all",
               "conditions": [{ "field": "b", "equals": "No" }],
-              "then": "empty",
-              "else": 6
+              "then": "b is no",
+              "else": "A is yes, b is not no"
             }
           }
         }
