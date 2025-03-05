@@ -85,4 +85,45 @@ export function parseFieldReference(fieldReference: string): { tableId: string; 
   };
 }
 
+/**
+ * Perform an aggregation operation on data from another table
+ * @param operation The operation to perform (SUM, AVG, COUNT, etc.)
+ * @param fieldReference The field reference in format "tableId.fieldName"
+ * @returns The result of the aggregation operation
+ */
+export function performAggregation(operation: string, fieldReference: string): any {
+  // Get all values for the field
+  const values = getCrossTableData(fieldReference);
+  
+  if (!values || !Array.isArray(values)) {
+    return null;
+  }
+  
+  // Convert string values to numbers where possible
+  const numericValues = values.map(value => {
+    const num = parseFloat(value);
+    return isNaN(num) ? 0 : num;
+  });
+  
+  // Perform the requested operation
+  switch (operation.toUpperCase()) {
+    case 'SUM':
+      return numericValues.reduce((sum, value) => sum + value, 0);
+    case 'AVG':
+    case 'AVERAGE':
+      return numericValues.length > 0 
+        ? numericValues.reduce((sum, value) => sum + value, 0) / numericValues.length 
+        : 0;
+    case 'COUNT':
+      return values.length;
+    case 'MAX':
+      return numericValues.length > 0 ? Math.max(...numericValues) : 0;
+    case 'MIN':
+      return numericValues.length > 0 ? Math.min(...numericValues) : 0;
+    default:
+      console.error(`Unsupported operation: ${operation}`);
+      return null;
+  }
+}
+
 export default tableRegistry;

@@ -31,6 +31,14 @@
       "calculations": {
         "excel": "t1.a"
       }
+    },
+    {
+      "headerName": "d",
+      "field": "d",
+      "editable": false,
+      "calculations": {
+        "excel": "SUM(t1.b)"
+      }
     }
   ]
 }

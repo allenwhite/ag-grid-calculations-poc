@@ -112,9 +112,9 @@ const SimpleTable: React.FC = () => {
   };
 
   const [rowData1, setRowData1] = useState<any[]>([
-    { a: "", b: "", c: 22, d: 44 },
-    { a: "", b: "", c: 33, d: 44 },
-    { a: "", b: "", c: 11, d: 44 },
+    { a: "Value 1", b: 10, c: 22, d: 44 },
+    { a: "Value 2", b: 20, c: 33, d: 44 },
+    { a: "Value 3", b: 30, c: 11, d: 44 },
   ]);
 
   const [rowData2, setRowData2] = useState<any[]>([

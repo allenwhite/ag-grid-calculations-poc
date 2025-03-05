@@ -6,7 +6,7 @@ import {
   AverageIf,
   instanceOfIfCondition,
 } from "./calculations";
-import { getCrossTableData, parseFieldReference } from "./tableRegistry";
+import { getCrossTableData, parseFieldReference, performAggregation } from "./tableRegistry";
 
 interface RowData {
   [key: string]: any; // TODO: come back to this
@@ -280,6 +280,23 @@ function doCalculation(
   // Handle cross-table references in Excel formulas
   if (calc.excel) {
     const excelFormula = calc.excel;
+    
+    // Check for aggregation functions like SUM(t1.b)
+    const aggregationRegex = /(SUM|AVG|AVERAGE|COUNT|MAX|MIN)\(([^)]+)\)/i;
+    const aggregationMatch = excelFormula.match(aggregationRegex);
+    
+    if (aggregationMatch && aggregationMatch.length === 3) {
+      const operation = aggregationMatch[1];
+      const fieldReference = aggregationMatch[2];
+      
+      // Check if the field reference is a cross-table reference
+      if (fieldReference.includes('.')) {
+        const fieldRef = parseFieldReference(fieldReference);
+        if (fieldRef) {
+          return performAggregation(operation, fieldReference);
+        }
+      }
+    }
     
     // Check if the formula contains cross-table references
     const crossTableRegex = /t[12]\.[a-zA-Z]+/g;
