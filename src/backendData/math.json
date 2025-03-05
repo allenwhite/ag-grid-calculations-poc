@@ -1,0 +1,9 @@
+{
+  "operation": "multiply",
+  "operand1": {
+    "operation": "add",
+    "operand1": { "variable": "A" },
+    "operand2": { "variable": "B" }
+  },
+  "operand2": { "variable": "C" }
+}

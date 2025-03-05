@@ -49,3 +49,37 @@ export type { Calculations, Condition, IfCondition, AverageIf };
 /**
  * we would have to define a JSON structure that models an equation...
  */
+
+interface VariableNode {
+  variable: string;
+}
+
+interface OperationNode {
+  operation: string;
+  operand1: ExpressionNode;
+  operand2: ExpressionNode;
+}
+
+export type ExpressionNode = VariableNode | OperationNode;
+
+export function evaluateExpression(
+  node: ExpressionNode,
+  variables: { [key: string]: number }
+): number {
+  if ("variable" in node) {
+    return variables[node.variable];
+  }
+
+  const left = evaluateExpression(node.operand1, variables);
+  const right = evaluateExpression(node.operand2, variables);
+
+  switch (node.operation) {
+    case "add":
+      return left + right;
+    case "multiply":
+      return left * right;
+    // Add other operations as needed
+    default:
+      throw new Error("Unknown operation: " + node.operation);
+  }
+}
