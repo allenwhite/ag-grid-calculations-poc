@@ -61,7 +61,6 @@ const SimpleTable: React.FC = () => {
         ref={gridRef}
         columnDefs={getColDefs(tableData.columnDefinitions)}
         rowData={rowData}
-        gridOptions={{ headerHeight: 120 }}
         // columnDefs={getColDefs(table.columnDefinitions)}
         defaultColDef={defaultColDef}
         modules={[ClientSideRowModelModule]}

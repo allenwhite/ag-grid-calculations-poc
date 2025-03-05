@@ -90,14 +90,14 @@ const getColDefs = (columnDefinitions: ColumnDefinitions[]): ColDef[] => {
           cellEditorParams: { values: cd.options },
         }
       : {}),
-    ...(cd.calculations
-      ? {
-          valueGetter: (params: any) => {
-            if (!cd.calculations) return {};
-            doCalculation(params, cd.calculations);
-          },
-        }
-      : {}),
+    // ...(cd.calculations
+    //   ? {
+    //       valueGetter: (params: any) => {
+    //         if (!cd.calculations) return {};
+    //         doCalculation(params, cd.calculations);
+    //       },
+    //     }
+    //   : {}),
   }));
 };
 
@@ -142,6 +142,9 @@ function doCalculation(params: any, calcs: string): string {
 /**
  * aggregation
  * referencing another table
+ * 
+ * 
+      "calculations": "a*c"
  */
 
 export { CalculationTable, getColDefs };
