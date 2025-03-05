@@ -89,14 +89,12 @@ export function evaluateExpression(
   variables: { [key: string]: any }
 ): number {
   if ("variable" in node) {
-    console.log(321, node.variable, variables);
     return variables[node.variable];
   }
 
   const left = evaluateExpression(node.operand1, variables);
   const right = evaluateExpression(node.operand2, variables);
 
-  console.log(node.operation, left, right);
   switch (node.operation) {
     case "add":
       return left + right;
