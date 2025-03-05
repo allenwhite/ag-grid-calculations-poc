@@ -18,24 +18,15 @@ import { evaluateExpression, ExpressionNode } from "../model/calculations";
 
 const SimpleTable: React.FC = () => {
   // Example usage:
-  const equation: ExpressionNode = {
-    operation: "multiply",
-    operand1: {
-      operation: "add",
-      operand1: { variable: "A" },
-      operand2: { variable: "B" },
-    },
-    operand2: { variable: "C" },
-  };
+  const equation: ExpressionNode = mathJson;
 
-  const variables = {
-    A: 1,
-    B: 2,
-    C: 3,
-  };
+  // const variables = {
+  //   A: 1,
+  //   B: 2,
+  //   C: 3,
+  // };
 
-  const result = evaluateExpression(equation, variables);
-  console.log(2222, result); // Output: 9, since (1 + 2) * 3 = 9
+  // const result = evaluateExpression(equation, variables);
 
   const tableData: CalculationTable = tableConfig;
 
@@ -67,7 +58,7 @@ const SimpleTable: React.FC = () => {
   };
   const [rowData, setRowData] = useState<any[]>([
     { a: "", b: "", c: 22, d: 44 },
-    { a: "", b: "", c: 33, d: 44 },
+    { a: "", b: "", c: 33, d: 77 },
     { a: "", b: "", c: 11, d: 44 },
   ]);
   // i think we could autogenerate this to be the correct size

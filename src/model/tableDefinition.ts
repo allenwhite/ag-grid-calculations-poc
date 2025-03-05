@@ -5,9 +5,12 @@ import {
   IfCondition,
   AverageIf,
   instanceOfIfCondition,
+  instanceOfExpressionNode,
+  evaluateExpression,
+  ExpressionNode,
 } from "./calculations";
 
-interface RowData {
+export interface RowData {
   [key: string]: any; // TODO: come back to this
 }
 
@@ -15,7 +18,7 @@ interface Params {
   data: RowData;
 }
 
-type CalculationResult = string | number;
+export type CalculationResult = string | number;
 
 interface TableDefinition {
   description: string;
@@ -171,12 +174,19 @@ function doCalculation(
         });
   }
 
+  function evaluateExpressionNode(
+    params: Params,
+    expressionNode: ExpressionNode,
+    rowData: RowData[]
+  ): CalculationResult {
+    return evaluateExpression(expressionNode, params.data);
+  }
+
   function evaluateIfCondition(
     params: Params,
     condition: IfCondition,
     rowData: RowData[]
   ): CalculationResult {
-    console.log(11, condition);
     const conditionsMet = evaluateConditions(
       condition.conditions,
       condition.check
@@ -192,32 +202,19 @@ function doCalculation(
       // Recursively evaluate if the 'else' part is another condition
       if (instanceOfIfCondition(condition.else.if)) {
         return evaluateIfCondition(params, condition.else.if, rowData);
+      } else if (instanceOfExpressionNode(condition.else)) {
+        return evaluateExpressionNode(params, condition.else, rowData);
       }
       return condition.else;
     }
   }
 
+  console.log(params, rowData);
   // Evaluate the 'if' condition
   if (calc.if) {
     let test = evaluateIfCondition(params, calc.if, rowData);
     return JSON.stringify(test);
   }
-
-  // Default return if no conditions are met
-  // return "Unsupported calculation";
-
-  // Handle the 'averageIf' condition
-  // if (calc.averageIf) {
-  //   const { range, criteria, averageRange } = calc.averageIf;
-  //   const criteriaValue = params.data[criteria];
-  //   const valuesToAverage = rowData
-  //     .filter((row) => row[range] === criteriaValue)
-  //     .map((row) => row[averageRange]);
-
-  //   const sum = valuesToAverage.reduce((acc, val) => acc + val, 0);
-  //   console.log(3, calc, rowData, params);
-  //   return valuesToAverage.length ? sum / valuesToAverage.length : 0;
-  // }
 
   return "hm";
 }

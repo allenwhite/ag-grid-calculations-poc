@@ -1,3 +1,5 @@
+import { CalculationResult, RowData } from "./tableDefinition";
+
 interface Condition {
   field: string;
   equals?: string;
@@ -54,6 +56,20 @@ interface VariableNode {
   variable: string;
 }
 
+function instanceOfOperationNode(object: any): object is OperationNode {
+  return (
+    typeof object === "object" &&
+    object !== null &&
+    "operation" in object &&
+    "operand1" in object &&
+    "operand2" in object
+  );
+}
+
+function instanceOfVariableNode(object: any): object is VariableNode {
+  return typeof object === "object" && object !== null && "variable" in object;
+}
+
 interface OperationNode {
   operation: string;
   operand1: ExpressionNode;
@@ -62,17 +78,25 @@ interface OperationNode {
 
 export type ExpressionNode = VariableNode | OperationNode;
 
+export function instanceOfExpressionNode(
+  object: any
+): object is ExpressionNode {
+  return instanceOfOperationNode(object) || instanceOfVariableNode(object);
+}
+
 export function evaluateExpression(
   node: ExpressionNode,
-  variables: { [key: string]: number }
+  variables: { [key: string]: any }
 ): number {
   if ("variable" in node) {
+    console.log(321, node.variable, variables);
     return variables[node.variable];
   }
 
   const left = evaluateExpression(node.operand1, variables);
   const right = evaluateExpression(node.operand2, variables);
 
+  console.log(node.operation, left, right);
   switch (node.operation) {
     case "add":
       return left + right;

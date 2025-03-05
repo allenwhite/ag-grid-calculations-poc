@@ -55,7 +55,27 @@
     {
       "headerName": "F",
       "field": "f",
-      "editable": false
+      "editable": false,
+      "calculations": {
+        "excel": "=IF(OR($A=\"No\",$B=\"\"),\"\",IF($A=\"No\",IF($B<1,0,1),IF($C<0.5,0,1)))",
+        "if": {
+          "check": "any",
+          "conditions": [
+            { "field": "a", "equals": "No" },
+            { "field": "a", "equals": "" }
+          ],
+          "then": "a is no or empty",
+          "else": {
+            "operation": "multiply",
+            "operand1": {
+              "operation": "add",
+              "operand1": { "variable": "c" },
+              "operand2": { "variable": "c" }
+            },
+            "operand2": { "variable": "d" }
+          }
+        }
+      }
     }
   ]
 }
