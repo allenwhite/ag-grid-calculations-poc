@@ -1,0 +1,33 @@
+{
+  "description": "Calculation Methodology 1, Table 1: Characterization of tested wells - To be reported in Table AA.1.iii of the Reporting Form",
+  "columnDefinitions": [
+    {
+      "headerName": "A",
+      "field": "a",
+      "editable": true,
+      "options": ["Yes", "No"]
+    },
+    {
+      "headerName": "B",
+      "field": "b",
+      "editable": true,
+      "cellStyleRules": [
+        {
+          "conditions": [{ "field": "a", "value": "No" }],
+          "style": { "backgroundColor": "black" }
+        }
+      ]
+    },
+    {
+      "headerName": "C",
+      "field": "c",
+      "editable": true
+    },
+    {
+      "headerName": "D",
+      "field": "d",
+      "editable": false,
+      "calculations": "a*c"
+    }
+  ]
+}
