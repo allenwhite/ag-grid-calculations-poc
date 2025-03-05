@@ -43,25 +43,19 @@ const SimpleTable: React.FC = () => {
     },
   };
 
-  const columnDefs = [
-    { headerName: "Make", field: "make" },
-    { headerName: "Model", field: "model" },
-    { headerName: "Price", field: "price" },
-  ];
-
+  // i think we could autogenerate this to be the correct size
   const rowData = [
-    { make: "Toyota", model: "Celica", price: 35000 },
-    { make: "Ford", model: "Mondeo", price: 32000 },
-    { make: "Porsche", model: "Boxster", price: 72000 },
+    { a: "", b: "", c: 22, d: 44 },
+    { a: "", b: "", c: 33, d: 44 },
+    { a: "", b: "", c: 11, d: 44 },
   ];
 
   return (
     <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
       <AgGridReact
         ref={gridRef}
-        columnDefs={getColDefs(tableData.columnDefinitions)}
+        columnDefs={getColDefs(tableData.columnDefinitions, rowData)}
         rowData={rowData}
-        // columnDefs={getColDefs(table.columnDefinitions)}
         defaultColDef={defaultColDef}
         modules={[ClientSideRowModelModule]}
         onCellValueChanged={onCellValueChanged}

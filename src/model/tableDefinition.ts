@@ -1,11 +1,21 @@
 import { CellStyle, ColDef, ValueGetterFunc } from "@ag-grid-community/core";
+import {
+  Calculations,
+  Condition,
+  IfCondition,
+  AverageIf,
+  instanceOfIfCondition,
+} from "./calculations";
 
-interface TableModel<T> {
-  columns: ColDef<T>[];
-  data: T[];
+interface RowData {
+  [key: string]: any; // TODO: come back to this
 }
 
-export default TableModel;
+interface Params {
+  data: RowData;
+}
+
+type CalculationResult = string | number;
 
 interface TableDefinition {
   description: string;
@@ -32,7 +42,7 @@ interface ColumnDefinitions {
   editable: boolean;
   options?: string[] | null;
   cellStyleRules?: StyleRule[] | null;
-  calculations?: string | null;
+  calculations?: Calculations | null;
 }
 
 class ColumnDefinitions {
@@ -41,7 +51,7 @@ class ColumnDefinitions {
   editable: boolean;
   options?: string[] | null;
   cellStyleRules?: StyleRule[] | null;
-  calculations?: string | null;
+  calculations?: Calculations | null;
 
   constructor(
     headerName: string,
@@ -49,7 +59,7 @@ class ColumnDefinitions {
     editable: boolean,
     options?: string[] | null,
     cellStyleRules?: StyleRule[] | null,
-    calculations?: string | null
+    calculations?: Calculations | null
   ) {
     this.headerName = headerName;
     this.field = field;
@@ -70,7 +80,10 @@ class CalculationTable implements TableDefinition {
   }
 }
 
-const getColDefs = (columnDefinitions: ColumnDefinitions[]): ColDef[] => {
+const getColDefs = (
+  columnDefinitions: ColumnDefinitions[],
+  rowData: RowData[]
+): ColDef[] => {
   return columnDefinitions.map((cd) => ({
     headerName: cd.headerName,
     field: cd.field,
@@ -90,19 +103,19 @@ const getColDefs = (columnDefinitions: ColumnDefinitions[]): ColDef[] => {
           cellEditorParams: { values: cd.options },
         }
       : {}),
-    // ...(cd.calculations
-    //   ? {
-    //       valueGetter: (params: any) => {
-    //         if (!cd.calculations) return {};
-    //         doCalculation(params, cd.calculations);
-    //       },
-    //     }
-    //   : {}),
+    ...(cd.calculations
+      ? {
+          valueGetter: (params: any) => {
+            if (!cd.calculations) return 0;
+            return doCalculation(params, cd.calculations, rowData);
+          },
+        }
+      : {}),
   }));
 };
 
 function applyStyleRules(params: any, rules: StyleRule[]): CellStyle {
-  console.log(params, rules);
+  // console.log(params, rules);
   for (const rule of rules) {
     const { conditions, style } = rule;
 
@@ -132,11 +145,87 @@ function applyStyleRules(params: any, rules: StyleRule[]): CellStyle {
     : { backgroundColor: "lightgray" };
 }
 
-function doCalculation(params: any, calcs: string): string {
-  console.log(calcs, params);
-  // a*c
-  // a: c:
-  return "?";
+function doCalculation(
+  params: Params,
+  calc: Calculations,
+  rowData: RowData[]
+): CalculationResult {
+  // Helper function to evaluate conditions
+  function evaluateConditions(conditions: Condition[], check: string): boolean {
+    return check === "all"
+      ? conditions.every((cond) => {
+          const fieldValue = params.data[cond.field];
+          return cond.equals !== undefined
+            ? fieldValue === cond.equals
+            : cond.lessThan !== undefined
+            ? fieldValue < cond.lessThan
+            : false;
+        })
+      : conditions.some((cond) => {
+          const fieldValue = params.data[cond.field];
+          return cond.equals !== undefined
+            ? fieldValue === cond.equals
+            : cond.lessThan !== undefined
+            ? fieldValue < cond.lessThan
+            : false;
+        });
+  }
+
+  function evaluateIfCondition(
+    params: Params,
+    condition: IfCondition,
+    rowData: RowData[]
+  ): CalculationResult {
+    const conditionsMet = evaluateConditions(
+      condition.conditions,
+      condition.check
+    );
+
+    if (conditionsMet) {
+      // Recursively evaluate if the 'then' part is another condition
+      if (instanceOfIfCondition(condition.then)) {
+        return evaluateIfCondition(params, condition.then, rowData);
+      }
+      return condition.then;
+    } else {
+      // Recursively evaluate if the 'else' part is another condition
+      if (instanceOfIfCondition(condition.else)) {
+        return evaluateIfCondition(params, condition.else, rowData);
+      }
+      return condition.else;
+    }
+  }
+
+  // Evaluate the 'if' condition
+  if (calc.if) {
+    return evaluateIfCondition(params, calc.if, rowData);
+  }
+
+  // Default return if no conditions are met
+  // return "Unsupported calculation";
+
+  // Handle the 'averageIf' condition
+  if (calc.averageIf) {
+    const { range, criteria, averageRange } = calc.averageIf;
+    const criteriaValue = params.data[criteria];
+    const valuesToAverage = rowData
+      .filter((row) => row[range] === criteriaValue)
+      .map((row) => row[averageRange]);
+
+    const sum = valuesToAverage.reduce((acc, val) => acc + val, 0);
+    console.log(3, calc, rowData, params);
+    return valuesToAverage.length ? sum / valuesToAverage.length : 0;
+  }
+
+  return "hm";
+}
+
+function evaluateExcelFormula(
+  params: Params,
+  rowData: RowData[],
+  formula: string
+): CalculationResult {
+  return formula; // Return the formula as a string if not supported
 }
 
 /**
