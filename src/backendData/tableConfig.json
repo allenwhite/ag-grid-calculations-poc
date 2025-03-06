@@ -76,6 +76,15 @@
           }
         }
       }
+    },
+    {
+      "headerName": "G - call function",
+      "field": "g",
+      "editable": false,
+      "funcCall": {
+        "funcName": "calculateExcelFormula",
+        "inputs": ["c", "d"]
+      }
     }
   ]
 }

@@ -29,7 +29,6 @@ const SimpleTable: React.FC = () => {
   // const result = evaluateExpression(equation, variables);
 
   const tableData: CalculationTable = tableConfig;
-
   const gridRef = useRef<AgGridReact>(null);
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {

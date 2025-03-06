@@ -9,6 +9,7 @@ import {
   evaluateExpression,
   ExpressionNode,
 } from "./calculations";
+import { calculateExcelFormula } from "../utils/utils";
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this
@@ -46,6 +47,17 @@ interface ColumnDefinitions {
   options?: string[] | null;
   cellStyleRules?: StyleRule[] | null;
   calculations?: Calculations | null;
+  funcCall?: FuncCall | null;
+}
+
+class FuncCall {
+  funcName: string;
+  inputs: string[];
+
+  constructor(funcName: string, inputs: string[]) {
+    this.funcName = funcName;
+    this.inputs = inputs;
+  }
 }
 
 class ColumnDefinitions {
@@ -87,6 +99,7 @@ const getColDefs = (
   columnDefinitions: ColumnDefinitions[],
   rowData: RowData[]
 ): ColDef[] => {
+  console.log(111, columnDefinitions);
   return columnDefinitions.map((cd) => ({
     headerName: cd.headerName,
     field: cd.field,
@@ -109,13 +122,43 @@ const getColDefs = (
     ...(cd.calculations
       ? {
           valueGetter: (params: any) => {
-            if (!cd.calculations) return 0;
-            return doCalculation(params, cd.calculations, rowData);
+            console.log(222, cd);
+            if (cd.headerName === "G") {
+              console.log(cd);
+            }
+            if (cd.calculations) {
+              return doCalculation(params, cd.calculations, rowData);
+            }
+          },
+        }
+      : {}),
+    ...(cd.funcCall
+      ? {
+          valueGetter: (params: any) => {
+            if (cd.funcCall) {
+              return doFuncCall(params, cd.funcCall, rowData);
+            }
           },
         }
       : {}),
   }));
 };
+
+function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
+  const { funcName, inputs } = funcCall;
+  console.log("??");
+  switch (funcName) {
+    case "calculateExcelFormula":
+      const args = inputs.map((input) => params.data[input]) as [
+        number,
+        number
+      ];
+      return calculateExcelFormula(...args);
+    // Add more cases if there are other functions to call
+    default:
+      throw new Error(`Function ${funcName} is not defined.`);
+  }
+}
 
 function applyStyleRules(params: any, rules: StyleRule[]): CellStyle {
   // console.log(params, rules);
@@ -153,7 +196,6 @@ function doCalculation(
   calc: Calculations,
   rowData: RowData[]
 ): CalculationResult {
-  // Helper function to evaluate conditions
   function evaluateConditions(conditions: Condition[], check: string): boolean {
     return check === "all"
       ? conditions.every((cond) => {
@@ -209,7 +251,6 @@ function doCalculation(
     }
   }
 
-  console.log(params, rowData);
   // Evaluate the 'if' condition
   if (calc.if) {
     let test = evaluateIfCondition(params, calc.if, rowData);
