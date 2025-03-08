@@ -12,24 +12,28 @@ import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import tableConfig from "../backendData/tableConfig.json";
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-
-import mathJson from "../backendData/math.json";
-import { evaluateExpression, ExpressionNode } from "../model/calculations";
+import { createFormulaParser, evaluate } from "../react-spread/engine/formula";
+import { Point } from "../react-spread/point";
 
 const SimpleTable: React.FC = () => {
-  // Example usage:
-  const equation: ExpressionNode = mathJson;
-
-  // const variables = {
-  //   A: 1,
-  //   B: 2,
-  //   C: 3,
-  // };
-
-  // const result = evaluateExpression(equation, variables);
-
   const tableData: CalculationTable = tableConfig;
+
   const gridRef = useRef<AgGridReact>(null);
+  const defaultColDef = {
+    cellStyle: (params: any) => {
+      return params.colDef.editable
+        ? { backgroundColor: "lightgreen" }
+        : { backgroundColor: "lightgray" };
+    },
+  };
+  const [rowData, setRowData] = useState<any[]>([
+    { a: "", b: "", c: 22, d: 44 },
+    { a: "", b: "", c: 33, d: 77 },
+    { a: "", b: "", c: 11, d: 44 },
+  ]);
+  // i think we could autogenerate this to be the correct size
+
+  const fomulaParser = createFormulaParser(rowData);
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
     console.log("onCellValueChanged", event);
@@ -45,22 +49,16 @@ const SimpleTable: React.FC = () => {
 
   const onCellClicked = (event: CellClickedEvent) => {
     if (!event.column) return;
+    console.log(event);
+    const result = evaluate(
+      "$C$+$D$",
+      { column: 1, row: (event.rowIndex ?? 0) + 1 },
+      fomulaParser
+    );
+    console.log(result);
     // setSelectedCell(`${event.column.getColId()}: ${event.value}`);
   };
 
-  const defaultColDef = {
-    cellStyle: (params: any) => {
-      return params.colDef.editable
-        ? { backgroundColor: "lightgreen" }
-        : { backgroundColor: "lightgray" };
-    },
-  };
-  const [rowData, setRowData] = useState<any[]>([
-    { a: "", b: "", c: 22, d: 44 },
-    { a: "", b: "", c: 33, d: 77 },
-    { a: "", b: "", c: 11, d: 44 },
-  ]);
-  // i think we could autogenerate this to be the correct size
   return (
     <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
       <AgGridReact

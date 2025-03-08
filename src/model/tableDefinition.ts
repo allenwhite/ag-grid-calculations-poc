@@ -99,7 +99,6 @@ const getColDefs = (
   columnDefinitions: ColumnDefinitions[],
   rowData: RowData[]
 ): ColDef[] => {
-  console.log(111, columnDefinitions);
   return columnDefinitions.map((cd) => ({
     headerName: cd.headerName,
     field: cd.field,
@@ -122,10 +121,6 @@ const getColDefs = (
     ...(cd.calculations
       ? {
           valueGetter: (params: any) => {
-            console.log(222, cd);
-            if (cd.headerName === "G") {
-              console.log(cd);
-            }
             if (cd.calculations) {
               return doCalculation(params, cd.calculations, rowData);
             }
@@ -146,7 +141,6 @@ const getColDefs = (
 
 function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
   const { funcName, inputs } = funcCall;
-  console.log("??");
   switch (funcName) {
     case "calculateExcelFormula":
       const args = inputs.map((input) => params.data[input]) as [
