@@ -50,12 +50,6 @@ const SimpleTable: React.FC = () => {
   const onCellClicked = (event: CellClickedEvent) => {
     if (!event.column) return;
     console.log(event);
-    const result = evaluate(
-      "$C$+$D$",
-      { column: 1, row: (event.rowIndex ?? 0) + 1 },
-      fomulaParser
-    );
-    console.log(result);
     // setSelectedCell(`${event.column.getColId()}: ${event.value}`);
   };
 
@@ -63,7 +57,11 @@ const SimpleTable: React.FC = () => {
     <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
       <AgGridReact
         ref={gridRef}
-        columnDefs={getColDefs(tableData.columnDefinitions, rowData)}
+        columnDefs={getColDefs(
+          tableData.columnDefinitions,
+          rowData,
+          fomulaParser
+        )}
         rowData={rowData}
         defaultColDef={defaultColDef}
         modules={[ClientSideRowModelModule]}

@@ -10,6 +10,8 @@ import {
   ExpressionNode,
 } from "./calculations";
 import { calculateExcelFormula } from "../utils/utils";
+import FormulaParser from "fast-formula-parser";
+import { evaluate } from "../react-spread/engine/formula";
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this
@@ -67,6 +69,7 @@ class ColumnDefinitions {
   options?: string[] | null;
   cellStyleRules?: StyleRule[] | null;
   calculations?: Calculations | null;
+  excelFormula?: string | null;
 
   constructor(
     headerName: string,
@@ -74,7 +77,8 @@ class ColumnDefinitions {
     editable: boolean,
     options?: string[] | null,
     cellStyleRules?: StyleRule[] | null,
-    calculations?: Calculations | null
+    calculations?: Calculations | null,
+    excelFormula?: string | null
   ) {
     this.headerName = headerName;
     this.field = field;
@@ -82,6 +86,7 @@ class ColumnDefinitions {
     this.options = options;
     this.cellStyleRules = cellStyleRules;
     this.calculations = calculations;
+    this.excelFormula = excelFormula;
   }
 }
 
@@ -97,7 +102,8 @@ class CalculationTable implements TableDefinition {
 
 const getColDefs = (
   columnDefinitions: ColumnDefinitions[],
-  rowData: RowData[]
+  rowData: RowData[],
+  fomulaParser: FormulaParser
 ): ColDef[] => {
   return columnDefinitions.map((cd) => ({
     headerName: cd.headerName,
@@ -132,6 +138,19 @@ const getColDefs = (
           valueGetter: (params: any) => {
             if (cd.funcCall) {
               return doFuncCall(params, cd.funcCall, rowData);
+            }
+          },
+        }
+      : {}),
+    ...(cd.excelFormula
+      ? {
+          valueGetter: (params: any) => {
+            if (cd.excelFormula) {
+              return evaluate(
+                cd.excelFormula,
+                { column: 1, row: params.node.rowIndex + 1 },
+                fomulaParser
+              );
             }
           },
         }
@@ -232,6 +251,8 @@ function doCalculation(
       // Recursively evaluate if the 'then' part is another condition
       if (instanceOfIfCondition(condition.then.if)) {
         return evaluateIfCondition(params, condition.then.if, rowData);
+      } else if (instanceOfExpressionNode(condition.then)) {
+        return evaluateExpressionNode(params, condition.then, rowData);
       }
       return condition.then.toString();
     } else {
@@ -252,14 +273,6 @@ function doCalculation(
   }
 
   return "hm";
-}
-
-function evaluateExcelFormula(
-  params: Params,
-  rowData: RowData[],
-  formula: string
-): CalculationResult {
-  return formula; // Return the formula as a string if not supported
 }
 
 /**

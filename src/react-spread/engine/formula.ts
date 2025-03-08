@@ -75,18 +75,19 @@ export function createFormulaParser(
       //   if (!isNaN(cell?.value as number)) return Number(cell?.value);
       //   return cell?.value;
       // });
-
+      console.log("onRange", ref, formattedData);
       const arr = [];
       for (let row = ref.from.row; row <= ref.to.row; row++) {
         const innerArr = [];
-        if (data[row - 1]) {
+        if (formattedData[row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
-            innerArr.push(data[row - 1][col - 1]);
+            innerArr.push(formattedData[row - 1][col - 1]);
           }
         }
         arr.push(innerArr);
       }
-      return arr;
+      console.log("arr", arr);
+      return arr as Value[];
     },
   });
 }
