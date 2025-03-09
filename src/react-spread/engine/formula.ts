@@ -135,7 +135,7 @@ export function createFormulaParser(
         typeof val
       );
       console.log("val", val);
-      if (isNumeric(val)) return val;
+      if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
     },
@@ -268,5 +268,6 @@ function convertCoordToCellRef(coord: Coord | Point): CellRef {
 }
 
 function isNumeric(value: string): boolean {
+  console.log("isNumeric", value, /^-?\d+(\.\d+)?$/.test(value));
   return /^-?\d+(\.\d+)?$/.test(value);
 }
