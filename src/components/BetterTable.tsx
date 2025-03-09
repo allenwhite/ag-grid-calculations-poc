@@ -41,6 +41,10 @@ const BetterTable: React.FC = () => {
   //=IF(OR($E$=\"\",$N$=\"\"),\"\",IF($E$=\"No\",IF($N$<1,0,1),IF($N$<0.5,0,1)))
   const fomulaParser = createFormulaParser(rowData);
 
+  const addRow = () => {
+    setRowData([...rowData, { ...initialRowData }]);
+  };
+
   const onCellValueChanged = (event: CellValueChangedEvent) => {
     // console.log("onCellValueChanged", event);
     gridRef.current?.api.refreshCells({
@@ -72,6 +76,7 @@ const BetterTable: React.FC = () => {
         onCellValueChanged={onCellValueChanged}
         onCellClicked={onCellClicked}
       />
+      <button onClick={addRow}>Add Row</button>
     </div>
   );
 };
