@@ -11,7 +11,7 @@ import {
 } from "./calculations";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser from "fast-formula-parser";
-import { evaluate } from "../react-spread/engine/formula";
+import { columns, evaluate } from "../react-spread/engine/formula";
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this
@@ -103,6 +103,7 @@ class CalculationTable implements TableDefinition {
 const getColDefs = (
   columnDefinitions: ColumnDefinitions[],
   rowData: RowData[],
+  setRowData: (rowData: RowData[]) => void,
   fomulaParser: FormulaParser
 ): ColDef[] => {
   return columnDefinitions.map((cd) => ({
@@ -145,12 +146,19 @@ const getColDefs = (
     ...(cd.excelFormula
       ? {
           valueGetter: (params: any) => {
+            console.log("params", columns.indexOf(params.column.colId) - 1);
             if (cd.excelFormula) {
-              return evaluate(
+              const evaled = evaluate(
                 cd.excelFormula,
-                { column: 1, row: params.node.rowIndex + 1 },
+                {
+                  col: params.column.colId,
+                  row: params.node.rowIndex + 1,
+                },
                 fomulaParser
               );
+              rowData[params.node.rowIndex][params.column.colId] = evaled;
+              setRowData(rowData);
+              return evaled;
             }
           },
         }

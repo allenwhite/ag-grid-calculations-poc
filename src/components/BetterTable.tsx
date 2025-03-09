@@ -10,12 +10,11 @@ import {
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
-import tableConfig from "../backendData/tableConfig.json";
+import tableConfig from "../backendData/betterTableConfig.json";
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
 import { createFormulaParser, evaluate } from "../react-spread/engine/formula";
-import { Point } from "../react-spread/point";
 
-const SimpleTable: React.FC = () => {
+const BetterTable: React.FC = () => {
   const tableData: CalculationTable = tableConfig;
 
   const gridRef = useRef<AgGridReact>(null);
@@ -25,41 +24,46 @@ const SimpleTable: React.FC = () => {
         ? { backgroundColor: "lightgreen" }
         : { backgroundColor: "lightgray" };
     },
+    // autoHeight: true, // Enable auto height for headers
+    wrapHeaderText: true, // Allow header text to wrap
+    headerHeight: 200, // Set header height
   };
-  const [rowData, setRowData] = useState<any[]>([
-    { a: "", b: "", c: 22, d: 44 },
-    { a: "", b: "", c: 33, d: 77 },
-    { a: "", b: "", c: 11, d: 44 },
-  ]);
-  // i think we could autogenerate this to be the correct size
+  // Extract fields from columnDefinitions to create initial rowData
+  const initialRowData = tableConfig.columnDefinitions.reduce<
+    Record<string, any>
+  >((acc, colDef) => {
+    acc[colDef.field] = "";
+    return acc;
+  }, {});
 
+  const [rowData, setRowData] = useState<any[]>([initialRowData]);
+
+  //=IF(OR($E$=\"\",$N$=\"\"),\"\",IF($E$=\"No\",IF($N$<1,0,1),IF($N$<0.5,0,1)))
   const fomulaParser = createFormulaParser(rowData);
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
-    console.log("onCellValueChanged", event);
-    // if (!event.column) return;
-    // const field = event.column.getColId();
-    // if (field === "weight" || field === "pricePerGram") {
+    // console.log("onCellValueChanged", event);
     gridRef.current?.api.refreshCells({
       force: true,
       // columns: ["timePeriod"],
     });
-    // }
   };
 
   const onCellClicked = (event: CellClickedEvent) => {
     if (!event.column) return;
-    console.log(event);
+    // console.log(event);
     // setSelectedCell(`${event.column.getColId()}: ${event.value}`);
   };
 
   return (
     <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
-      {/* <AgGridReact
+      <AgGridReact
         ref={gridRef}
+        headerHeight={200}
         columnDefs={getColDefs(
           tableData.columnDefinitions,
           rowData,
+          setRowData,
           fomulaParser
         )}
         rowData={rowData}
@@ -67,9 +71,9 @@ const SimpleTable: React.FC = () => {
         modules={[ClientSideRowModelModule]}
         onCellValueChanged={onCellValueChanged}
         onCellClicked={onCellClicked}
-      /> */}
+      />
     </div>
   );
 };
 
-export default SimpleTable;
+export default BetterTable;

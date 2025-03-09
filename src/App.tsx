@@ -1,12 +1,14 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import SimpleTable from "./components/SimpleTable";
+// import SimpleTable from "./components/SimpleTable";
+import BetterTable from "./components/BetterTable";
 
 function App() {
   return (
     <div className="App">
-      <SimpleTable />
+      <BetterTable />
+      {/* <SimpleTable /> */}
     </div>
   );
 }

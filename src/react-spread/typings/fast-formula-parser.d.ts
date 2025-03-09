@@ -2,6 +2,7 @@ declare module "fast-formula-parser" {
   export type CellCoord = {
     row: number;
     col: number;
+    address: string | undefined = undefined;
   };
   export type CellRef = CellCoord & {
     sheet: string;
