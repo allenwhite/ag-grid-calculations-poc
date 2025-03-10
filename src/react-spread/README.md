@@ -6,6 +6,7 @@ We borrowed the formula parser typescript interface from [react-spreadsheet](htt
 
 ## TODO
 
+- Styling?
 - Clean up current implementation
 - Trim unused code
 - make available as package for use elsewhere
