@@ -8,3 +8,4 @@ We borrowed the formula parser typescript interface from [react-spreadsheet](htt
 
 - Clean up current implementation
 - Trim unused code
+- make available as package for use elsewhere
