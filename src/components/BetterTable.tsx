@@ -38,7 +38,6 @@ const BetterTable: React.FC = () => {
 
   const [rowData, setRowData] = useState<any[]>([initialRowData]);
 
-  //=IF(OR($E$=\"\",$N$=\"\"),\"\",IF($E$=\"No\",IF($N$<1,0,1),IF($N$<0.5,0,1)))
   const fomulaParser = createFormulaParser(rowData);
 
   const addRow = () => {
