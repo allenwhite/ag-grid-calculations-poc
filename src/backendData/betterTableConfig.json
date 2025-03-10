@@ -2,7 +2,7 @@
   "description": "Calculation Methodologies 2 & 3, Table 1: Well-specific input data",
   "columnDefinitions": [
     {
-      "headerName": "1 C Sub-Basin ID",
+      "headerName": "Sub-Basin ID",
       "field": "C",
       "editable": true,
       "options": [
@@ -11,18 +11,18 @@
       ]
     },
     {
-      "headerName": "2 D Well ID",
+      "headerName": "Well ID",
       "field": "D",
       "editable": true
     },
     {
-      "headerName": "3 E Were Plunger Lifts used?\n(Yes/No)",
+      "headerName": "Were Plunger Lifts used?\n(Yes/No)",
       "field": "E",
       "editable": true,
       "options": ["Yes", "No"]
     },
     {
-      "headerName": "4 F [CDp]\nCasing internal diameter\n(inches)",
+      "headerName": "[CDp]\nCasing internal diameter\n(inches)",
       "field": "F",
       "editable": true,
       "cellStyleRules": [
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "headerName": "5 G [WDp]\nWell depth from either the top of the well or the lowest packer to the bottom of the well, p\n(feet)",
+      "headerName": "[WDp]\nWell depth from either the top of the well or the lowest packer to the bottom of the well, p\n(feet)",
       "field": "G",
       "editable": true,
       "cellStyleRules": [
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "headerName": "6 H [SPp]\nShut-in pressure or surface pressure for wells with tubing production and no packers or casing pressure for each well, p, or casing-to-tubing pressure ratio of one well from the same sub-basin multiplied by the tubing pressure of each well, p, in the sub-basin\n(psia)",
+      "headerName": "[SPp]\nShut-in pressure or surface pressure for wells with tubing production and no packers or casing pressure for each well, p, or casing-to-tubing pressure ratio of one well from the same sub-basin multiplied by the tubing pressure of each well, p, in the sub-basin\n(psia)",
       "field": "H",
       "editable": true,
       "cellStyleRules": [
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "headerName": "7 I [TDp]\nTubing internal diameter\n(inches)",
+      "headerName": "[TDp]\nTubing internal diameter\n(inches)",
       "field": "I",
       "editable": true,
       "cellStyleRules": [
@@ -66,7 +66,7 @@
       ]
     },
     {
-      "headerName": "8 J [WDp]\nTubing depth to plunger bumper for each well, p\n(feet)",
+      "headerName": "[WDp]\nTubing depth to plunger bumper for each well, p\n(feet)",
       "field": "J",
       "editable": true,
       "cellStyleRules": [
@@ -77,7 +77,7 @@
       ]
     },
     {
-      "headerName": "9 K [SPp]\nFlow-line pressure for each well, p\n(psia)",
+      "headerName": "[SPp]\nFlow-line pressure for each well, p\n(psia)",
       "field": "K",
       "editable": true,
       "cellStyleRules": [
@@ -88,33 +88,31 @@
       ]
     },
     {
-      "headerName": "10 L [Vp]\nNumber of unloading events per year per well, p",
+      "headerName": "[Vp]\nNumber of unloading events per year per well, p",
       "field": "L",
       "editable": true
     },
     {
-      "headerName": "11 M [SFRp]\nAverage flow-line rate of gas for well, p\n(scf/hr)",
+      "headerName": "[SFRp]\nAverage flow-line rate of gas for well, p\n(scf/hr)",
       "field": "M",
       "editable": true
     },
     {
-      "headerName": "12 N [HRp,q]\nTime that each well, p, was left open to the atmosphere during each unloading event, q\n(hours)\n\n[NOTE: use average hours for all well unloading events.]",
+      "headerName": "[HRp,q]\nTime that each well, p, was left open to the atmosphere during each unloading event, q\n(hours)\n\n[NOTE: use average hours for all well unloading events.]",
       "field": "N",
       "editable": true
     },
     {
-      "headerName": "13 O [Zp,q]\nFor wells without plunger lifts, if HRp,q is less than 1, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 1, then Zp,q is equal to 1\n\nFor wells with plunger lifts, if HRp,q is less than 0.5, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 0.5, then Zp,q is equal to 1",
+      "headerName": "[Zp,q]\nFor wells without plunger lifts, if HRp,q is less than 1, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 1, then Zp,q is equal to 1\n\nFor wells with plunger lifts, if HRp,q is less than 0.5, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 0.5, then Zp,q is equal to 1",
       "field": "O",
       "editable": false,
       "excelFormula": "=IF(OR($E$=\"\",$N$=\"\"),\"\",IF($E$=\"No\",IF($N$<1,0,1),IF($N$<0.5,0,1)))"
     },
     {
-      "headerName": "14 P [Es]\nAnnual natural gas emissions\n(scf)",
+      "headerName": "[Es]\nAnnual natural gas emissions\n(scf)",
       "field": "P",
       "editable": false,
-      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))",
-      "broken": "=($L$*($M$*($N$-0.5)*$O$))",
-      "bonus": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))"
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))"
     }
   ]
 }
