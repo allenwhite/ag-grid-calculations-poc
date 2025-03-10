@@ -11,7 +11,7 @@ import {
 } from "./calculations";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser from "fast-formula-parser";
-import { columns, evaluate } from "../react-spread/engine/formula";
+import { columns, evaluate } from "../calc-engine/engine/formula";
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this

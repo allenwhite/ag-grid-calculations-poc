@@ -12,7 +12,7 @@ import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import tableConfig from "../backendData/betterTableConfig.json";
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-import { createFormulaParser, evaluate } from "../react-spread/engine/formula";
+import { createFormulaParser, evaluate } from "../calc-engine/engine/formula";
 
 const BetterTable: React.FC = () => {
   const tableData: CalculationTable = tableConfig;
@@ -59,7 +59,10 @@ const BetterTable: React.FC = () => {
   };
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+    <div
+      className="ag-theme-alpine"
+      style={{ height: 400, width: "90%", marginLeft: "5%" }}
+    >
       <AgGridReact
         ref={gridRef}
         headerHeight={200}

@@ -12,8 +12,8 @@ import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import tableConfig from "../backendData/tableConfig.json";
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-import { createFormulaParser, evaluate } from "../react-spread/engine/formula";
-import { Point } from "../react-spread/point";
+import { createFormulaParser, evaluate } from "../calc-engine/engine/formula";
+import { Point } from "../calc-engine/point";
 
 const SimpleTable: React.FC = () => {
   const tableData: CalculationTable = tableConfig;
