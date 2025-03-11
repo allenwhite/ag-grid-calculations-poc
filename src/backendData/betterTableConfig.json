@@ -58,12 +58,10 @@
       "headerName": "[TDp]\nTubing internal diameter\n(inches)",
       "field": "I",
       "editable": true,
-      "cellStyleRules": [
-        {
-          "conditions": [{ "field": "E", "value": "No" }],
-          "style": { "backgroundColor": "black" }
-        }
-      ]
+      "cellStyle": {
+        "condition": "=$E$=\"No\"",
+        "style": { "backgroundColor": "black" }
+      }
     },
     {
       "headerName": "[WDp]\nTubing depth to plunger bumper for each well, p\n(feet)",

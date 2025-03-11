@@ -42,12 +42,23 @@ class StyleRule {
   }
 }
 
+class StyleExpression {
+  condition: string;
+  style: CellStyle;
+
+  constructor(condition: string, style: CellStyle) {
+    this.condition = condition;
+    this.style = style;
+  }
+}
+
 interface ColumnDefinitions {
   headerName: string;
   field: string;
   editable: boolean;
   options?: string[] | null;
   cellStyleRules?: StyleRule[] | null;
+  cellStyle?: StyleExpression | null;
   calculations?: Calculations | null;
   funcCall?: FuncCall | null;
 }
@@ -68,6 +79,7 @@ class ColumnDefinitions {
   editable: boolean;
   options?: string[] | null;
   cellStyleRules?: StyleRule[] | null;
+  cellStyle?: StyleExpression | null;
   calculations?: Calculations | null;
   excelFormula?: string | null;
 
@@ -76,6 +88,7 @@ class ColumnDefinitions {
     field: string,
     editable: boolean,
     options?: string[] | null,
+    cellStyle?: StyleExpression | null,
     cellStyleRules?: StyleRule[] | null,
     calculations?: Calculations | null,
     excelFormula?: string | null
@@ -84,6 +97,7 @@ class ColumnDefinitions {
     this.field = field;
     this.editable = editable;
     this.options = options;
+    this.cellStyle = cellStyle;
     this.cellStyleRules = cellStyleRules;
     this.calculations = calculations;
     this.excelFormula = excelFormula;
@@ -111,6 +125,28 @@ const getColDefs = (
     field: cd.field,
     editable: cd.editable,
     sortable: false,
+    ...(cd.cellStyle
+      ? {
+          cellStyle: (params: any): CellStyle => {
+            if (!cd.cellStyle) return {};
+            const evaled = evaluate(
+              cd.cellStyle.condition,
+              {
+                col: params.column.colId,
+                row: params.node.rowIndex + 1,
+              },
+              fomulaParser
+            );
+            console.log(evaled);
+            if (evaled) {
+              return cd.cellStyle.style;
+            }
+            return params.colDef.editable
+              ? { backgroundColor: "lightgreen" }
+              : { backgroundColor: "lightgray" };
+          },
+        }
+      : {}),
     ...(cd.cellStyleRules
       ? {
           cellStyle: (params: any): CellStyle => {
