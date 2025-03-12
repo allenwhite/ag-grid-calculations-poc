@@ -10,52 +10,46 @@ import {
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
-import tableConfig from "../backendData/Method2-3Table1.json";
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
 import { createFormulaParser } from "../calc-engine/engine/formula";
+import { PageData } from "../App";
 
-const CalculationTableView: React.FC = () => {
-  const tableData: CalculationTable = tableConfig;
+interface CalculationTableViewProps {
+  tableData: CalculationTable;
+  pageData?: PageData;
+}
 
+const CalculationTableView: React.FC<CalculationTableViewProps> = ({
+  tableData,
+  pageData,
+}) => {
   const gridRef = useRef<AgGridReact>(null);
+  const [rowData, setRowData] = useState<any[]>([pageData]);
+  const fomulaParser = createFormulaParser(rowData);
+
+  const addRow = () => {
+    setRowData([...rowData, { ...pageData }]);
+  };
+
+  const onCellValueChanged = (event: CellValueChangedEvent) => {
+    gridRef.current?.api.refreshCells({
+      force: true,
+    });
+  };
+
+  const onCellClicked = (event: CellClickedEvent) => {
+    if (!event.column) return;
+  };
+
+  // move to another file?
   const defaultColDef = {
     cellStyle: (params: any) => {
       return params.colDef.editable
         ? { backgroundColor: "lightgreen" }
         : { backgroundColor: "lightgray" };
     },
-    // autoHeight: true, // Enable auto height for headers
-    wrapHeaderText: true, // Allow header text to wrap
-    headerHeight: 200, // Set header height
-  };
-  // Extract fields from columnDefinitions to create initial rowData
-  const initialRowData = tableConfig.columnDefinitions.reduce<
-    Record<string, any>
-  >((acc, colDef) => {
-    acc[colDef.field] = "";
-    return acc;
-  }, {});
-
-  const [rowData, setRowData] = useState<any[]>([initialRowData]);
-
-  const fomulaParser = createFormulaParser(rowData);
-
-  const addRow = () => {
-    setRowData([...rowData, { ...initialRowData }]);
-  };
-
-  const onCellValueChanged = (event: CellValueChangedEvent) => {
-    // console.log("onCellValueChanged", event);
-    gridRef.current?.api.refreshCells({
-      force: true,
-      // columns: ["timePeriod"],
-    });
-  };
-
-  const onCellClicked = (event: CellClickedEvent) => {
-    if (!event.column) return;
-    // console.log(event);
-    // setSelectedCell(`${event.column.getColId()}: ${event.value}`);
+    wrapHeaderText: true,
+    headerHeight: 200,
   };
 
   return (
@@ -63,6 +57,7 @@ const CalculationTableView: React.FC = () => {
       className="ag-theme-alpine"
       style={{ height: 400, width: "90%", marginLeft: "5%" }}
     >
+      <h2>{tableData.description}</h2>
       <AgGridReact
         ref={gridRef}
         headerHeight={200}

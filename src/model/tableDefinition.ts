@@ -105,10 +105,16 @@ class ColumnDefinitions {
 }
 
 class CalculationTable implements TableDefinition {
+  tableId: string;
   description: string;
   columnDefinitions: ColumnDefinitions[];
 
-  constructor(description: string, columnDefinitions: ColumnDefinitions[]) {
+  constructor(
+    tableId: string,
+    description: string,
+    columnDefinitions: ColumnDefinitions[]
+  ) {
+    this.tableId = tableId;
     this.description = description;
     this.columnDefinitions = columnDefinitions;
   }
