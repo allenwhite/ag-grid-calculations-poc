@@ -25,34 +25,28 @@
       "headerName": "[CDp]\nCasing internal diameter\n(inches)",
       "field": "F",
       "editable": true,
-      "cellStyleRules": [
-        {
-          "conditions": [{ "field": "E", "value": "Yes" }],
-          "style": { "backgroundColor": "black" }
-        }
-      ]
+      "cellStyle": {
+        "condition": "=$E$=\"Yes\"",
+        "style": { "backgroundColor": "black" }
+      }
     },
     {
       "headerName": "[WDp]\nWell depth from either the top of the well or the lowest packer to the bottom of the well, p\n(feet)",
       "field": "G",
       "editable": true,
-      "cellStyleRules": [
-        {
-          "conditions": [{ "field": "E", "value": "Yes" }],
-          "style": { "backgroundColor": "black" }
-        }
-      ]
+      "cellStyle": {
+        "condition": "=$E$=\"Yes\"",
+        "style": { "backgroundColor": "black" }
+      }
     },
     {
       "headerName": "[SPp]\nShut-in pressure or surface pressure for wells with tubing production and no packers or casing pressure for each well, p, or casing-to-tubing pressure ratio of one well from the same sub-basin multiplied by the tubing pressure of each well, p, in the sub-basin\n(psia)",
       "field": "H",
       "editable": true,
-      "cellStyleRules": [
-        {
-          "conditions": [{ "field": "E", "value": "Yes" }],
-          "style": { "backgroundColor": "black" }
-        }
-      ]
+      "cellStyle": {
+        "condition": "=$E$=\"Yes\"",
+        "style": { "backgroundColor": "black" }
+      }
     },
     {
       "headerName": "[TDp]\nTubing internal diameter\n(inches)",
@@ -67,23 +61,19 @@
       "headerName": "[WDp]\nTubing depth to plunger bumper for each well, p\n(feet)",
       "field": "J",
       "editable": true,
-      "cellStyleRules": [
-        {
-          "conditions": [{ "field": "E", "value": "No" }],
-          "style": { "backgroundColor": "black" }
-        }
-      ]
+      "cellStyle": {
+        "condition": "=$E$=\"No\"",
+        "style": { "backgroundColor": "black" }
+      }
     },
     {
       "headerName": "[SPp]\nFlow-line pressure for each well, p\n(psia)",
       "field": "K",
       "editable": true,
-      "cellStyleRules": [
-        {
-          "conditions": [{ "field": "E", "value": "No" }],
-          "style": { "backgroundColor": "black" }
-        }
-      ]
+      "cellStyle": {
+        "condition": "=$E$=\"No\"",
+        "style": { "backgroundColor": "black" }
+      }
     },
     {
       "headerName": "[Vp]\nNumber of unloading events per year per well, p",

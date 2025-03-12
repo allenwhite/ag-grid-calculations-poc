@@ -137,7 +137,7 @@ const getColDefs = (
               },
               fomulaParser
             );
-            console.log(evaled);
+            console.log("evaled?", evaled);
             if (evaled) {
               return cd.cellStyle.style;
             }
@@ -147,27 +147,10 @@ const getColDefs = (
           },
         }
       : {}),
-    ...(cd.cellStyleRules
-      ? {
-          cellStyle: (params: any): CellStyle => {
-            if (!cd.cellStyleRules) return {};
-            return applyStyleRules(params, cd.cellStyleRules);
-          },
-        }
-      : {}),
     ...(cd.options
       ? {
           cellEditor: "agSelectCellEditor",
           cellEditorParams: { values: cd.options },
-        }
-      : {}),
-    ...(cd.calculations
-      ? {
-          valueGetter: (params: any) => {
-            if (cd.calculations) {
-              return doCalculation(params, cd.calculations, rowData);
-            }
-          },
         }
       : {}),
     ...(cd.funcCall
@@ -215,37 +198,6 @@ function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
     default:
       throw new Error(`Function ${funcName} is not defined.`);
   }
-}
-
-function applyStyleRules(params: any, rules: StyleRule[]): CellStyle {
-  // console.log(params, rules);
-  for (const rule of rules) {
-    const { conditions, style } = rule;
-
-    const allConditionsMet = conditions.every((condition: any) => {
-      const fieldValue = params.data[condition.field];
-
-      if (condition.value !== undefined && fieldValue !== condition.value) {
-        return false;
-      }
-
-      if (
-        condition.greaterThan !== undefined &&
-        fieldValue <= condition.greaterThan
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-
-    if (allConditionsMet) {
-      return style;
-    }
-  }
-  return params.colDef.editable
-    ? { backgroundColor: "lightgreen" }
-    : { backgroundColor: "lightgray" };
 }
 
 function doCalculation(
