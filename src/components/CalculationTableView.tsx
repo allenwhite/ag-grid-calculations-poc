@@ -10,11 +10,11 @@ import {
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
-import tableConfig from "../backendData/betterTableConfig.json";
+import tableConfig from "../backendData/Method2-3Table1.json";
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-import { createFormulaParser, evaluate } from "../calc-engine/engine/formula";
+import { createFormulaParser } from "../calc-engine/engine/formula";
 
-const BetterTable: React.FC = () => {
+const CalculationTableView: React.FC = () => {
   const tableData: CalculationTable = tableConfig;
 
   const gridRef = useRef<AgGridReact>(null);
@@ -83,4 +83,4 @@ const BetterTable: React.FC = () => {
   );
 };
 
-export default BetterTable;
+export default CalculationTableView;
