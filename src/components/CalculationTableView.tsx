@@ -46,7 +46,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
     cellStyle: (params: any) => {
       return params.colDef.editable
         ? { backgroundColor: "lightgreen" }
-        : { backgroundColor: "lightgray" };
+        : { backgroundColor: "#C0C0C0" };
     },
     wrapHeaderText: true,
     headerHeight: 200,

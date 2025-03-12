@@ -1,107 +1,96 @@
 {
   "tableId": "Method2-3Table2",
-  "description": "Calculation Methodologies 2 & 3, Table 2: Well-specific input data",
+  "description": "Calculation Methodologies 2 & 3, Table 2: Sub-basin-level calculations",
   "columnDefinitions": [
     {
-      "headerName": "Sub-Basin ID",
+      "headerName": "Sub-Basin",
       "field": "C",
-      "editable": true,
-      "options": [
-        "110 - ESSEX, NY (31) - Shale gas",
-        "200 - ESSEX, NY (31) - Shale gas"
-      ]
+      "editable": false,
+      "excelFormula": "=IF($AK1699=\"\",\"\",LEFT($AK1699,FIND(\"_\",$AK1699)-1))"
     },
     {
-      "headerName": "Well ID",
+      "headerName": "Calculation Method",
       "field": "D",
-      "editable": true
+      "editable": false,
+      "excelFormula": "=IF($E6706=\"\",\"\",IF($E6706=\"No\",\"Calculation Methodology 2 [98.233(f)(2)]\",\"Calculation Methodology 3 [98.233(f)(3)]\"))"
     },
     {
-      "headerName": "Were Plunger Lifts used?\n(Yes/No)",
+      "headerName": "Were Plunger Lifts used?",
       "field": "E",
-      "editable": true,
-      "options": ["Yes", "No"]
+      "editable": false,
+      "excelFormula": "=IF($AK1699=\"\",\"\",RIGHT($AK1699,LEN($AK1699)-FIND(\"_\",$AK1699)))"
     },
     {
-      "headerName": "[CDp]\nCasing internal diameter\n(inches)",
+      "headerName": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)",
       "field": "F",
-      "editable": true,
-      "cellStyle": {
-        "condition": "=$E$=\"Yes\"",
-        "style": { "backgroundColor": "black" }
-      }
+      "editable": true
     },
     {
-      "headerName": "[WDp]\nWell depth from either the top of the well or the lowest packer to the bottom of the well, p\n(feet)",
+      "headerName": "[MCH4]\nMole fraction of CH4 in natural gas\n(decimal)",
       "field": "G",
-      "editable": true,
-      "cellStyle": {
-        "condition": "=$E$=\"Yes\"",
-        "style": { "backgroundColor": "black" }
-      }
+      "editable": true
     },
     {
-      "headerName": "[SPp]\nShut-in pressure or surface pressure for wells with tubing production and no packers or casing pressure for each well, p, or casing-to-tubing pressure ratio of one well from the same sub-basin multiplied by the tubing pressure of each well, p, in the sub-basin\n(psia)",
+      "headerName": "[Es,n]\nAnnual natural gas emissions from well venting during liquids unloading\n(scf)",
       "field": "H",
-      "editable": true,
-      "cellStyle": {
-        "condition": "=$E$=\"Yes\"",
-        "style": { "backgroundColor": "black" }
-      }
+      "editable": false,
+      "excelFormula": "=IF($AK1699=\"\",\"\",SUMIFS($P$1699:$P$6698,$AI$1699:$AI$6698,$AK1699))"
     },
     {
-      "headerName": "[TDp]\nTubing internal diameter\n(inches)",
+      "headerName": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)",
       "field": "I",
-      "editable": true,
-      "cellStyle": {
-        "condition": "=$E$=\"No\"",
-        "style": { "backgroundColor": "black" }
-      }
+      "editable": false,
+      "excelFormula": "=IF(H6706=\"\",\"\",H6706*F6706)"
     },
     {
-      "headerName": "[WDp]\nTubing depth to plunger bumper for each well, p\n(feet)",
+      "headerName": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)",
       "field": "J",
-      "editable": true,
-      "cellStyle": {
-        "condition": "=$E$=\"No\"",
-        "style": { "backgroundColor": "black" }
-      }
+      "editable": false,
+      "excelFormula": "=IF(H6706=\"\",\"\",H6706*G6706)"
     },
     {
-      "headerName": "[SPp]\nFlow-line pressure for each well, p\n(psia)",
+      "headerName": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)",
       "field": "K",
-      "editable": true,
-      "cellStyle": {
-        "condition": "=$E$=\"No\"",
-        "style": { "backgroundColor": "black" }
-      }
+      "editable": false,
+      "excelFormula": "=IF(I6706=\"\",\"\",I6706*$D$26/1000)"
     },
     {
-      "headerName": "[Vp]\nNumber of unloading events per year per well, p",
+      "headerName": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)",
       "field": "L",
-      "editable": true
+      "editable": false,
+      "excelFormula": "=IF(J6706=\"\",\"\",J6706*$D$26/1000)"
     },
     {
-      "headerName": "[SFRp]\nAverage flow-line rate of gas for well, p\n(scf/hr)",
+      "headerName": "Total Number of Wells vented for liquids unloading in sub-basin",
       "field": "M",
-      "editable": true
+      "editable": false,
+      "excelFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",COUNTIFS($C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))"
     },
     {
-      "headerName": "[HRp,q]\nTime that each well, p, was left open to the atmosphere during each unloading event, q\n(hours)\n\n[NOTE: use average hours for all well unloading events.]",
+      "headerName": "[Vp]\nCumulative number of unloadings vented to the atmosphere",
       "field": "N",
-      "editable": true
+      "editable": false,
+      "excelFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))"
     },
     {
-      "headerName": "[Zp,q]\nFor wells without plunger lifts, if HRp,q is less than 1, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 1, then Zp,q is equal to 1\n\nFor wells with plunger lifts, if HRp,q is less than 0.5, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 0.5, then Zp,q is equal to 1",
+      "headerName": "Average internal casing diameter across sub-basin\n(inches)",
       "field": "O",
       "editable": false,
-      "excelFormula": "=IF(OR($E$=\"\",$N$=\"\"),\"\",IF($E$=\"No\",IF($N$<1,0,1),IF($N$<0.5,0,1)))"
+      "cellStyle": {
+        "condition": "$E6706=\"Yes\"",
+        "style": { "backgroundColor": "black" }
+      },
+      "excelFormula": "=IF(E6706=\"\",\"\",IF(E6706=\"No\",AVERAGEIF($C$1699:$C$6698,C6706,$F$1699:$F$6698),\"\"))"
     },
     {
-      "headerName": "[Es]\nAnnual natural gas emissions\n(scf)",
+      "headerName": "Average internal casing diameter across sub-basin\n(inches)",
       "field": "P",
       "editable": false,
-      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))"
+      "cellStyle": {
+        "condition": "$E6706=\"No\"",
+        "style": { "backgroundColor": "black" }
+      },
+      "excelFormula": "=IF(E6706=\"\",\"\",IF(E6706=\"No\",\"\",AVERAGEIF($C$1699:$C$6698,C6706,$I$1699:$I$6698)))"
     }
   ]
 }

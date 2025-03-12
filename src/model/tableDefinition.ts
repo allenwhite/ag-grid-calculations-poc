@@ -1,14 +1,5 @@
-import { CellStyle, ColDef, ValueGetterFunc } from "@ag-grid-community/core";
-import {
-  Calculations,
-  Condition,
-  IfCondition,
-  AverageIf,
-  instanceOfIfCondition,
-  instanceOfExpressionNode,
-  evaluateExpression,
-  ExpressionNode,
-} from "./calculations";
+import { CellStyle, ColDef } from "@ag-grid-community/core";
+import { Calculations } from "./calculations";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser from "fast-formula-parser";
 import { columns, evaluate } from "../calc-engine/engine/formula";
@@ -109,14 +100,21 @@ class CalculationTable implements TableDefinition {
   description: string;
   columnDefinitions: ColumnDefinitions[];
 
+  /**
+   * maybe this is literally at the top level? separate json altogether?
+   */
+  referenceTables?: Record<string, ColumnDefinitions[]> | undefined;
+
   constructor(
     tableId: string,
     description: string,
-    columnDefinitions: ColumnDefinitions[]
+    columnDefinitions: ColumnDefinitions[],
+    referenceTables?: Record<string, ColumnDefinitions[]>
   ) {
     this.tableId = tableId;
     this.description = description;
     this.columnDefinitions = columnDefinitions;
+    this.referenceTables = referenceTables;
   }
 }
 
@@ -205,13 +203,5 @@ function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
       throw new Error(`Function ${funcName} is not defined.`);
   }
 }
-
-/**
- * aggregation
- * referencing another table
- * 
- * 
-      "calculations": "a*c"
- */
 
 export { CalculationTable, getColDefs };
