@@ -6,7 +6,10 @@ We borrowed the formula parser typescript interface from [calc-enginesheet](http
 
 ## TODO
 
-- Styling?
+- tests
+- Cross table refs
+- Lookup table refs
+- range support
 - Clean up current implementation
 - Trim unused code
 - make available as package for use elsewhere
