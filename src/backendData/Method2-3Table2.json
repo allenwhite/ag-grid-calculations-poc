@@ -12,7 +12,7 @@
       "headerName": "Calculation Method",
       "field": "D",
       "editable": false,
-      "excelFormula": "=IF($E6706=\"\",\"\",IF($E6706=\"No\",\"Calculation Methodology 2 [98.233(f)(2)]\",\"Calculation Methodology 3 [98.233(f)(3)]\"))"
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"Calculation Methodology 2 [98.233(f)(2)]\",\"Calculation Methodology 3 [98.233(f)(3)]\"))"
     },
     {
       "headerName": "Were Plunger Lifts used?",
@@ -40,57 +40,57 @@
       "headerName": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)",
       "field": "I",
       "editable": false,
-      "excelFormula": "=IF(H6706=\"\",\"\",H6706*F6706)"
+      "excelFormula": "=IF($H$=\"\",\"\",$H$*$F$)"
     },
     {
       "headerName": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)",
       "field": "J",
       "editable": false,
-      "excelFormula": "=IF(H6706=\"\",\"\",H6706*G6706)"
+      "excelFormula": "=IF($H$=\"\",\"\",$H$*$G$)"
     },
     {
       "headerName": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)",
       "field": "K",
       "editable": false,
-      "excelFormula": "=IF(I6706=\"\",\"\",I6706*$D$26/1000)"
+      "excelFormula": "=IF($I$=\"\",\"\",$I$*$D$26/1000)"
     },
     {
       "headerName": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)",
       "field": "L",
       "editable": false,
-      "excelFormula": "=IF(J6706=\"\",\"\",J6706*$D$26/1000)"
+      "excelFormula": "=IF($J$=\"\",\"\",$J$*$D$26/1000)"
     },
     {
       "headerName": "Total Number of Wells vented for liquids unloading in sub-basin",
       "field": "M",
       "editable": false,
-      "excelFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",COUNTIFS($C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))"
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",COUNTIFS($C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
     },
     {
       "headerName": "[Vp]\nCumulative number of unloadings vented to the atmosphere",
       "field": "N",
       "editable": false,
-      "excelFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))"
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
     },
     {
       "headerName": "Average internal casing diameter across sub-basin\n(inches)",
       "field": "O",
       "editable": false,
       "cellStyle": {
-        "condition": "$E6706=\"Yes\"",
+        "condition": "$E$=\"Yes\"",
         "style": { "backgroundColor": "black" }
       },
-      "excelFormula": "=IF(E6706=\"\",\"\",IF(E6706=\"No\",AVERAGEIF($C$1699:$C$6698,C6706,$F$1699:$F$6698),\"\"))"
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",AVERAGEIF($C$1699:$C$6698,$C$,$F$1699:$F$6698),\"\"))"
     },
     {
       "headerName": "Average internal casing diameter across sub-basin\n(inches)",
       "field": "P",
       "editable": false,
       "cellStyle": {
-        "condition": "$E6706=\"No\"",
+        "condition": "$E$=\"No\"",
         "style": { "backgroundColor": "black" }
       },
-      "excelFormula": "=IF(E6706=\"\",\"\",IF(E6706=\"No\",\"\",AVERAGEIF($C$1699:$C$6698,C6706,$I$1699:$I$6698)))"
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"\",AVERAGEIF($C$1699:$C$6698,$C$,$I$1699:$I$6698)))"
     }
   ]
 }

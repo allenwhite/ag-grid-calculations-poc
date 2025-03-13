@@ -1,0 +1,24 @@
+{
+  "tableId": "Method2-3RefTable",
+  "description": "Calculation Methodologies 2 & 3, Reference Table",
+  "columnDefinitions": [
+    {
+      "headerName": "unique id",
+      "field": "AI",
+      "editable": false,
+      "excelFormula": "=IF(C1699=\"\",\"\",C1699&\"_\"&E1699)"
+    },
+    {
+      "headerName": "no dupes",
+      "field": "AJ",
+      "editable": false,
+      "excelFormula": "=IF(COUNTIF($AI$1699:AI1699,AI1699)=1,AI1699,\"\")"
+    },
+    {
+      "headerName": "no blanks",
+      "field": "AK",
+      "editable": false,
+      "excelFormula": "=IFERROR(INDEX($AJ$1699:$AJ$6698,SMALL((IF(LEN($AJ$1699:$AJ$6698),ROW(INDIRECT(\"1:\"&ROWS($AJ$1699:$AJ$6698))))),ROW(A1)),1),\"\")"
+    }
+  ]
+}
