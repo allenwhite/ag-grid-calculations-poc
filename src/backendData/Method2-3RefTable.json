@@ -6,13 +6,13 @@
       "headerName": "unique id",
       "field": "AI",
       "editable": false,
-      "excelFormula": "=IF(C1699=\"\",\"\",C1699&\"_\"&E1699)"
+      "excelFormula": "=IF($Method2-3Table1.C$=\"\",\"\",$Method2-3Table1.C$&\"_\"&$Method2-3Table1.E$)"
     },
     {
-      "headerName": "no dupes",
+      "headerName": "no dupes", // i could just use start row, if we have it
       "field": "AJ",
       "editable": false,
-      "excelFormula": "=IF(COUNTIF($AI$1699:AI1699,AI1699)=1,AI1699,\"\")"
+      "excelFormula": "=IF(COUNTIF($AI$0$:$AI$0$,$AI$0$)=1,$AI$0$,\"\")"
     },
     {
       "headerName": "no blanks",

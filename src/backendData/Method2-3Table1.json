@@ -103,5 +103,8 @@
       "editable": false,
       "excelFormula": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))"
     }
-  ]
+  ],
+  "computed": {
+    "Method2-3Table2.Sub-Basin": "SET(C&E) ??"
+  }
 }
