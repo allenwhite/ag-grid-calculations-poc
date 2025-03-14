@@ -58,6 +58,16 @@ describe("evaluate()", () => {
     //   evaluate(SUM_A1_A2_FORMULA, { row: 1, column: 1 }, formulaParser)
     // ).toBe(3);
   });
+  /**
+   * With the given data and the given equation for this column, do i get the expected value in colum P?
+   * 
+   * {
+      "headerName": "[Es]\nAnnual natural gas emissions\n(scf)",
+      "field": "P",
+      "editable": false,
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))"
+    }
+   */
   test("evaluates Method2-3Table1.P formula", () => {
     const data = [
       {

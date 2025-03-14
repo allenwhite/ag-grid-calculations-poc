@@ -253,6 +253,8 @@ export function evaluate(
   }
 }
 
+// I should add in the old ones and make a separate one for Coord
+
 function convertCoordToCellRef(coord: Coord | Point): CellRef {
   console.log("coord", coord, "col in coord", "col" in coord);
   const point2 = {
