@@ -11,7 +11,7 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-import { createFormulaParser } from "../calc-engine/engine/formula";
+import { createCCFormulaParser } from "../calc-engine/engine/formula";
 import { PageData } from "../App";
 
 interface CalculationTableViewProps {
@@ -25,7 +25,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
 }) => {
   const gridRef = useRef<AgGridReact>(null);
   const [rowData, setRowData] = useState<any[]>([pageData]);
-  const fomulaParser = createFormulaParser(rowData);
+  const fomulaParser = createCCFormulaParser(rowData);
 
   const addRow = () => {
     setRowData([...rowData, { ...pageData }]);
