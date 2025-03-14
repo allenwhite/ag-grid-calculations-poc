@@ -26,7 +26,7 @@ function App() {
     <div className="App">
       <CalculationTableView tableData={table1Data} pageData={pageData} />
       <div style={{ height: "80px" }}></div>
-      <CalculationTableView tableData={table2Data} pageData={pageData} />
+      {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
     </div>
   );
 }

@@ -96,6 +96,7 @@ export function createFormulaParser(
   // data: Matrix.Matrix<CellBase>,
   config?: Omit<FormulaParserConfig, "onCell" | "onRange">
 ): FormulaParser {
+  console.log("data", data);
   return new FormulaParser({
     ...config,
     onCell: (ref) => {
@@ -232,6 +233,7 @@ export function evaluate(
   coord: Coord | Point,
   formulaParser: FormulaParser
 ): Value {
+  console.log("formula", formula, "coord", coord);
   const parsedFormula = replaceRanges(formula, coord);
   console.log("parsedFormula", parsedFormula);
   try {
