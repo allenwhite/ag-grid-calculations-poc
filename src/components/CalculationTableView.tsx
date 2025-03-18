@@ -29,7 +29,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   const fomulaParser = createCCFormulaParser(rowData);
 
   const addRow = () => {
-    setRowData([...rowData, { ...pageData }]);
+    setRowData([...rowData, { ...initialData[0] }]); // pagedata is wrong
   };
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {

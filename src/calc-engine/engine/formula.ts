@@ -88,7 +88,12 @@ export function convertStartDataToData(startData: any[]) {
   const result = startData.map((row) => {
     return Object.keys(row).map((key) => row[key]);
   });
-  console.log("convertStartDataToData(startData:)", startData, result);
+  console.log(
+    "convertStartDataToData(startData:)",
+    startData,
+    result,
+    Object.values(startData[0])
+  );
   return result;
 } //  i think this can just be values...
 
@@ -145,13 +150,16 @@ export function createCCFormulaParser(
     },
     onRange: (ref) => {
       const formattedData = convertStartDataToData(data);
-      console.log("onRange", ref, formattedData);
+
+      const colOffset = columns.indexOf(Object.keys(data[0])[0]);
+      console.log("onRange", ref, formattedData, data, colOffset);
       const arr = [];
       for (let row = ref.from.row; row <= ref.to.row; row++) {
         const innerArr = [];
         if (formattedData[row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
-            innerArr.push(formattedData[row - 1][col - 1]);
+            console.log("pushing", row - 1, col - 1 - colOffset, formattedData);
+            innerArr.push(formattedData[row - 1][col - 1 - colOffset]);
           }
         }
         arr.push(innerArr);
