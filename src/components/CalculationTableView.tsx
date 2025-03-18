@@ -24,7 +24,8 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   pageData,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
-  const [rowData, setRowData] = useState<any[]>([pageData]);
+  const initialData = pageData ? [pageData[tableData.tableId]] : [];
+  const [rowData, setRowData] = useState<any[]>(initialData);
   const fomulaParser = createCCFormulaParser(rowData);
 
   const addRow = () => {
@@ -41,7 +42,6 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
     if (!event.column) return;
   };
 
-  // move to another file?
   const defaultColDef = {
     cellStyle: (params: any) => {
       return params.colDef.editable

@@ -83,6 +83,7 @@ export function extractFormula(value: string): string {
   return value.slice(1);
 }
 
+// test this, its not working perfectly
 export function convertStartDataToData(startData: any[]) {
   const result = startData.map((row) => {
     return Object.keys(row).map((key) => row[key]);
@@ -134,6 +135,7 @@ export function createCCFormulaParser(
     ...config,
     onCell: (ref) => {
       const formattedData = convertStartDataToData(data);
+      console.log("onCell", ref, formattedData);
       const val = ref.address
         ? data[ref.row - 1][ref.address.replace("$", "").replace(/[0-9]/g, "")]
         : formattedData[ref.row - 1][ref.col - 1];
@@ -154,7 +156,6 @@ export function createCCFormulaParser(
         }
         arr.push(innerArr);
       }
-      console.log("arr", arr);
       return arr as Value[];
     },
   });
