@@ -6,19 +6,22 @@
       "headerName": "unique id",
       "field": "AI",
       "editable": false,
-      "excelFormula": "=IF($Method2-3Table1.C$=\"\",\"\",$Method2-3Table1.C$&\"_\"&$Method2-3Table1.E$)"
+      "excelFormula": "=IF($Method2-3Table1.C$=\"\",\"\",$Method2-3Table1.C$&\"_\"&$Method2-3Table1.E$)",
+      "notes": "original: =IF(C1700=\"\",\"\",C1700&\"_\"&E1700) ... C1700 -> $Method2-3Table1.C$ for reference outside table "
     },
     {
       "headerName": "no dupes",
       "field": "AJ",
       "editable": false,
-      "excelFormula": "=IF(COUNTIF($AI$0$:$AI$0$,$AI$0$)=1,$AI$0$,\"\")"
+      "excelFormula": "=IF(COUNTIF($AI1:$AI$,$AI$)=1,$AI$,\"\")",
+      "notes": "original: =IF(COUNTIF($AI$1699:AI1700,AI1700)=1,AI1700,\"\") ... $AI$1699 -> $AI1, AI1700 -> $AI$"
     },
     {
       "headerName": "no blanks",
       "field": "AK",
       "editable": false,
-      "excelFormula": "=IFERROR(INDEX($AJ$1699:$AJ$6698,SMALL((IF(LEN($AJ$1699:$AJ$6698),ROW(INDIRECT(\"1:\"&ROWS($AJ$1699:$AJ$6698))))),ROW(A1)),1),\"\")"
+      "excelFormula": "=IFERROR(INDEX(AJ:AJ,SMALL((IF(LEN(AJ:AJ),ROW(INDIRECT(\"1:\"&ROWS(AJ:AJ))))),ROW(A1)),1),\"\")",
+      "notes": "original: =IFERROR(INDEX($AJ$1699:$AJ$6698,SMALL((IF(LEN($AJ$1699:$AJ$6698),ROW(INDIRECT(\"1:\"&ROWS($AJ$1699:$AJ$6698))))),ROW(A1)),1),\"\") ... $AJ$1699:$AJ$6698 -> AJ:AJ this is the whole range"
     }
   ]
 }

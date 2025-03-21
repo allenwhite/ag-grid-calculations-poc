@@ -104,7 +104,7 @@
       "excelFormula": "=IF(OR($C$=\"\",$E$=\"\",$L$=\"\",$M$=\"\",$N$=\"\"),\"\",(($L$*((0.37*10^-3)*IF($E$=\"No\",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$=\"No\",1,0.5))*$O$)))))"
     },
     {
-      "headerName": "Test Range",
+      "headerName": "Test Sum up to this row",
       "field": "Q",
       "editable": false,
       "excelFormula": "=SUM(P1:$P$)"
