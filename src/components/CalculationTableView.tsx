@@ -88,6 +88,6 @@ export default CalculationTableView;
  * checklist
  *
  * 1. full page refs working
- * 2. ranges working
+ * 2. ranges working ✅
  * 3. custom formulas
  */
