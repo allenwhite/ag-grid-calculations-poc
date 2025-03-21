@@ -9,7 +9,7 @@
       "excelFormula": "=IF($Method2-3Table1.C$=\"\",\"\",$Method2-3Table1.C$&\"_\"&$Method2-3Table1.E$)"
     },
     {
-      "headerName": "no dupes", // i could just use start row, if we have it
+      "headerName": "no dupes",
       "field": "AJ",
       "editable": false,
       "excelFormula": "=IF(COUNTIF($AI$0$:$AI$0$,$AI$0$)=1,$AI$0$,\"\")"
