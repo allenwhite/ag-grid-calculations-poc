@@ -31,9 +31,25 @@ function App() {
 
   const [pageData, setPageData] = useState<PageData>(newPageData);
 
+  const addRow = () => {
+    setPageData((prev) => {
+      return {
+        ...prev,
+        [table1Data.tableId]: [
+          ...prev[table1Data.tableId],
+          getInitialEmptyData(table1Data),
+        ],
+      };
+    });
+  };
+
   return (
     <div className="App">
-      <CalculationTableView tableDefinition={table1Data} pageData={pageData} />
+      <CalculationTableView
+        tableDefinition={table1Data}
+        pageData={pageData}
+        addRow={addRow}
+      />
       <div style={{ height: "80px" }}></div>
       {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
     </div>

@@ -11,35 +11,28 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-import {
-  createCCFormulaParser,
-  createCCFormulaParserSingle,
-} from "../calc-engine/engine/formula";
+import { createCCFormulaParser } from "../calc-engine/engine/formula";
 import { PageData, TableData } from "../App";
 
 interface CalculationTableViewProps {
   tableDefinition: CalculationTable;
   pageData?: PageData;
+  addRow: () => void;
 }
 
 const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   tableDefinition,
   pageData,
+  addRow,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
   const initialData: TableData = pageData
     ? pageData[tableDefinition.tableId]
     : [];
 
-  const [rowData, setRowData] = useState<any[]>(initialData);
-
   const fomulaParser = pageData
-    ? createCCFormulaParserSingle(tableDefinition, rowData)
+    ? createCCFormulaParser(tableDefinition, pageData)
     : undefined;
-
-  const addRow = () => {
-    setRowData([...rowData, { ...initialData[0] }]);
-  };
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
     gridRef.current?.api.refreshCells({
@@ -73,11 +66,11 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
           headerHeight={200}
           columnDefs={getColDefs(
             tableDefinition,
-            rowData,
-            setRowData,
+            initialData,
+            () => {},
             fomulaParser
           )}
-          rowData={rowData}
+          rowData={initialData}
           defaultColDef={defaultColDef}
           modules={[ClientSideRowModelModule]}
           onCellValueChanged={onCellValueChanged}
