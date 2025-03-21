@@ -124,7 +124,6 @@ const getColDefs = (
   setRowData: (rowData: RowData[]) => void,
   fomulaParser: FormulaParser
 ): ColDef[] => {
-  console.log("rowData", rowData);
   return tableDefinition.columnDefinitions.map((cd) => ({
     headerName: cd.headerName,
     field: cd.field,
@@ -143,7 +142,6 @@ const getColDefs = (
               },
               fomulaParser
             );
-            console.log("evaled?", evaled);
             if (evaled) {
               return cd.cellStyle.style;
             }
@@ -171,7 +169,7 @@ const getColDefs = (
     ...(cd.excelFormula
       ? {
           valueGetter: (params: any) => {
-            console.log("params", columns.indexOf(params.column.colId) - 1);
+            // console.log("params", columns.indexOf(params.column.colId) - 1);
             if (cd.excelFormula) {
               const evaled = evaluateCC(
                 cd.excelFormula,

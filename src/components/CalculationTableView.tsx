@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import {
@@ -67,7 +67,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
           columnDefs={getColDefs(
             tableDefinition,
             initialData,
-            () => {},
+            () => {}, // setRowData equivalent needed here? maybe not
             fomulaParser
           )}
           rowData={initialData}

@@ -144,33 +144,29 @@ export function createCCFormulaParser(
   return new FormulaParser({
     ...config,
     onCell: (ref: CellRef) => {
-      const formattedData = convertStartDataToData(data);
-      console.log("onCell", ref, "data", data);
       const val = ref.address
         ? data[tableId][ref.row - 1][
             ref.address.replace("$", "").replace(/[0-9]/g, "")
           ]
-        : formattedData[tableId][ref.row - 1][ref.col - 1];
+        : data[tableId][ref.row - 1][columns[ref.col - 1]];
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
     },
     onRange: (ref) => {
-      const formattedData = convertStartDataToData(data);
+      console.log(`onRange ref`, ref, data);
 
-      const colOffset = columns.indexOf(Object.keys(data[0])[0]);
-      console.log("onRange", ref, formattedData, data, colOffset);
-      const arr = [];
+      const arr: Value[] = [];
       for (let row = ref.from.row; row <= ref.to.row; row++) {
         const innerArr = [];
-        if (formattedData[row - 1]) {
+        if (data[tableId][row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
-            console.log("pushing", row - 1, col - 1 - colOffset, formattedData);
-            innerArr.push(formattedData[row - 1][col - 1 - colOffset]);
+            innerArr.push(data[tableId][row - 1][columns[col - 1]]);
           }
         }
         arr.push(innerArr);
       }
+      console.log("onRange:", arr);
       return arr as Value[];
     },
   });
@@ -250,13 +246,19 @@ export function evaluateCC(
   coord: Coord,
   formulaParser: FormulaParser
 ): Value {
-  console.log("formula", formula, "coord", coord);
   const parsedFormula = replaceRanges(formula, coord);
-  console.log("parsedFormula", parsedFormula);
+  console.log(
+    "formula",
+    formula,
+    "parsedFormula",
+    parsedFormula,
+    "coord",
+    coord
+  );
   try {
     const position = convertCoordToCellRef(coord);
     const returned = formulaParser.parse(parsedFormula, position);
-    console.log("returned", returned);
+    // console.log("returned", returned);
     return returned instanceof FormulaError ? returned.toString() : returned;
   } catch (error) {
     console.log("err", error);
@@ -272,12 +274,12 @@ export function evaluateCC(
 
 function convertCoordToCellRef(coord: Coord): CellRef {
   const point2 = {
-    row: 0,
-    col: 3,
-    sheet: coord.tableId,
-    address: "F1", //`${coord.col}${coord.row}`,
+    row: coord.row + 1,
+    col: columns.indexOf(coord.col),
+    // TODO: fill once we support multiple sheets
+    sheet: "Sheet1",
+    address: `${coord.col}${coord.row + 1}`,
   };
-  console.log("convertCoordToCellRef(coord: ", coord, "): ", point2);
   return point2;
 }
 

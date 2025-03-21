@@ -107,7 +107,7 @@
       "headerName": "Test Range",
       "field": "Q",
       "editable": false,
-      "excelFormula": "=SUM(P1:P3)"
+      "excelFormula": "=SUM($P1:$P2)"
     }
   ],
   "computed": {
