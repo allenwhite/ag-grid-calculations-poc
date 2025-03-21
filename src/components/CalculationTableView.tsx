@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import {
@@ -11,7 +11,10 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
-import { createCCFormulaParser } from "../calc-engine/engine/formula";
+import {
+  createCCFormulaParser,
+  createCCFormulaParserSingle,
+} from "../calc-engine/engine/formula";
 import { PageData } from "../App";
 
 interface CalculationTableViewProps {
@@ -36,9 +39,9 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   ];
   pageData && (pageData[tableDefinition.tableId] = hardInitialData);
   const [rowData, setRowData] = useState<any[]>(hardInitialData);
-  console.log("pageData", pageData);
+
   const fomulaParser = pageData
-    ? createCCFormulaParser(tableDefinition, pageData)
+    ? createCCFormulaParserSingle(tableDefinition, rowData)
     : undefined;
 
   const addRow = () => {

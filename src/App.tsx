@@ -3,6 +3,7 @@ import CalculationTableView from "./components/CalculationTableView";
 import table1Config from "./backendData/Method2-3Table1.json";
 import table2Config from "./backendData/Method2-3Table2.json";
 import { CalculationTable } from "./model/tableDefinition";
+import { useState } from "react";
 
 export type TableData = Record<string, any>;
 export type PageData = Record<string, TableData>;
@@ -24,9 +25,11 @@ function App() {
    *  ],
    * }
    */
-  const pageData: PageData = {};
-  pageData[table1Data.tableId] = [getInitialEmptyData(table1Data)];
-  pageData[table2Data.tableId] = [getInitialEmptyData(table2Data)];
+  const newPageData: PageData = {};
+  newPageData[table1Data.tableId] = [getInitialEmptyData(table1Data)];
+  newPageData[table2Data.tableId] = [getInitialEmptyData(table2Data)];
+
+  const [pageData, setPageData] = useState<PageData>(newPageData);
 
   return (
     <div className="App">

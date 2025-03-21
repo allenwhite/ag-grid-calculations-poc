@@ -85,6 +85,12 @@ export function extractFormula(value: string): string {
   return value.slice(1);
 }
 
+export function convertStartDataToDataSingle(data: any[]): {
+  [key: string]: any[];
+} {
+  return Object.fromEntries(data.map((row, index) => [index, row]));
+}
+
 export function convertStartDataToData(pageData: PageData): {
   [key: string]: any[];
 } {
@@ -125,6 +131,44 @@ export function createFormulaParser(
         if (!isNaN(cell?.value as number)) return Number(cell?.value);
         return cell?.value;
       });
+    },
+  });
+}
+
+export function createCCFormulaParserSingle(
+  tableDefinition: CalculationTable,
+  data: any[],
+  config?: Omit<FormulaParserConfig, "onCell" | "onRange">
+) {
+  return new FormulaParser({
+    ...config,
+    onCell: (ref: CellRef) => {
+      const formattedData = convertStartDataToDataSingle(data);
+      console.log("onCell", ref, "data", data);
+      const val = ref.address
+        ? data[ref.row - 1][ref.address.replace("$", "").replace(/[0-9]/g, "")]
+        : formattedData[ref.row - 1][ref.col - 1];
+      if (isNumeric(val)) return Number(val);
+      if (val?.toString()?.length === 0) return 0;
+      return val;
+    },
+    onRange: (ref) => {
+      const formattedData = convertStartDataToDataSingle(data);
+
+      const colOffset = columns.indexOf(Object.keys(data[0])[0]);
+      console.log("onRange", ref, formattedData, data, colOffset);
+      const arr = [];
+      for (let row = ref.from.row; row <= ref.to.row; row++) {
+        const innerArr = [];
+        if (formattedData[row - 1]) {
+          for (let col = ref.from.col; col <= ref.to.col; col++) {
+            console.log("pushing", row - 1, col - 1 - colOffset, formattedData);
+            innerArr.push(formattedData[row - 1][col - 1 - colOffset]);
+          }
+        }
+        arr.push(innerArr);
+      }
+      return arr as Value[];
     },
   });
 }
