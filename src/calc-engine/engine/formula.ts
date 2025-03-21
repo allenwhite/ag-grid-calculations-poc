@@ -10,6 +10,8 @@ import { Point } from "../point";
 import * as Matrix from "../matrix";
 import { CellBase } from "../types";
 import { PointSet } from "./point-set";
+import { PageData } from "../../App";
+import { CalculationTable } from "../../model/tableDefinition";
 
 export const FORMULA_VALUE_PREFIX = "=";
 
@@ -83,19 +85,15 @@ export function extractFormula(value: string): string {
   return value.slice(1);
 }
 
-// test this, its not working perfectly
-export function convertStartDataToData(startData: any[]) {
-  const result = startData.map((row) => {
-    return Object.keys(row).map((key) => row[key]);
+export function convertStartDataToData(pageData: PageData): {
+  [key: string]: any[];
+} {
+  const result: { [key: string]: any[] } = {};
+  Object.keys(pageData).forEach((key) => {
+    result[key] = Object.values(pageData[key]);
   });
-  console.log(
-    "convertStartDataToData(startData:)",
-    startData,
-    result,
-    Object.values(startData[0])
-  );
   return result;
-} //  i think this can just be values...
+}
 
 export function createFormulaParser(
   data: Matrix.Matrix<CellBase>,
@@ -132,18 +130,21 @@ export function createFormulaParser(
 }
 
 export function createCCFormulaParser(
-  data: any[],
+  tableDefinition: CalculationTable,
+  data: PageData,
   config?: Omit<FormulaParserConfig, "onCell" | "onRange">
 ): FormulaParser {
-  console.log("data", data);
+  const tableId = tableDefinition.tableId;
   return new FormulaParser({
     ...config,
-    onCell: (ref) => {
+    onCell: (ref: CellRef) => {
       const formattedData = convertStartDataToData(data);
-      console.log("onCell", ref, formattedData);
+      console.log("onCell", ref, "data", data);
       const val = ref.address
-        ? data[ref.row - 1][ref.address.replace("$", "").replace(/[0-9]/g, "")]
-        : formattedData[ref.row - 1][ref.col - 1];
+        ? data[tableId][ref.row - 1][
+            ref.address.replace("$", "").replace(/[0-9]/g, "")
+          ]
+        : formattedData[tableId][ref.row - 1][ref.col - 1];
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
@@ -182,7 +183,7 @@ export function getReferences(
 ): PointSet {
   const { rows, columns } = Matrix.getSize(data);
   try {
-    const dependencies = depParser.parse(formula, convertCoordToCellRef(point));
+    const dependencies = depParser.parse(formula, convertPointToCellRef(point));
 
     const references = PointSet.from(
       dependencies.flatMap((reference) => {
@@ -235,12 +236,12 @@ const replaceRanges = (formula: string, currentPosition: Coord | Point) => {
 };
 
 export class Coord {
-  constructor(public row: number, public col: string) {}
+  constructor(public row: number, public col: string, public tableId: string) {}
 }
 
-export function evaluate(
+export function evaluateCC(
   formula: string,
-  coord: Coord | Point,
+  coord: Coord,
   formulaParser: FormulaParser
 ): Value {
   console.log("formula", formula, "coord", coord);
@@ -263,25 +264,45 @@ export function evaluate(
   }
 }
 
-// I should add in the old ones and make a separate one for Coord
-
-function convertCoordToCellRef(coord: Coord | Point): CellRef {
-  console.log("coord", coord, "col in coord", "col" in coord);
+function convertCoordToCellRef(coord: Coord): CellRef {
   const point2 = {
-    row: coord.row + 1,
-    col: "col" in coord ? columns.indexOf(coord.col) : coord.column + 1,
-    // TODO: fill once we support multiple sheets
-    sheet: "Sheet1",
-    address:
-      "col" in coord
-        ? `${coord.col}${coord.row + 1}`
-        : columns[coord.column + 1],
+    row: 0,
+    col: 3,
+    sheet: coord.tableId,
+    address: "F1", //`${coord.col}${coord.row}`,
   };
-  console.log("convertPointToCellRef", point2);
+  console.log("convertCoordToCellRef(coord: ", coord, "): ", point2);
   return point2;
 }
 
+export function evaluate(
+  formula: string,
+  point: Point,
+  formulaParser: FormulaParser
+): Value {
+  try {
+    const position = convertPointToCellRef(point);
+    const returned = formulaParser.parse(formula, position);
+    return returned instanceof FormulaError ? returned.toString() : returned;
+  } catch (error) {
+    if (error instanceof FormulaError) {
+      return error.toString();
+    }
+    throw error;
+  }
+}
+
+function convertPointToCellRef(point: Point): CellRef {
+  return {
+    row: point.row + 1,
+    col: point.column + 1,
+    // TODO: fill once we support multiple sheets
+    sheet: "Sheet1",
+    address: `${columns.indexOf(`${point.column}`)}${point.row + 1}`,
+  };
+}
+
 function isNumeric(value: string): boolean {
-  console.log("isNumeric", value, /^-?\d+(\.\d+)?$/.test(value));
+  // console.log("isNumeric", value, /^-?\d+(\.\d+)?$/.test(value));
   return /^-?\d+(\.\d+)?$/.test(value);
 }

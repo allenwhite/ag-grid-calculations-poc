@@ -15,21 +15,34 @@ import { createCCFormulaParser } from "../calc-engine/engine/formula";
 import { PageData } from "../App";
 
 interface CalculationTableViewProps {
-  tableData: CalculationTable;
+  tableDefinition: CalculationTable;
   pageData?: PageData;
 }
 
 const CalculationTableView: React.FC<CalculationTableViewProps> = ({
-  tableData,
+  tableDefinition,
   pageData,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
-  const initialData = pageData ? [pageData[tableData.tableId]] : [];
-  const [rowData, setRowData] = useState<any[]>(initialData);
-  const fomulaParser = createCCFormulaParser(rowData);
+  const initialData = pageData ? [pageData[tableDefinition.tableId]] : [];
+  // const [rowData, setRowData] = useState<any[]>(initialData);
+  const hardInitialData = [
+    {
+      C: "",
+      D: "",
+      E: "",
+      F: "",
+    },
+  ];
+  pageData && (pageData[tableDefinition.tableId] = hardInitialData);
+  const [rowData, setRowData] = useState<any[]>(hardInitialData);
+  console.log("pageData", pageData);
+  const fomulaParser = pageData
+    ? createCCFormulaParser(tableDefinition, pageData)
+    : undefined;
 
   const addRow = () => {
-    setRowData([...rowData, { ...initialData[0] }]); // pagedata is wrong
+    // setRowData([...rowData, { ...initialData[0] }]);
   };
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
@@ -57,25 +70,35 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
       className="ag-theme-alpine"
       style={{ height: 400, width: "90%", marginLeft: "5%" }}
     >
-      <h2>{tableData.description}</h2>
-      <AgGridReact
-        ref={gridRef}
-        headerHeight={200}
-        columnDefs={getColDefs(
-          tableData.columnDefinitions,
-          rowData,
-          setRowData,
-          fomulaParser
-        )}
-        rowData={rowData}
-        defaultColDef={defaultColDef}
-        modules={[ClientSideRowModelModule]}
-        onCellValueChanged={onCellValueChanged}
-        onCellClicked={onCellClicked}
-      />
+      <h2>{tableDefinition.description}</h2>
+      {fomulaParser && (
+        <AgGridReact
+          ref={gridRef}
+          headerHeight={200}
+          columnDefs={getColDefs(
+            tableDefinition,
+            rowData,
+            setRowData,
+            fomulaParser
+          )}
+          rowData={rowData}
+          defaultColDef={defaultColDef}
+          modules={[ClientSideRowModelModule]}
+          onCellValueChanged={onCellValueChanged}
+          onCellClicked={onCellClicked}
+        />
+      )}
       <button onClick={addRow}>Add Row</button>
     </div>
   );
 };
 
 export default CalculationTableView;
+
+/**
+ * checklist
+ *
+ * 1. full page refs working
+ * 2. ranges working
+ * 3. custom formulas
+ */

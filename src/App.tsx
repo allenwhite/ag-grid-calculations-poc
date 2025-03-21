@@ -14,17 +14,23 @@ function App() {
   /**
    * Full page data to enable cross table references
    * {
-   *  tableId1: { table data },
-   *  tableId2: { table data },
+   *  tableId1: [
+   *    { table data }
+   *    { table data }
+   * ],
+   *  tableId2: [
+   *    { table data }
+   *    { table data }
+   *  ],
    * }
    */
   const pageData: PageData = {};
-  pageData[table1Data.tableId] = getInitialEmptyData(table1Data);
-  pageData[table2Data.tableId] = getInitialEmptyData(table2Data);
+  pageData[table1Data.tableId] = [getInitialEmptyData(table1Data)];
+  pageData[table2Data.tableId] = [getInitialEmptyData(table2Data)];
 
   return (
     <div className="App">
-      <CalculationTableView tableData={table1Data} pageData={pageData} />
+      <CalculationTableView tableDefinition={table1Data} pageData={pageData} />
       <div style={{ height: "80px" }}></div>
       {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
     </div>
