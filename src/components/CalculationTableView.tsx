@@ -15,7 +15,7 @@ import {
   createCCFormulaParser,
   createCCFormulaParserSingle,
 } from "../calc-engine/engine/formula";
-import { PageData } from "../App";
+import { PageData, TableData } from "../App";
 
 interface CalculationTableViewProps {
   tableDefinition: CalculationTable;
@@ -27,25 +27,18 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   pageData,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
-  const initialData = pageData ? [pageData[tableDefinition.tableId]] : [];
-  // const [rowData, setRowData] = useState<any[]>(initialData);
-  const hardInitialData = [
-    {
-      C: "",
-      D: "",
-      E: "",
-      F: "",
-    },
-  ];
-  pageData && (pageData[tableDefinition.tableId] = hardInitialData);
-  const [rowData, setRowData] = useState<any[]>(hardInitialData);
+  const initialData: TableData = pageData
+    ? pageData[tableDefinition.tableId]
+    : [];
+
+  const [rowData, setRowData] = useState<any[]>(initialData);
 
   const fomulaParser = pageData
     ? createCCFormulaParserSingle(tableDefinition, rowData)
     : undefined;
 
   const addRow = () => {
-    // setRowData([...rowData, { ...initialData[0] }]);
+    setRowData([...rowData, { ...initialData[0] }]);
   };
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {

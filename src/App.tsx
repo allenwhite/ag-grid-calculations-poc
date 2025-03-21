@@ -5,7 +5,7 @@ import table2Config from "./backendData/Method2-3Table2.json";
 import { CalculationTable } from "./model/tableDefinition";
 import { useState } from "react";
 
-export type TableData = Record<string, any>;
+export type TableData = Record<string, any>[]; // { C: "11", D: "No" }
 export type PageData = Record<string, TableData>;
 
 function App() {
