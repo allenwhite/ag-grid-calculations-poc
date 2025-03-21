@@ -154,22 +154,22 @@ export function createCCFormulaParser(
       return val;
     },
     onRange: (ref) => {
-      console.log(`onRange ref`, ref, data);
+      // console.log(`onRange ref`, ref, data);
 
       const arr: Value[] = [];
       const rowMax = Math.min(ref.to.row, data[tableId].length);
-      console.log("onRange rowMax", rowMax);
+      // console.log("onRange rowMax", rowMax);
       for (let row = ref.from.row; row <= rowMax; row++) {
         const innerArr = [];
         if (data[tableId][row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
-            console.log("onRangePush", `row ${row}, col ${col}`);
+            // console.log("onRangePush", `row ${row}, col ${col}`);
             innerArr.push(data[tableId][row - 1][columns[col - 1]]);
           }
         }
         arr.push(innerArr);
       }
-      console.log("onRange:", arr);
+      // console.log("onRange:", arr);
       return arr as Value[];
     },
   });
@@ -250,14 +250,14 @@ export function evaluateCC(
   formulaParser: FormulaParser
 ): Value {
   const parsedFormula = replaceRanges(formula, coord);
-  console.log(
-    "formula",
-    formula,
-    "parsedFormula",
-    parsedFormula,
-    "coord",
-    coord
-  );
+  // console.log(
+  //   "formula",
+  //   formula,
+  //   "parsedFormula",
+  //   parsedFormula,
+  //   "coord",
+  //   coord
+  // );
   try {
     const position = convertCoordToCellRef(coord);
     const returned = formulaParser.parse(parsedFormula, position);
