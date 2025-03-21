@@ -157,10 +157,13 @@ export function createCCFormulaParser(
       console.log(`onRange ref`, ref, data);
 
       const arr: Value[] = [];
-      for (let row = ref.from.row; row <= ref.to.row; row++) {
+      const rowMax = Math.min(ref.to.row, data[tableId].length);
+      console.log("onRange rowMax", rowMax);
+      for (let row = ref.from.row; row <= rowMax; row++) {
         const innerArr = [];
         if (data[tableId][row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
+            console.log("onRangePush", `row ${row}, col ${col}`);
             innerArr.push(data[tableId][row - 1][columns[col - 1]]);
           }
         }
