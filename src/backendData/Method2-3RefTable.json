@@ -6,7 +6,7 @@
       "headerName": "unique id",
       "field": "AI",
       "editable": false,
-      "excelFormula": "=IF($Method2-3Table1.C$=\"\",\"\",$Method2-3Table1.C$&\"_\"&$Method2-3Table1.E$)",
+      "excelFormula": "=IF($C$=\"\",\"\",$C$&\"_\"&$E$)",
       "originalFormula": "=IF(C1700=\"\",\"\",C1700&\"_\"&E1700)",
       "notes": "C1700 -> $Method2-3Table1.C$ for reference outside table "
     },

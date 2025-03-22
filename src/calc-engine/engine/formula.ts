@@ -140,15 +140,27 @@ export function createCCFormulaParser(
   data: PageData,
   config?: Omit<FormulaParserConfig, "onCell" | "onRange">
 ): FormulaParser {
-  const tableId = tableDefinition.tableId;
+  const currentTableId = tableDefinition.tableId;
   return new FormulaParser({
     ...config,
     onCell: (ref: CellRef) => {
-      const val = ref.address
-        ? data[tableId][ref.row - 1][
-            ref.address.replace("$", "").replace(/[0-9]/g, "")
-          ]
+      const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
+      let tableId = currentTableId;
+
+      if (!(column && column in data[currentTableId][ref.row - 1])) {
+        Object.entries(data).every(([key, value]) => {
+          if (column && column in value[0]) {
+            tableId = key;
+            return false;
+          }
+          return true;
+        });
+      }
+
+      const val = column
+        ? data[tableId][ref.row - 1][column]
         : data[tableId][ref.row - 1][columns[ref.col - 1]];
+
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
@@ -157,14 +169,14 @@ export function createCCFormulaParser(
       // console.log(`onRange ref`, ref, data);
 
       const arr: Value[] = [];
-      const rowMax = Math.min(ref.to.row, data[tableId].length);
+      const rowMax = Math.min(ref.to.row, data[currentTableId].length);
       // console.log("onRange rowMax", rowMax);
       for (let row = ref.from.row; row <= rowMax; row++) {
         const innerArr = [];
-        if (data[tableId][row - 1]) {
+        if (data[currentTableId][row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
             // console.log("onRangePush", `row ${row}, col ${col}`);
-            innerArr.push(data[tableId][row - 1][columns[col - 1]]);
+            innerArr.push(data[currentTableId][row - 1][columns[col - 1]]);
           }
         }
         arr.push(innerArr);
@@ -232,10 +244,10 @@ export function getReferences(
  * @param currentPosition - current cell position
  * @returns
  */
-const replaceRanges = (formula: string, currentPosition: Coord | Point) => {
+const replaceRanges = (formula: string, currentPosition: Coord) => {
   return formula
     .replace(FORMULA_VALUE_PREFIX, "")
-    .replace(/\$([A-Za-z]+)\$/g, (match, p1) => {
+    .replace(/\$([A-Za-z0-9.-]+)\$/g, (match, p1) => {
       return `$${p1}${currentPosition.row}`;
     });
 };
@@ -309,7 +321,7 @@ function convertPointToCellRef(point: Point): CellRef {
     col: point.column + 1,
     // TODO: fill once we support multiple sheets
     sheet: "Sheet1",
-    address: `${columns.indexOf(`${point.column}`)}${point.row + 1}`,
+    address: `${columns[point.column]}${point.row + 1}`,
   };
 }
 
