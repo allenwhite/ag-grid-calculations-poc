@@ -147,9 +147,9 @@ export function createCCFormulaParser(
       const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
 
-      if (!(column && column in data[currentTableId][ref.row - 1])) {
+      if (!(column && column in data[currentTableId].data[ref.row - 1])) {
         Object.entries(data).every(([key, value]) => {
-          if (column && column in value[0]) {
+          if (column && column in value.data[0]) {
             tableId = key;
             return false;
           }
@@ -158,8 +158,8 @@ export function createCCFormulaParser(
       }
 
       const val = column
-        ? data[tableId][ref.row - 1][column]
-        : data[tableId][ref.row - 1][columns[ref.col - 1]];
+        ? data[tableId].data[ref.row - 1][column]
+        : data[tableId].data[ref.row - 1][columns[ref.col - 1]];
 
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
@@ -169,19 +169,19 @@ export function createCCFormulaParser(
       // console.log(`onRange ref`, ref, data);
 
       const arr: Value[] = [];
-      const rowMax = Math.min(ref.to.row, data[currentTableId].length);
+      const rowMax = Math.min(ref.to.row, data[currentTableId].data.length);
       // console.log("onRange rowMax", rowMax);
       for (let row = ref.from.row; row <= rowMax; row++) {
         const innerArr = [];
-        if (data[currentTableId][row - 1]) {
+        if (data[currentTableId].data[row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
             // console.log("onRangePush", `row ${row}, col ${col}`);
-            innerArr.push(data[currentTableId][row - 1][columns[col - 1]]);
+            innerArr.push(data[currentTableId].data[row - 1][columns[col - 1]]);
           }
         }
         arr.push(innerArr);
       }
-      // console.log("onRange:", arr);
+      // console.log("onRange:", arr)
       return arr as Value[];
     },
   });

@@ -25,9 +25,8 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   pageData,
   addRow,
 }) => {
-  const gridRef = useRef<AgGridReact>(null);
-  const initialData: TableData = pageData
-    ? pageData[tableDefinition.tableId]
+  const initialData: Record<string, any>[] = pageData
+    ? pageData[tableDefinition.tableId].data
     : [];
 
   const fomulaParser = pageData
@@ -35,8 +34,11 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
     : undefined;
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
-    gridRef.current?.api.refreshCells({
-      force: true,
+    if (!pageData) return;
+    Object.entries(pageData).forEach(([key, value]) => {
+      value.ref.current?.api.refreshCells({
+        force: true,
+      });
     });
   };
 
@@ -62,7 +64,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
       <h2>{tableDefinition.description}</h2>
       {fomulaParser && (
         <AgGridReact
-          ref={gridRef}
+          ref={pageData?.[tableDefinition.tableId].ref}
           headerHeight={200}
           columnDefs={getColDefs(
             tableDefinition,
