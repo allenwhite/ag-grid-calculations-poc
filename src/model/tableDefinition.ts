@@ -2,14 +2,10 @@ import { CellStyle, ColDef } from "@ag-grid-community/core";
 import { Calculations } from "./calculations";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser from "fast-formula-parser";
-import { columns, evaluate, evaluateCC } from "../calc-engine/engine/formula";
+import { evaluateCC } from "../calc-engine/engine/formula";
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this
-}
-
-interface Params {
-  data: RowData;
 }
 
 export type CalculationResult = string | number;
