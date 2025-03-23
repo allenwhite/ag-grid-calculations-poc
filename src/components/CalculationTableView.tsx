@@ -12,7 +12,7 @@ import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import { CalculationTable, getColDefs } from "../model/tableDefinition";
 import { createCCFormulaParser } from "../calc-engine/engine/formula";
-import { PageData, TableData } from "../App";
+import { PageData } from "../App";
 
 interface CalculationTableViewProps {
   tableDefinition: CalculationTable;
@@ -89,7 +89,8 @@ export default CalculationTableView;
 /**
  * checklist
  *
- * 1. full page refs working
+ * 1. full page refs working ✅
  * 2. ranges working ✅
  * 3. custom formulas
+ * 4. tests
  */

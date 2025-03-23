@@ -147,6 +147,11 @@ export function createCCFormulaParser(
       const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
 
+      /**
+       * If the column is not in the current table, use the first table that has the given colum.
+       * We may need to adjust this if there is a case where the column exists in table1 and table2
+       * but we want to use table 2.
+       */
       if (!(column && column in data[currentTableId].data[ref.row - 1])) {
         Object.entries(data).every(([key, value]) => {
           if (column && column in value.data[0]) {
