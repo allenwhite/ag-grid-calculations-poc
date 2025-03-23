@@ -11,7 +11,7 @@ import * as Matrix from "../matrix";
 import { CellBase } from "../types";
 import { PointSet } from "./point-set";
 import { PageData } from "../../App";
-import { CalculationTable } from "../../model/tableDefinition";
+import { CalcTableDefinition } from "../../model/tableDefinition";
 
 export const FORMULA_VALUE_PREFIX = "=";
 
@@ -136,7 +136,7 @@ export function createFormulaParser(
 }
 
 export function createCCFormulaParser(
-  tableDefinition: CalculationTable,
+  tableDefinition: CalcTableDefinition,
   data: PageData,
   config?: Omit<FormulaParserConfig, "onCell" | "onRange">
 ): FormulaParser {

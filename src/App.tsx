@@ -3,20 +3,21 @@ import CalculationTableView from "./components/CalculationTableView";
 import table1ConfigJSON from "./backendData/Method2-3Table1.json";
 import table2ConfigJSON from "./backendData/Method2-3Table2.json";
 import refTableConfigJSON from "./backendData/Method2-3RefTable.json";
-import { CalculationTable } from "./model/tableDefinition";
+import { CalcTableDefinition } from "./model/tableDefinition";
 import { useRef, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 
 export type TableData = {
   ref: React.RefObject<AgGridReact<any> | null>;
+  tableDefinition: CalcTableDefinition;
   data: Record<string, any>[];
 };
 export type PageData = Record<string, TableData>;
 
 function App() {
-  const table1Config: CalculationTable = table1ConfigJSON;
-  const table2Config: CalculationTable = table2ConfigJSON;
-  const refTableConfig: CalculationTable = refTableConfigJSON;
+  const table1Config = CalcTableDefinition.fromJson(table1ConfigJSON);
+  const table2Config = CalcTableDefinition.fromJson(table2ConfigJSON);
+  const refTableConfig = CalcTableDefinition.fromJson(refTableConfigJSON);
 
   /**
    * Full page data to enable cross table references
@@ -38,15 +39,18 @@ function App() {
 
   newPageData[table1Config.tableId] = {
     ref: gridRef1,
-    data: [getInitialEmptyData(table1Config)],
+    tableDefinition: table1Config,
+    data: [table1Config.emptyRowData],
   };
   newPageData[table2Config.tableId] = {
     ref: gridRef2,
-    data: [getInitialEmptyData(table2Config)],
+    tableDefinition: table2Config,
+    data: [table2Config.emptyRowData],
   };
   newPageData[refTableConfig.tableId] = {
     ref: gridRef3,
-    data: [getInitialEmptyData(refTableConfig)],
+    tableDefinition: refTableConfig,
+    data: [refTableConfig.emptyRowData],
   };
 
   const [pageData, setPageData] = useState<PageData>(newPageData);
@@ -54,16 +58,16 @@ function App() {
   /**
    * Expand to work with multiple tables
    */
-  const addRow = () => {
-    // setPageData((prev) => {
-    //   return {
-    //     ...prev,
-    //     [table1Config.tableId]: [
-    //       ...prev[table1Config.tableId],
-    //       getInitialEmptyData(table1Config),
-    //     ],
-    //   };
-    // });
+  const addRow = (tableId: string) => {
+    setPageData((prev) => {
+      return {
+        ...prev,
+        [tableId]: {
+          ...prev[tableId],
+          data: [...prev[tableId].data, table1Config.emptyRowData],
+        },
+      };
+    });
   };
 
   return (
@@ -71,29 +75,17 @@ function App() {
       <CalculationTableView
         tableDefinition={table1Config}
         pageData={pageData}
-        addRow={addRow}
+        addRow={() => addRow(table1Config.tableId)}
       />
       <div style={{ height: "80px" }}></div>
       <CalculationTableView
         tableDefinition={refTableConfig}
         pageData={pageData}
-        addRow={addRow}
+        addRow={() => addRow(refTableConfig.tableId)}
       />
       {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
     </div>
   );
 }
-
-const getInitialEmptyData = (
-  tableData: CalculationTable
-): Record<string, any> => {
-  return tableData.columnDefinitions.reduce<Record<string, any>>(
-    (acc, colDef) => {
-      acc[colDef.field] = "";
-      return acc;
-    },
-    {}
-  );
-};
 
 export default App;

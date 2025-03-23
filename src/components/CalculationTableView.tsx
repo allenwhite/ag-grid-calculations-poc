@@ -10,12 +10,12 @@ import {
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
-import { CalculationTable, getColDefs } from "../model/tableDefinition";
+import { CalcTableDefinition, getColDefs } from "../model/tableDefinition";
 import { createCCFormulaParser } from "../calc-engine/engine/formula";
 import { PageData } from "../App";
 
 interface CalculationTableViewProps {
-  tableDefinition: CalculationTable;
+  tableDefinition: CalcTableDefinition;
   pageData?: PageData;
   addRow: () => void;
 }

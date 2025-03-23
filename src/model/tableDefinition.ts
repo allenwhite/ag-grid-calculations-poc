@@ -14,11 +14,6 @@ interface Params {
 
 export type CalculationResult = string | number;
 
-interface TableDefinition {
-  description: string;
-  columnDefinitions: ColumnDefinitions[];
-}
-
 interface ComparativeDef {
   field: string;
 }
@@ -95,31 +90,45 @@ class ColumnDefinitions {
   }
 }
 
-class CalculationTable implements TableDefinition {
+interface CalcTableJSON {
+  tableId: string;
+  description: string;
+  columnDefinitions: ColumnDefinitions[];
+}
+
+class CalcTableDefinition {
   tableId: string;
   description: string;
   columnDefinitions: ColumnDefinitions[];
 
-  /**
-   * maybe this is literally at the top level? separate json altogether?
-   */
-  referenceTables?: Record<string, ColumnDefinitions[]> | undefined;
-
   constructor(
     tableId: string,
     description: string,
-    columnDefinitions: ColumnDefinitions[],
-    referenceTables?: Record<string, ColumnDefinitions[]>
+    columnDefinitions: ColumnDefinitions[]
   ) {
     this.tableId = tableId;
     this.description = description;
     this.columnDefinitions = columnDefinitions;
-    this.referenceTables = referenceTables;
+  }
+
+  static fromJson(json: CalcTableJSON): CalcTableDefinition {
+    return new CalcTableDefinition(
+      json.tableId,
+      json.description,
+      json.columnDefinitions
+    );
+  }
+
+  get emptyRowData(): Record<string, any> {
+    return this.columnDefinitions.reduce<Record<string, any>>((acc, cd) => {
+      acc[cd.field] = "";
+      return acc;
+    }, {});
   }
 }
 
 const getColDefs = (
-  tableDefinition: CalculationTable,
+  tableDefinition: CalcTableDefinition,
   rowData: RowData[],
   setRowData: (rowData: RowData[]) => void,
   fomulaParser: FormulaParser
@@ -205,4 +214,4 @@ function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
   }
 }
 
-export { CalculationTable, getColDefs };
+export { CalcTableDefinition, getColDefs };
