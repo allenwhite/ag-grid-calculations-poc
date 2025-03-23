@@ -79,20 +79,17 @@ const testFormula = (
   toBe: any,
   fromTables: mockTable[]
 ) => {
-  // const pageData: PageData = mockPageData(fromTables);
-  // // const tableDefinition
-  // const formulaParser = createCCFormulaParser(
-  //   fromTables[0].definition,
-  //   pageData
-  // );
-  // expect(
-  //   evaluateCC(
-  //     formula,
-  //     // { col: "P", row: 1, tableId: "Method2-3Table1" } as Coord,
-  //     { row: row } as Coord,
-  //     formulaParser
-  //   )
-  // ).toBe(toBe);
+  const pageData: PageData = mockPageData(fromTables);
+  // const tableDefinition
+  const formulaParser = createCCFormulaParser(pageData);
+  expect(
+    evaluateCC(
+      formula,
+      // { col: "P", row: 1, tableId: "Method2-3Table1" } as Coord,
+      { row: row } as Coord,
+      formulaParser
+    )
+  ).toBe(toBe);
 };
 
 // Tests
