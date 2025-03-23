@@ -1,6 +1,7 @@
 {
   "tableId": "Method2-3RefTable",
   "description": "Calculation Methodologies 2 & 3, Reference Table",
+  "type": "reference",
   "columnDefinitions": [
     {
       "headerName": "unique id",

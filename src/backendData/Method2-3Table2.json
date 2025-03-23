@@ -1,6 +1,7 @@
 {
   "tableId": "Method2-3Table2",
   "description": "Calculation Methodologies 2 & 3, Table 2: Sub-basin-level calculations",
+  "type": "entry",
   "columnDefinitions": [
     {
       "headerName": "Sub-Basin",

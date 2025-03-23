@@ -1,6 +1,7 @@
 {
   "tableId": "Method2-3Table1",
   "description": "Calculation Methodologies 2 & 3, Table 1: Well-specific input data",
+  "type": "entry",
   "columnDefinitions": [
     {
       "headerName": "Sub-Basin ID",
@@ -109,8 +110,5 @@
       "editable": false,
       "excelFormula": "=SUM(P1:$P$)"
     }
-  ],
-  "computed": {
-    "Method2-3Table2.Sub-Basin": "SET(C&E) ??"
-  }
+  ]
 }
