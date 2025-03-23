@@ -68,79 +68,72 @@ class CalcTableDefinition {
       return acc;
     }, {});
   }
-}
 
-const getColDefs = (
-  tableDefinition: CalcTableDefinition,
-  rowData: RowData[],
-  setRowData: (rowData: RowData[]) => void,
-  fomulaParser: FormulaParser
-): ColDef[] => {
-  return tableDefinition.columnDefinitions.map((cd) => ({
-    headerName: cd.headerName,
-    field: cd.field,
-    editable: cd.editable,
-    sortable: false,
-    ...(cd.cellStyle
-      ? {
-          cellStyle: (params: any): CellStyle => {
-            if (!cd.cellStyle) return {};
-            const evaled = evaluateCC(
-              cd.cellStyle.condition,
-              {
-                col: params.column.colId,
-                row: params.node.rowIndex + 1,
-                tableId: tableDefinition.tableId,
-              },
-              fomulaParser
-            );
-            if (evaled) {
-              return cd.cellStyle.style;
-            }
-            return params.colDef.editable
-              ? { backgroundColor: "lightgreen" }
-              : { backgroundColor: "lightgray" };
-          },
-        }
-      : {}),
-    ...(cd.options
-      ? {
-          cellEditor: "agSelectCellEditor",
-          cellEditorParams: { values: cd.options },
-        }
-      : {}),
-    ...(cd.funcCall
-      ? {
-          valueGetter: (params: any) => {
-            if (cd.funcCall) {
-              return doFuncCall(params, cd.funcCall, rowData);
-            }
-          },
-        }
-      : {}),
-    ...(cd.excelFormula
-      ? {
-          valueGetter: (params: any) => {
-            // console.log("params", columns.indexOf(params.column.colId) - 1);
-            if (cd.excelFormula) {
+  getColDefs(rowData: RowData[], fomulaParser: FormulaParser): ColDef[] {
+    return this.columnDefinitions.map((cd) => ({
+      headerName: cd.headerName,
+      field: cd.field,
+      editable: cd.editable,
+      sortable: false,
+      ...(cd.cellStyle
+        ? {
+            cellStyle: (params: any): CellStyle => {
+              if (!cd.cellStyle) return {};
               const evaled = evaluateCC(
-                cd.excelFormula,
+                cd.cellStyle.condition,
                 {
                   col: params.column.colId,
                   row: params.node.rowIndex + 1,
-                  tableId: tableDefinition.tableId,
+                  tableId: this.tableId,
                 },
                 fomulaParser
               );
-              rowData[params.node.rowIndex][params.column.colId] = evaled;
-              setRowData(rowData);
-              return evaled;
-            }
-          },
-        }
-      : {}),
-  }));
-};
+              if (evaled) {
+                return cd.cellStyle.style;
+              }
+              return params.colDef.editable
+                ? { backgroundColor: "lightgreen" }
+                : { backgroundColor: "lightgray" };
+            },
+          }
+        : {}),
+      ...(cd.options
+        ? {
+            cellEditor: "agSelectCellEditor",
+            cellEditorParams: { values: cd.options },
+          }
+        : {}),
+      ...(cd.funcCall
+        ? {
+            valueGetter: (params: any) => {
+              if (cd.funcCall) {
+                return doFuncCall(params, cd.funcCall, rowData);
+              }
+            },
+          }
+        : {}),
+      ...(cd.excelFormula
+        ? {
+            valueGetter: (params: any) => {
+              // console.log("params", columns.indexOf(params.column.colId) - 1);
+              if (cd.excelFormula) {
+                const evaled = evaluateCC(
+                  cd.excelFormula,
+                  {
+                    col: params.column.colId,
+                    row: params.node.rowIndex + 1,
+                    tableId: this.tableId,
+                  },
+                  fomulaParser
+                );
+                return evaled;
+              }
+            },
+          }
+        : {}),
+    }));
+  }
+}
 
 function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
   const { funcName, inputs } = funcCall;
@@ -157,4 +150,4 @@ function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
   }
 }
 
-export { CalcTableDefinition, getColDefs };
+export { CalcTableDefinition };

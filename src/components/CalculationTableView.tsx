@@ -9,7 +9,7 @@ import {
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
-import { CalcTableDefinition, getColDefs } from "../model/tableDefinition";
+import { CalcTableDefinition } from "../model/tableDefinition";
 import { createCCFormulaParser } from "../calc-engine/engine/formula";
 import { PageData } from "../App";
 
@@ -65,12 +65,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
         <AgGridReact
           ref={pageData?.[tableDefinition.tableId].ref}
           headerHeight={200}
-          columnDefs={getColDefs(
-            tableDefinition,
-            initialData,
-            () => {}, // setRowData equivalent needed here? maybe not
-            fomulaParser
-          )}
+          columnDefs={tableDefinition.getColDefs(initialData, fomulaParser)}
           rowData={initialData}
           defaultColDef={defaultColDef}
           modules={[ClientSideRowModelModule]}
