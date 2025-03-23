@@ -20,6 +20,7 @@ function App() {
   const refTableConfig = CalcTableDefinition.fromJson(refTableConfigJSON);
 
   /**
+   * TODO: redo this
    * Full page data to enable cross table references
    * {
    *  tableId1: [
@@ -64,7 +65,10 @@ function App() {
         ...prev,
         [tableId]: {
           ...prev[tableId],
-          data: [...prev[tableId].data, table1Config.emptyRowData],
+          data: [
+            ...prev[tableId].data,
+            prev[tableId].tableDefinition.emptyRowData,
+          ],
         },
       };
     });

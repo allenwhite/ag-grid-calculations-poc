@@ -146,7 +146,6 @@ export function createCCFormulaParser(
     onCell: (ref: CellRef) => {
       const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
-
       /**
        * If the column is not in the current table, use the first table that has the given colum.
        * We may need to adjust this if there is a case where the column exists in table1 and table2
@@ -161,7 +160,6 @@ export function createCCFormulaParser(
           return true;
         });
       }
-
       const val = column
         ? data[tableId].data[ref.row - 1][column]
         : data[tableId].data[ref.row - 1][columns[ref.col - 1]];
@@ -171,11 +169,8 @@ export function createCCFormulaParser(
       return val;
     },
     onRange: (ref) => {
-      // console.log(`onRange ref`, ref, data);
-
       const arr: Value[] = [];
       const rowMax = Math.min(ref.to.row, data[currentTableId].data.length);
-      // console.log("onRange rowMax", rowMax);
       for (let row = ref.from.row; row <= rowMax; row++) {
         const innerArr = [];
         if (data[currentTableId].data[row - 1]) {
@@ -267,18 +262,20 @@ export function evaluateCC(
   formulaParser: FormulaParser
 ): Value {
   const parsedFormula = replaceRanges(formula, coord);
-  // console.log(
-  //   "formula",
-  //   formula,
-  //   "parsedFormula",
-  //   parsedFormula,
-  //   "coord",
-  //   coord
-  // );
+  if (coord.tableId === "Method2-3RefTable") {
+    console.log(
+      "formula",
+      formula,
+      "parsedFormula",
+      parsedFormula,
+      "coord",
+      coord
+    );
+  }
   try {
     const position = convertCoordToCellRef(coord);
     const returned = formulaParser.parse(parsedFormula, position);
-    // console.log("returned", returned);
+    console.log("returned", returned);
     return returned instanceof FormulaError ? returned.toString() : returned;
   } catch (error) {
     console.log("err", error);
