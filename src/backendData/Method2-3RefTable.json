@@ -2,6 +2,10 @@
   "tableId": "Method2-3RefTable",
   "description": "Calculation Methodologies 2 & 3, Reference Table",
   "type": "reference",
+  "externalRefs": {
+    "C": "Method2-3Table1",
+    "D": "Method2-3Table1"
+  },
   "columnDefinitions": [
     {
       "headerName": "unique id",

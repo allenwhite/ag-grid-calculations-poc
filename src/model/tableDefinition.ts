@@ -1,5 +1,4 @@
 import { CellStyle, ColDef } from "@ag-grid-community/core";
-import { Calculations } from "./calculations";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser from "fast-formula-parser";
 import { evaluateCC } from "../calc-engine/engine/formula";
@@ -10,39 +9,8 @@ export interface RowData {
 
 export type CalculationResult = string | number;
 
-interface ComparativeDef {
-  field: string;
-}
-
-class StyleRule {
-  conditions: ComparativeDef[];
-  style: CellStyle;
-
-  constructor(conditions: ComparativeDef[], style: CellStyle) {
-    this.conditions = conditions;
-    this.style = style;
-  }
-}
-
 class StyleExpression {
-  condition: string;
-  style: CellStyle;
-
-  constructor(condition: string, style: CellStyle) {
-    this.condition = condition;
-    this.style = style;
-  }
-}
-
-interface ColumnDefinitions {
-  headerName: string;
-  field: string;
-  editable: boolean;
-  options?: string[] | null;
-  cellStyleRules?: StyleRule[] | null;
-  cellStyle?: StyleExpression | null;
-  calculations?: Calculations | null;
-  funcCall?: FuncCall | null;
+  constructor(public condition: string, public style: CellStyle) {}
 }
 
 class FuncCall {
@@ -56,62 +24,41 @@ class FuncCall {
 }
 
 class ColumnDefinitions {
-  headerName: string;
-  field: string;
-  editable: boolean;
-  options?: string[] | null;
-  cellStyleRules?: StyleRule[] | null;
-  cellStyle?: StyleExpression | null;
-  calculations?: Calculations | null;
-  excelFormula?: string | null;
-
   constructor(
-    headerName: string,
-    field: string,
-    editable: boolean,
-    options?: string[] | null,
-    cellStyle?: StyleExpression | null,
-    cellStyleRules?: StyleRule[] | null,
-    calculations?: Calculations | null,
-    excelFormula?: string | null
-  ) {
-    this.headerName = headerName;
-    this.field = field;
-    this.editable = editable;
-    this.options = options;
-    this.cellStyle = cellStyle;
-    this.cellStyleRules = cellStyleRules;
-    this.calculations = calculations;
-    this.excelFormula = excelFormula;
-  }
+    public headerName: string,
+    public field: string,
+    public editable: boolean,
+    public options?: string[] | null,
+    public cellStyle?: StyleExpression | null,
+    public excelFormula?: string | null,
+    public funcCall?: FuncCall | null
+  ) {}
 }
 
 interface CalcTableJSON {
   tableId: string;
   description: string;
+  type: string;
   columnDefinitions: ColumnDefinitions[];
+  externalRefs?: { [key: string]: string } | null;
 }
 
 class CalcTableDefinition {
-  tableId: string;
-  description: string;
-  columnDefinitions: ColumnDefinitions[];
-
   constructor(
-    tableId: string,
-    description: string,
-    columnDefinitions: ColumnDefinitions[]
-  ) {
-    this.tableId = tableId;
-    this.description = description;
-    this.columnDefinitions = columnDefinitions;
-  }
+    public tableId: string,
+    public description: string,
+    public type: string,
+    public columnDefinitions: ColumnDefinitions[],
+    public externalRefs?: { [key: string]: string } | null
+  ) {}
 
   static fromJson(json: CalcTableJSON): CalcTableDefinition {
     return new CalcTableDefinition(
       json.tableId,
       json.description,
-      json.columnDefinitions
+      json.type,
+      json.columnDefinitions,
+      json.externalRefs
     );
   }
 

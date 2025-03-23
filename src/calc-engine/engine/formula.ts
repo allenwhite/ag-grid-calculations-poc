@@ -147,19 +147,25 @@ export function createCCFormulaParser(
       const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
       /**
-       * If the column is not in the current table, use the first table that has the given colum.
-       * We may need to adjust this if there is a case where the column exists in table1 and table2
-       * but we want to use table 2.
+       * If the column is not present in the current table,
+       *   use the indicated column from the externalRefs lookup table.
+       * If no lookup exists, use the first table that has the given colum.
        */
-      if (!(column && column in data[currentTableId].data[ref.row - 1])) {
-        Object.entries(data).every(([key, value]) => {
-          if (column && column in value.data[0]) {
-            tableId = key;
-            return false;
-          }
-          return true;
-        });
+      if (column && !(column in data[currentTableId].data[ref.row - 1])) {
+        const externalTableId = tableDefinition.externalRefs?.[column];
+        if (externalTableId) {
+          tableId = externalTableId;
+        } else {
+          Object.entries(data).every(([key, value]) => {
+            if (column && column in value.data[0]) {
+              tableId = key;
+              return false;
+            }
+            return true;
+          });
+        }
       }
+
       const val = column
         ? data[tableId].data[ref.row - 1][column]
         : data[tableId].data[ref.row - 1][columns[ref.col - 1]];
