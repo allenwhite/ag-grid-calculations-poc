@@ -10,6 +10,7 @@ import {
 } from "./model/tableDefinition";
 import { useRef, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
+import { createCCFormulaParser } from "./calc-engine/engine/formula";
 
 function App() {
   const table1Config = CalcTableDefinition.fromJson(table1ConfigJSON);
@@ -17,17 +18,23 @@ function App() {
   const refTableConfig = CalcTableDefinition.fromJson(refTableConfigJSON);
 
   /**
-   * TODO: redo this
    * Full page data to enable cross table references
    * {
-   *  tableId1: [
-   *    { table data }
-   *    { table data }
-   * ],
-   *  tableId2: [
-   *    { table data }
-   *    { table data }
-   *  ],
+   *  tableId1: {
+   *    ref: AgGridReact,
+   *    tableDefinition: CalcTableDefinition,
+   *    data: [
+   *      { row data }
+   *      { row data }
+   *    ]
+   *  },
+   *  tableId2: {
+   *    ref: AgGridReact,
+   *    tableDefinition: CalcTableDefinition,
+   *    data: [
+   *      { row data }
+   *    ]
+   *  }
    * }
    */
   const newPageData: PageData = {};
@@ -53,6 +60,9 @@ function App() {
 
   const [pageData, setPageData] = useState<PageData>(newPageData);
 
+  // single formula parser to handle all the data on the page
+  const fomulaParser = createCCFormulaParser(pageData);
+
   /**
    * Adds a row of empty data to the specified tables in the current page data
    */
@@ -67,12 +77,14 @@ function App() {
       <CalculationTableView
         tableDefinition={table1Config}
         pageData={pageData}
+        fomulaParser={fomulaParser}
         addRow={addRow}
       />
       <div style={{ height: "80px" }}></div>
       <CalculationTableView
         tableDefinition={refTableConfig}
         pageData={pageData}
+        fomulaParser={fomulaParser}
         addRow={addRow}
       />
       {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}

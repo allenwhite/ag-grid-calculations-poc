@@ -135,14 +135,14 @@ export function createFormulaParser(
 }
 
 export function createCCFormulaParser(
-  tableDefinition: CalcTableDefinition,
   pageData: PageData,
   config?: Omit<FormulaParserConfig, "onCell" | "onRange">
 ): FormulaParser {
-  const currentTableId = tableDefinition.tableId;
   return new FormulaParser({
     ...config,
     onCell: (ref: CellRef) => {
+      const currentTableId = ref.sheet;
+
       const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
       /**
@@ -151,7 +151,8 @@ export function createCCFormulaParser(
        * If no lookup exists, use the first table that has the given colum.
        */
       if (column && !(column in pageData[currentTableId]?.data[ref.row - 1])) {
-        const externalTableId = tableDefinition.externalRefs?.[column];
+        const externalTableId =
+          pageData[currentTableId]?.tableDefinition?.externalRefs?.[column];
         if (externalTableId) {
           tableId = externalTableId;
         } else {
@@ -170,12 +171,11 @@ export function createCCFormulaParser(
         : pageData[tableId].data[ref.row - 1][columns[ref.col - 1]];
       console.log(
         "onCell val:",
-        // val,
-        // "ref:",
-        // ref,
-        // "using tableId:",
+        val,
+        "ref:",
+        ref,
+        "using tableId:",
         tableId,
-        tableDefinition,
         pageData
       );
       if (isNumeric(val)) return Number(val);
@@ -183,6 +183,7 @@ export function createCCFormulaParser(
       return val;
     },
     onRange: (ref) => {
+      const currentTableId = ref.sheet;
       const arr: Value[] = [];
       const rowMax = Math.min(ref.to.row, pageData[currentTableId].data.length);
       for (let row = ref.from.row; row <= rowMax; row++) {

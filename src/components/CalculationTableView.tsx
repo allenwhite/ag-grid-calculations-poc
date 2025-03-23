@@ -10,26 +10,24 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
 import { CalcTableDefinition, PageData } from "../model/tableDefinition";
-import { createCCFormulaParser } from "../calc-engine/engine/formula";
+import FormulaParser from "fast-formula-parser";
 
 interface CalculationTableViewProps {
   tableDefinition: CalcTableDefinition;
   pageData?: PageData;
+  fomulaParser: FormulaParser;
   addRow: (tableIds: string[]) => void;
 }
 
 const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   tableDefinition,
   pageData,
+  fomulaParser,
   addRow,
 }) => {
   const initialData: Record<string, any>[] = pageData
     ? pageData[tableDefinition.tableId].data
     : [];
-
-  const fomulaParser = pageData
-    ? createCCFormulaParser(tableDefinition, pageData)
-    : undefined;
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
     if (!pageData) return;
@@ -105,7 +103,7 @@ export default CalculationTableView;
  *
  * 1. full page refs working ✅
  * 2. ranges working ✅
- * 3. tests
+ * 3. tests ✅
  * 4. custom formulas
  * 5. Add table 3
  * 6. Add result table
