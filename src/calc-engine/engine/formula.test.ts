@@ -124,32 +124,50 @@ describe("evaluate()", () => {
     }
    */
   test("evaluates Method2-3Table1.P formula", () => {
-    const pageData: PageData = mockPageData([
-      new mockTable(mockMethod2_3Table1, [
-        {
-          C: "110 - ESSEX, NY (31) - Shale gas",
-          D: "11",
-          E: "Yes",
-          I: "11",
-          J: "11",
-          K: "11",
-          L: "11",
-          M: "11",
-          O: 1,
-          N: "11",
-          P: 0,
-        },
-      ]),
-    ]);
-
-    // const tableDefinition
-    const formulaParser = createCCFormulaParser(mockMethod2_3Table1, pageData);
-    expect(
-      evaluateCC(
-        '=IF(OR($C$="",$E$="",$L$="",$M$="",$N$=""),"",(($L$*((0.37*10^-3)*IF($E$="No",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$="No",1,0.5))*$O$)))))',
-        { col: "P", row: 1, tableId: "Method2-3Table1" } as Coord,
-        formulaParser
-      )
-    ).toBe(1330.08887);
+    testFormula(
+      '=IF(OR($C$="",$E$="",$L$="",$M$="",$N$=""),"",(($L$*((0.37*10^-3)*IF($E$="No",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$="No",1,0.5))*$O$)))))',
+      1,
+      1330.08887,
+      [
+        new mockTable(mockMethod2_3Table1, [
+          {
+            C: "110 - ESSEX, NY (31) - Shale gas",
+            D: "11",
+            E: "Yes",
+            I: "11",
+            J: "11",
+            K: "11",
+            L: "11",
+            M: "11",
+            O: 1,
+            N: "11",
+            P: 0,
+          },
+        ]),
+      ]
+    );
   });
 });
+
+const testFormula = (
+  formula: string,
+  row: number,
+  toBe: any,
+  fromTables: mockTable[]
+) => {
+  const pageData: PageData = mockPageData(fromTables);
+
+  // const tableDefinition
+  const formulaParser = createCCFormulaParser(
+    fromTables[0].definition,
+    pageData
+  );
+  expect(
+    evaluateCC(
+      formula,
+      // { col: "P", row: 1, tableId: "Method2-3Table1" } as Coord,
+      { row: row } as Coord,
+      formulaParser
+    )
+  ).toBe(toBe);
+};
