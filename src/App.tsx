@@ -59,18 +59,19 @@ function App() {
   /**
    * Expand to work with multiple tables
    */
-  const addRow = (tableId: string) => {
+  const addRow = (tableIds: string[]) => {
     setPageData((prev) => {
-      return {
-        ...prev,
-        [tableId]: {
-          ...prev[tableId],
+      const updatedData = { ...prev };
+      tableIds.forEach((tableId) => {
+        updatedData[tableId] = {
+          ...updatedData[tableId],
           data: [
-            ...prev[tableId].data,
-            prev[tableId].tableDefinition.emptyRowData,
+            ...updatedData[tableId].data,
+            updatedData[tableId].tableDefinition.emptyRowData,
           ],
-        },
-      };
+        };
+      });
+      return updatedData;
     });
   };
 
@@ -79,13 +80,13 @@ function App() {
       <CalculationTableView
         tableDefinition={table1Config}
         pageData={pageData}
-        addRow={() => addRow(table1Config.tableId)}
+        addRow={() => addRow([table1Config.tableId, refTableConfig.tableId])}
       />
       <div style={{ height: "80px" }}></div>
       <CalculationTableView
         tableDefinition={refTableConfig}
         pageData={pageData}
-        addRow={() => addRow(refTableConfig.tableId)}
+        addRow={() => {}}
       />
       {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
     </div>

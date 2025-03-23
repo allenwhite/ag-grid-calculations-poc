@@ -165,11 +165,22 @@ export function createCCFormulaParser(
           });
         }
       }
-
+      if (column === "P") {
+        console.log("onCell ref:", ref, "using tableId:", tableId, data);
+      }
+      //
       const val = column
         ? data[tableId].data[ref.row - 1][column]
         : data[tableId].data[ref.row - 1][columns[ref.col - 1]];
-
+      console.log(
+        "onCell val:",
+        val,
+        "ref:",
+        ref,
+        "using tableId:",
+        tableId,
+        data
+      );
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
@@ -268,20 +279,19 @@ export function evaluateCC(
   formulaParser: FormulaParser
 ): Value {
   const parsedFormula = replaceRanges(formula, coord);
-  if (coord.tableId === "Method2-3RefTable") {
-    console.log(
-      "formula",
-      formula,
-      "parsedFormula",
-      parsedFormula,
-      "coord",
-      coord
-    );
-  }
   try {
     const position = convertCoordToCellRef(coord);
     const returned = formulaParser.parse(parsedFormula, position);
-    console.log("returned", returned);
+    // console.log(
+    //   "formula",
+    //   formula,
+    //   "parsedFormula",
+    //   parsedFormula,
+    //   "coord",
+    //   coord,
+    //   "returned",
+    //   returned
+    // );
     return returned instanceof FormulaError ? returned.toString() : returned;
   } catch (error) {
     console.log("err", error);
@@ -300,7 +310,7 @@ function convertCoordToCellRef(coord: Coord): CellRef {
     row: coord.row + 1,
     col: columns.indexOf(coord.col),
     // TODO: fill once we support multiple sheets
-    sheet: "Sheet1",
+    sheet: coord.tableId,
     address: `${coord.col}${coord.row + 1}`,
   };
   return point2;

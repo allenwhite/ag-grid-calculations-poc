@@ -126,6 +126,9 @@ class CalcTableDefinition {
                   },
                   fomulaParser
                 );
+                // this little oneliner is working, but its likely we would need
+                // a setRowData useState type completion, or the angular equivalent.
+                rowData[params.node.rowIndex][params.column.colId] = evaled;
                 return evaled;
               }
             },
