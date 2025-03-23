@@ -3,16 +3,13 @@ import CalculationTableView from "./components/CalculationTableView";
 import table1ConfigJSON from "./backendData/Method2-3Table1.json";
 import table2ConfigJSON from "./backendData/Method2-3Table2.json";
 import refTableConfigJSON from "./backendData/Method2-3RefTable.json";
-import { CalcTableDefinition } from "./model/tableDefinition";
+import {
+  addRowFor,
+  CalcTableDefinition,
+  PageData,
+} from "./model/tableDefinition";
 import { useRef, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
-
-export type TableData = {
-  ref: React.RefObject<AgGridReact<any> | null>;
-  tableDefinition: CalcTableDefinition;
-  data: Record<string, any>[];
-};
-export type PageData = Record<string, TableData>;
 
 function App() {
   const table1Config = CalcTableDefinition.fromJson(table1ConfigJSON);
@@ -57,21 +54,11 @@ function App() {
   const [pageData, setPageData] = useState<PageData>(newPageData);
 
   /**
-   * Expand to work with multiple tables
+   * Adds a row of empty data to the specified tables in the current page data
    */
   const addRow = (tableIds: string[]) => {
     setPageData((prev) => {
-      const updatedData = { ...prev };
-      tableIds.forEach((tableId) => {
-        updatedData[tableId] = {
-          ...updatedData[tableId],
-          data: [
-            ...updatedData[tableId].data,
-            updatedData[tableId].tableDefinition.emptyRowData,
-          ],
-        };
-      });
-      return updatedData;
+      return addRowFor(prev, tableIds);
     });
   };
 
@@ -80,13 +67,13 @@ function App() {
       <CalculationTableView
         tableDefinition={table1Config}
         pageData={pageData}
-        addRow={() => addRow([table1Config.tableId, refTableConfig.tableId])}
+        addRow={addRow}
       />
       <div style={{ height: "80px" }}></div>
       <CalculationTableView
         tableDefinition={refTableConfig}
         pageData={pageData}
-        addRow={() => {}}
+        addRow={addRow}
       />
       {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
     </div>

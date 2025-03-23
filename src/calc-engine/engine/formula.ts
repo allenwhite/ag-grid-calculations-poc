@@ -10,8 +10,7 @@ import { Point } from "../point";
 import * as Matrix from "../matrix";
 import { CellBase } from "../types";
 import { PointSet } from "./point-set";
-import { PageData } from "../../App";
-import { CalcTableDefinition } from "../../model/tableDefinition";
+import { CalcTableDefinition, PageData } from "../../model/tableDefinition";
 
 export const FORMULA_VALUE_PREFIX = "=";
 
@@ -165,22 +164,19 @@ export function createCCFormulaParser(
           });
         }
       }
-      if (column === "P") {
-        console.log("onCell ref:", ref, "using tableId:", tableId, data);
-      }
       //
       const val = column
         ? data[tableId].data[ref.row - 1][column]
         : data[tableId].data[ref.row - 1][columns[ref.col - 1]];
-      console.log(
-        "onCell val:",
-        val,
-        "ref:",
-        ref,
-        "using tableId:",
-        tableId,
-        data
-      );
+      // console.log(
+      //   "onCell val:",
+      //   val,
+      //   "ref:",
+      //   ref,
+      //   "using tableId:",
+      //   tableId,
+      //   data
+      // );
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;

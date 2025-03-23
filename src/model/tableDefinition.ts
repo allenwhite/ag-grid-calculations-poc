@@ -2,9 +2,32 @@ import { CellStyle, ColDef } from "@ag-grid-community/core";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser from "fast-formula-parser";
 import { evaluateCC } from "../calc-engine/engine/formula";
+import { AgGridReact } from "@ag-grid-community/react";
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this
+}
+
+export type TableData = {
+  ref: React.RefObject<AgGridReact<any> | null>;
+  tableDefinition: CalcTableDefinition;
+  data: RowData[];
+};
+
+export type PageData = Record<string, TableData>;
+
+export function addRowFor(pageData: PageData, tableIds: string[]): PageData {
+  const updatedData = { ...pageData };
+  tableIds.forEach((tableId) => {
+    updatedData[tableId] = {
+      ...updatedData[tableId],
+      data: [
+        ...updatedData[tableId].data,
+        updatedData[tableId].tableDefinition.emptyRowData,
+      ],
+    };
+  });
+  return updatedData;
 }
 
 export type CalculationResult = string | number;
@@ -40,6 +63,7 @@ interface CalcTableJSON {
   description: string;
   type: string;
   columnDefinitions: ColumnDefinitions[];
+  dependentTables?: string[];
   externalRefs?: { [key: string]: string } | null;
 }
 
@@ -49,6 +73,7 @@ class CalcTableDefinition {
     public description: string,
     public type: string,
     public columnDefinitions: ColumnDefinitions[],
+    public dependentTables?: string[],
     public externalRefs?: { [key: string]: string } | null
   ) {}
 
@@ -58,6 +83,7 @@ class CalcTableDefinition {
       json.description,
       json.type,
       json.columnDefinitions,
+      json.dependentTables,
       json.externalRefs
     );
   }

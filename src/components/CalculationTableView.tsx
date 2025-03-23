@@ -9,14 +9,13 @@ import {
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-alpine.css";
 
-import { CalcTableDefinition } from "../model/tableDefinition";
+import { CalcTableDefinition, PageData } from "../model/tableDefinition";
 import { createCCFormulaParser } from "../calc-engine/engine/formula";
-import { PageData } from "../App";
 
 interface CalculationTableViewProps {
   tableDefinition: CalcTableDefinition;
   pageData?: PageData;
-  addRow: () => void;
+  addRow: (tableIds: string[]) => void;
 }
 
 const CalculationTableView: React.FC<CalculationTableViewProps> = ({
@@ -60,20 +59,41 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
       className="ag-theme-alpine"
       style={{ height: 400, width: "90%", marginLeft: "5%" }}
     >
-      <h2>{tableDefinition.description}</h2>
+      <h2>
+        {tableDefinition.description}
+        {tableDefinition.type === "reference" ? " (HIDDEN)" : ""}
+      </h2>
       {fomulaParser && (
-        <AgGridReact
-          ref={pageData?.[tableDefinition.tableId].ref}
-          headerHeight={200}
-          columnDefs={tableDefinition.getColDefs(initialData, fomulaParser)}
-          rowData={initialData}
-          defaultColDef={defaultColDef}
-          modules={[ClientSideRowModelModule]}
-          onCellValueChanged={onCellValueChanged}
-          onCellClicked={onCellClicked}
-        />
+        <div
+          style={{
+            height: tableDefinition.type === "reference" ? "auto" : "400px",
+            display: tableDefinition.type === "reference" ? "none" : "block",
+          }}
+        >
+          <AgGridReact
+            ref={pageData?.[tableDefinition.tableId].ref}
+            headerHeight={200}
+            columnDefs={tableDefinition.getColDefs(initialData, fomulaParser)}
+            rowData={initialData}
+            defaultColDef={defaultColDef}
+            modules={[ClientSideRowModelModule]}
+            onCellValueChanged={onCellValueChanged}
+            onCellClicked={onCellClicked}
+          />
+        </div>
       )}
-      <button onClick={addRow}>Add Row</button>
+      {tableDefinition.type === "entry" && (
+        <button
+          onClick={() =>
+            addRow([
+              tableDefinition.tableId,
+              ...(tableDefinition.dependentTables || []),
+            ])
+          }
+        >
+          Add Row
+        </button>
+      )}
     </div>
   );
 };
