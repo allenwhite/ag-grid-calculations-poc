@@ -5,7 +5,7 @@ import { evaluateCC } from "../calc-engine/engine/formula";
 import { AgGridReact } from "@ag-grid-community/react";
 
 export interface RowData {
-  [key: string]: any; // TODO: come back to this
+  [key: string]: any; // TODO: come back to this, could probably be Value
 }
 
 export type TableData = {

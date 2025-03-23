@@ -9,7 +9,15 @@ import {
   createFormulaParser,
   createCCFormulaParser,
   Coord,
+  evaluateCC,
 } from "./formula";
+import {
+  CalcTableDefinition,
+  PageData,
+  RowData,
+} from "../../model/tableDefinition";
+import { createRef } from "react";
+import { AgGridReact } from "@ag-grid-community/react";
 
 const A1 = "A1";
 const A2 = "A2";
@@ -18,6 +26,44 @@ const A2_POINT: Point.Point = { row: 1, column: 0 };
 const SUM_A1_A2_FORMULA = `SUM(${A1}, ${A2})`;
 const EXAMPLE_FORMULA = "TRUE()";
 const EXAMPLE_FORMULA_VALUE = `${FORMULA_VALUE_PREFIX}${EXAMPLE_FORMULA}`;
+
+const mockMethod2_3Table1: CalcTableDefinition = new CalcTableDefinition(
+  "Method2-3Table1",
+  "mock",
+  "mock",
+  [],
+  ["Method2-3RefTable"]
+);
+
+const mockMethod2_3RefTable: CalcTableDefinition = new CalcTableDefinition(
+  "Method2-3RefTable",
+  "mock",
+  "mock",
+  [],
+  [],
+  {
+    C: "Method2-3Table1",
+    D: "Method2-3Table1",
+  }
+);
+
+class mockTable {
+  constructor(public definition: CalcTableDefinition, public data: RowData[]) {}
+}
+
+const mockPageData = (fromTables: mockTable[]): PageData => {
+  const pageData: PageData = {};
+  fromTables.forEach((table) => {
+    pageData[table.definition.tableId] = {
+      ref: createRef<AgGridReact<any>>(),
+      tableDefinition: table.definition,
+      data: table.data,
+    };
+  });
+  return pageData;
+};
+
+// Tests
 
 describe("isFormulaValue()", () => {
   const cases = [
@@ -78,29 +124,32 @@ describe("evaluate()", () => {
     }
    */
   test("evaluates Method2-3Table1.P formula", () => {
-    const data = [
-      {
-        C: "110 - ESSEX, NY (31) - Shale gas",
-        D: "11",
-        E: "Yes",
-        I: "11",
-        J: "11",
-        K: "11",
-        L: "11",
-        M: "11",
-        O: 1,
-        N: "11",
-        P: 1330.08887,
-      },
-    ];
+    const pageData: PageData = mockPageData([
+      new mockTable(mockMethod2_3Table1, [
+        {
+          C: "110 - ESSEX, NY (31) - Shale gas",
+          D: "11",
+          E: "Yes",
+          I: "11",
+          J: "11",
+          K: "11",
+          L: "11",
+          M: "11",
+          O: 1,
+          N: "11",
+          P: 0,
+        },
+      ]),
+    ]);
 
-    // const formulaParser = createCCFormulaParser(data);
-    // expect(
-    //   evaluate(
-    //     '=IF(OR($C$="",$E$="",$L$="",$M$="",$N$=""),"",(($L$*((0.37*10^-3)*IF($E$="No",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$="No",1,0.5))*$O$)))))',
-    //     { col: "P", row: 1 } as Coord,
-    //     formulaParser
-    //   )
-    // ).toBe(1330.08887);
+    // const tableDefinition
+    const formulaParser = createCCFormulaParser(mockMethod2_3Table1, pageData);
+    expect(
+      evaluateCC(
+        '=IF(OR($C$="",$E$="",$L$="",$M$="",$N$=""),"",(($L$*((0.37*10^-3)*IF($E$="No",($F$^2)*$G$*$H$,($I$^2)*$J$*$K$))+($L$*($M$*($N$-IF($E$="No",1,0.5))*$O$)))))',
+        { col: "P", row: 1, tableId: "Method2-3Table1" } as Coord,
+        formulaParser
+      )
+    ).toBe(1330.08887);
   });
 });

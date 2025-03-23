@@ -136,7 +136,7 @@ export function createFormulaParser(
 
 export function createCCFormulaParser(
   tableDefinition: CalcTableDefinition,
-  data: PageData,
+  pageData: PageData,
   config?: Omit<FormulaParserConfig, "onCell" | "onRange">
 ): FormulaParser {
   const currentTableId = tableDefinition.tableId;
@@ -150,12 +150,12 @@ export function createCCFormulaParser(
        *   use the indicated column from the externalRefs lookup table.
        * If no lookup exists, use the first table that has the given colum.
        */
-      if (column && !(column in data[currentTableId].data[ref.row - 1])) {
+      if (column && !(column in pageData[currentTableId]?.data[ref.row - 1])) {
         const externalTableId = tableDefinition.externalRefs?.[column];
         if (externalTableId) {
           tableId = externalTableId;
         } else {
-          Object.entries(data).every(([key, value]) => {
+          Object.entries(pageData).every(([key, value]) => {
             if (column && column in value.data[0]) {
               tableId = key;
               return false;
@@ -166,30 +166,33 @@ export function createCCFormulaParser(
       }
       //
       const val = column
-        ? data[tableId].data[ref.row - 1][column]
-        : data[tableId].data[ref.row - 1][columns[ref.col - 1]];
-      // console.log(
-      //   "onCell val:",
-      //   val,
-      //   "ref:",
-      //   ref,
-      //   "using tableId:",
-      //   tableId,
-      //   data
-      // );
+        ? pageData[tableId].data[ref.row - 1][column]
+        : pageData[tableId].data[ref.row - 1][columns[ref.col - 1]];
+      console.log(
+        "onCell val:",
+        // val,
+        // "ref:",
+        // ref,
+        // "using tableId:",
+        tableId,
+        tableDefinition,
+        pageData
+      );
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
     },
     onRange: (ref) => {
       const arr: Value[] = [];
-      const rowMax = Math.min(ref.to.row, data[currentTableId].data.length);
+      const rowMax = Math.min(ref.to.row, pageData[currentTableId].data.length);
       for (let row = ref.from.row; row <= rowMax; row++) {
         const innerArr = [];
-        if (data[currentTableId].data[row - 1]) {
+        if (pageData[currentTableId].data[row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
             // console.log("onRangePush", `row ${row}, col ${col}`);
-            innerArr.push(data[currentTableId].data[row - 1][columns[col - 1]]);
+            innerArr.push(
+              pageData[currentTableId].data[row - 1][columns[col - 1]]
+            );
           }
         }
         arr.push(innerArr);
@@ -278,6 +281,7 @@ export function evaluateCC(
   try {
     const position = convertCoordToCellRef(coord);
     const returned = formulaParser.parse(parsedFormula, position);
+    console.log("returned", returned);
     // console.log(
     //   "formula",
     //   formula,
