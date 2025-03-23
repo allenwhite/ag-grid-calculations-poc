@@ -66,8 +66,8 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
       {fomulaParser && (
         <div
           style={{
-            height: tableDefinition.type === "reference" ? "auto" : "400px",
-            display: tableDefinition.type === "reference" ? "none" : "block",
+            height: tableDefinition.type === "reference?" ? "auto" : "400px",
+            display: tableDefinition.type === "reference?" ? "none" : "block",
           }}
         >
           <AgGridReact
@@ -105,6 +105,8 @@ export default CalculationTableView;
  *
  * 1. full page refs working ✅
  * 2. ranges working ✅
- * 3. custom formulas
- * 4. tests
+ * 3. tests
+ * 4. custom formulas
+ * 5. Add table 3
+ * 6. Add result table
  */
