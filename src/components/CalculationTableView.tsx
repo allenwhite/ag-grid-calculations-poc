@@ -96,14 +96,3 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
 };
 
 export default CalculationTableView;
-
-/**
- * checklist
- *
- * 1. full page refs working ✅
- * 2. ranges working ✅
- * 3. tests ✅
- * 4. custom formulas
- * 5. Add table 3
- * 6. Add result table
- */

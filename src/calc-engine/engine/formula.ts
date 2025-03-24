@@ -10,7 +10,7 @@ import { Point } from "../point";
 import * as Matrix from "../matrix";
 import { CellBase } from "../types";
 import { PointSet } from "./point-set";
-import { CalcTableDefinition, PageData } from "../../model/tableDefinition";
+import { PageData } from "../../model/tableDefinition";
 
 export const FORMULA_VALUE_PREFIX = "=";
 
