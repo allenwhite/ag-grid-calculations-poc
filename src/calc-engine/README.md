@@ -6,6 +6,9 @@ We borrowed the formula parser typescript interface from [react-spreadsheet](htt
 
 ## Implementation
 
+Our tables have to be remotely defined, so the structures below are designed to be serializable and can be produced nearly automatically from our python scripts.
+You can look at the JSON driving these tables in the [backendData folder](../backendData)
+
 #### CalcTableDefinition
 
 We construct this json-ifyable structure from our python excel book scraper
