@@ -58,6 +58,7 @@ Full page data to enable cross table references
 #### FormulaParser
 
 Our formula parser takes in the full PageData and is configured to return the correct data when requested. It is designed to handle the difficulty of cross table references, range references, and custom functions behind the scenes.
+Most of the magic here happens in [formula.ts](./engine/formula.ts). Tests for this interface are currently in [formula.test.ts](./engine/formula.test.ts).
 
 ## Checklist
 
