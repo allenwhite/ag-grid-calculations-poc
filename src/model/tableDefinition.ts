@@ -1,8 +1,10 @@
 import { CellStyle, ColDef } from "@ag-grid-community/core";
 import { calculateExcelFormula } from "../utils/utils";
-import FormulaParser from "fast-formula-parser";
+import FormulaParser, { Value } from "fast-formula-parser";
 import { evaluateCC } from "../calc-engine/engine/formula";
 import { AgGridReact } from "@ag-grid-community/react";
+
+const PRINT_TESTS_TO_CONSOLE = false;
 
 export interface RowData {
   [key: string]: any; // TODO: come back to this, could probably be Value
@@ -95,7 +97,69 @@ class CalcTableDefinition {
     }, {});
   }
 
-  getColDefs(rowData: RowData[], fomulaParser: FormulaParser): ColDef[] {
+  printTestVariables(pageData: PageData) {
+    if (!PRINT_TESTS_TO_CONSOLE) return;
+    console.log(
+      `${Object.values(pageData)
+        .map(
+          (tableData) =>
+            `
+            const mock${tableData.tableDefinition.tableId.replace(
+              "-",
+              "_"
+            )}: CalcTableDefinition = new CalcTableDefinition(
+              "${tableData.tableDefinition.tableId}",
+              "mock",
+              "mock",
+              [],
+              ${JSON.stringify(tableData.tableDefinition.dependentTables)},
+              ${JSON.stringify(tableData.tableDefinition.externalRefs)}
+            );
+          `
+        )
+        .join("\n")}`
+    );
+  }
+
+  printTest(
+    pageData: PageData,
+    excelFormula: string,
+    params: any,
+    evaled: Value
+  ) {
+    if (!PRINT_TESTS_TO_CONSOLE) return;
+    console.log(
+      `
+      test("evaluates ${this.tableId}.${params.column.colId} row ${
+        params.node.rowIndex + 1
+      } formula", () => {
+        testFormula({
+          formula: '${excelFormula}',
+          row: ${params.node.rowIndex + 1},
+          tableId: "${this.tableId}",
+          expected: ${typeof evaled === "string" ? `"${evaled}"` : evaled},
+          fromTables: [\n${Object.values(pageData)
+            .map(
+              (tableData) =>
+                `new mockTable(mock${tableData.tableDefinition.tableId.replace(
+                  "-",
+                  "_"
+                )}, ${JSON.stringify(tableData.data)})`
+            )
+            .join(",\n")}
+          ],
+        });
+      });
+      `
+    );
+  }
+
+  getColDefs(
+    rowData: RowData[], // TODO: remove
+    pageData: PageData,
+    fomulaParser: FormulaParser
+  ): ColDef[] {
+    this.printTestVariables(pageData);
     return this.columnDefinitions.map((cd) => ({
       headerName: cd.headerName,
       field: cd.field,
@@ -152,8 +216,10 @@ class CalcTableDefinition {
                   },
                   fomulaParser
                 );
-                // this little oneliner is working, but its likely we would need
-                // a setRowData useState type completion, or the angular equivalent.
+                this.printTest(pageData, cd.excelFormula, params, evaled);
+                // this little oneliner is working to keep things updated,
+                // but its likely we would need a setRowData useState type completion,
+                // or the angular equivalent.
                 rowData[params.node.rowIndex][params.column.colId] = evaled;
                 return evaled;
               }

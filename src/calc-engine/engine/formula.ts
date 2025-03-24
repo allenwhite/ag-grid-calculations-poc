@@ -169,15 +169,15 @@ export function createCCFormulaParser(
       const val = column
         ? pageData[tableId].data[ref.row - 1][column]
         : pageData[tableId].data[ref.row - 1][columns[ref.col - 1]];
-      console.log(
-        "onCell val:",
-        val,
-        "ref:",
-        ref,
-        "using tableId:",
-        tableId,
-        pageData
-      );
+      // console.log(
+      //   "onCell val:",
+      //   val,
+      //   "ref:",
+      //   ref,
+      //   "using tableId:",
+      //   tableId,
+      //   pageData
+      // );
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
@@ -282,7 +282,6 @@ export function evaluateCC(
   try {
     const position = convertCoordToCellRef(coord);
     const returned = formulaParser.parse(parsedFormula, position);
-    console.log("returned", returned);
     // console.log(
     //   "formula",
     //   formula,

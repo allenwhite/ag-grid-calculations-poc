@@ -14,7 +14,7 @@ import FormulaParser from "fast-formula-parser";
 
 interface CalculationTableViewProps {
   tableDefinition: CalcTableDefinition;
-  pageData?: PageData;
+  pageData: PageData;
   fomulaParser: FormulaParser;
   addRow: (tableIds: string[]) => void;
 }
@@ -30,7 +30,6 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
     : [];
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
-    if (!pageData) return;
     Object.entries(pageData).forEach(([key, value]) => {
       value.ref.current?.api.refreshCells({
         force: true,
@@ -71,7 +70,11 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
           <AgGridReact
             ref={pageData?.[tableDefinition.tableId].ref}
             headerHeight={200}
-            columnDefs={tableDefinition.getColDefs(initialData, fomulaParser)}
+            columnDefs={tableDefinition.getColDefs(
+              initialData,
+              pageData,
+              fomulaParser
+            )}
             rowData={initialData}
             defaultColDef={defaultColDef}
             modules={[ClientSideRowModelModule]}
