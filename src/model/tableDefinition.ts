@@ -97,63 +97,6 @@ class CalcTableDefinition {
     }, {});
   }
 
-  printTestVariables(pageData: PageData) {
-    if (!PRINT_TESTS_TO_CONSOLE) return;
-    console.log(
-      `${Object.values(pageData)
-        .map(
-          (tableData) =>
-            `
-            const mock${tableData.tableDefinition.tableId.replace(
-              "-",
-              "_"
-            )}: CalcTableDefinition = new CalcTableDefinition(
-              "${tableData.tableDefinition.tableId}",
-              "mock",
-              "mock",
-              [],
-              ${JSON.stringify(tableData.tableDefinition.dependentTables)},
-              ${JSON.stringify(tableData.tableDefinition.externalRefs)}
-            );
-          `
-        )
-        .join("\n")}`
-    );
-  }
-
-  printTest(
-    pageData: PageData,
-    excelFormula: string,
-    params: any,
-    evaled: Value
-  ) {
-    if (!PRINT_TESTS_TO_CONSOLE) return;
-    console.log(
-      `
-      test("evaluates ${this.tableId}.${params.column.colId} row ${
-        params.node.rowIndex + 1
-      } formula", () => {
-        testFormula({
-          formula: '${excelFormula}',
-          row: ${params.node.rowIndex + 1},
-          tableId: "${this.tableId}",
-          expected: ${typeof evaled === "string" ? `"${evaled}"` : evaled},
-          fromTables: [\n${Object.values(pageData)
-            .map(
-              (tableData) =>
-                `new mockTable(mock${tableData.tableDefinition.tableId.replace(
-                  "-",
-                  "_"
-                )}, ${JSON.stringify(tableData.data)})`
-            )
-            .join(",\n")}
-          ],
-        });
-      });
-      `
-    );
-  }
-
   getColDefs(pageData: PageData, fomulaParser: FormulaParser): ColDef[] {
     this.printTestVariables(pageData);
     return this.columnDefinitions.map((cd) => ({
@@ -229,6 +172,75 @@ class CalcTableDefinition {
           }
         : {}),
     }));
+  }
+
+  printTestVariables(pageData: PageData) {
+    if (!PRINT_TESTS_TO_CONSOLE) return;
+    console.log(
+      `${Object.values(pageData)
+        .map(
+          (tableData) =>
+            `
+            const mock${tableData.tableDefinition.tableId.replace(
+              "-",
+              "_"
+            )}: CalcTableDefinition = new CalcTableDefinition(
+              "${tableData.tableDefinition.tableId}",
+              "mock",
+              "mock",
+              [],
+              ${JSON.stringify(tableData.tableDefinition.dependentTables)},
+              ${JSON.stringify(tableData.tableDefinition.externalRefs)}
+            );
+          `
+        )
+        .join("\n")}`
+    );
+  }
+
+  printTest(
+    pageData: PageData,
+    excelFormula: string,
+    params: any,
+    evaled: Value
+  ) {
+    if (!PRINT_TESTS_TO_CONSOLE) return;
+    // sometimes the correct answer is already there, this just ensures it isnt. probably not necessary
+    const replaceTestData = (tableData: RowData[]): RowData[] => {
+      let copy = tableData;
+      if (
+        params.node.rowIndex in copy &&
+        params.column.colId in copy[params.node.rowIndex]
+      ) {
+        copy[params.node.rowIndex][params.column.colId] =
+          typeof evaled === "string" ? "" : -999;
+      }
+      return copy;
+    };
+    console.log(
+      `
+      test("evaluates ${this.tableId}.${params.column.colId} row ${
+        params.node.rowIndex + 1
+      } formula", () => {
+        testFormula({
+          formula: '${excelFormula}',
+          row: ${params.node.rowIndex + 1},
+          tableId: "${this.tableId}",
+          expected: ${typeof evaled === "string" ? `"${evaled}"` : evaled},
+          fromTables: [\n${Object.values(pageData)
+            .map(
+              (tableData) =>
+                `new mockTable(mock${tableData.tableDefinition.tableId.replace(
+                  "-",
+                  "_"
+                )}, ${JSON.stringify(replaceTestData(tableData.data))})`
+            )
+            .join(",\n")}
+          ],
+        });
+      });
+      `
+    );
   }
 }
 
