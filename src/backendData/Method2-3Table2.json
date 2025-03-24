@@ -1,0 +1,97 @@
+{
+  "tableId": "Method2-3Table2",
+  "description": "Calculation Methodologies 2 & 3, Table 2: Sub-basin-level calculations",
+  "type": "entry",
+  "columnDefinitions": [
+    {
+      "headerName": "Sub-Basin",
+      "field": "C",
+      "editable": false,
+      "excelFormula": "=IF($AK1699=\"\",\"\",LEFT($AK1699,FIND(\"_\",$AK1699)-1))"
+    },
+    {
+      "headerName": "Calculation Method",
+      "field": "D",
+      "editable": false,
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"Calculation Methodology 2 [98.233(f)(2)]\",\"Calculation Methodology 3 [98.233(f)(3)]\"))"
+    },
+    {
+      "headerName": "Were Plunger Lifts used?",
+      "field": "E",
+      "editable": false,
+      "excelFormula": "=IF($AK1699=\"\",\"\",RIGHT($AK1699,LEN($AK1699)-FIND(\"_\",$AK1699)))"
+    },
+    {
+      "headerName": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)",
+      "field": "F",
+      "editable": true
+    },
+    {
+      "headerName": "[MCH4]\nMole fraction of CH4 in natural gas\n(decimal)",
+      "field": "G",
+      "editable": true
+    },
+    {
+      "headerName": "[Es,n]\nAnnual natural gas emissions from well venting during liquids unloading\n(scf)",
+      "field": "H",
+      "editable": false,
+      "excelFormula": "=IF($AK1699=\"\",\"\",SUMIFS($P$1699:$P$6698,$AI$1699:$AI$6698,$AK1699))"
+    },
+    {
+      "headerName": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)",
+      "field": "I",
+      "editable": false,
+      "excelFormula": "=IF($H$=\"\",\"\",$H$*$F$)"
+    },
+    {
+      "headerName": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)",
+      "field": "J",
+      "editable": false,
+      "excelFormula": "=IF($H$=\"\",\"\",$H$*$G$)"
+    },
+    {
+      "headerName": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)",
+      "field": "K",
+      "editable": false,
+      "excelFormula": "=IF($I$=\"\",\"\",$I$*$D$26/1000)"
+    },
+    {
+      "headerName": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)",
+      "field": "L",
+      "editable": false,
+      "excelFormula": "=IF($J$=\"\",\"\",$J$*$D$26/1000)"
+    },
+    {
+      "headerName": "Total Number of Wells vented for liquids unloading in sub-basin",
+      "field": "M",
+      "editable": false,
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",COUNTIFS($C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
+    },
+    {
+      "headerName": "[Vp]\nCumulative number of unloadings vented to the atmosphere",
+      "field": "N",
+      "editable": false,
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
+    },
+    {
+      "headerName": "Average internal casing diameter across sub-basin\n(inches)",
+      "field": "O",
+      "editable": false,
+      "cellStyle": {
+        "condition": "$E$=\"Yes\"",
+        "style": { "backgroundColor": "black" }
+      },
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",AVERAGEIF($C$1699:$C$6698,$C$,$F$1699:$F$6698),\"\"))"
+    },
+    {
+      "headerName": "Average internal casing diameter across sub-basin\n(inches)",
+      "field": "P",
+      "editable": false,
+      "cellStyle": {
+        "condition": "$E$=\"No\"",
+        "style": { "backgroundColor": "black" }
+      },
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"\",AVERAGEIF($C$1699:$C$6698,$C$,$I$1699:$I$6698)))"
+    }
+  ]
+}

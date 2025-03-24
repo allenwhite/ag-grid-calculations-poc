@@ -26,8 +26,54 @@
     {
       "headerName": "D",
       "field": "d",
+      "editable": false
+    },
+    {
+      "headerName": "E",
+      "field": "e",
       "editable": false,
-      "calculations": "a*c"
+      "calculations": {
+        "excel": "=IF(OR($A=\"No\",$B=\"\"),\"\",IF($A=\"No\",IF($B<1,0,1),IF($C<0.5,0,1)))",
+        "if": {
+          "check": "any",
+          "conditions": [
+            { "field": "a", "equals": "No" },
+            { "field": "a", "equals": "" }
+          ],
+          "then": {
+            "operation": "multiply",
+            "operand1": {
+              "operation": "add",
+              "operand1": { "variable": "c" },
+              "operand2": { "variable": "c" }
+            },
+            "operand2": { "variable": "d" }
+          },
+          "else": {
+            "if": {
+              "check": "all",
+              "conditions": [{ "field": "b", "equals": "No" }],
+              "then": "b is no",
+              "else": "A is yes, b is not no"
+            }
+          }
+        }
+      }
+    },
+    {
+      "headerName": "F - call function",
+      "field": "f",
+      "editable": false,
+      "funcCall": {
+        "funcName": "calculateExcelFormula",
+        "inputs": ["c", "d"]
+      }
+    },
+    {
+      "headerName": "G - SUM($C1:$C5) + $D$",
+      "field": "g",
+      "editable": false,
+      "excelFormula": "SUM($C1:$C5) + $D$"
     }
   ]
 }

@@ -1,147 +1,262 @@
-import { CellStyle, ColDef, ValueGetterFunc } from "@ag-grid-community/core";
+import { CellStyle, ColDef } from "@ag-grid-community/core";
+import { calculateExcelFormula } from "../utils/utils";
+import FormulaParser, { Value } from "fast-formula-parser";
+import { evaluateCC } from "../calc-engine/engine/formula";
+import { AgGridReact } from "@ag-grid-community/react";
 
-interface TableModel<T> {
-  columns: ColDef<T>[];
-  data: T[];
+const PRINT_TESTS_TO_CONSOLE = false;
+
+export interface RowData {
+  [key: string]: any; // TODO: come back to this, could probably be Value
 }
 
-export default TableModel;
+export type TableData = {
+  ref: React.RefObject<AgGridReact<any> | null>;
+  tableDefinition: CalcTableDefinition;
+  data: RowData[];
+};
 
-interface TableDefinition {
-  description: string;
-  columnDefinitions: ColumnDefinitions[];
+export type PageData = Record<string, TableData>;
+
+export function addRowFor(pageData: PageData, tableIds: string[]): PageData {
+  const updatedData = { ...pageData };
+  tableIds.forEach((tableId) => {
+    updatedData[tableId] = {
+      ...updatedData[tableId],
+      data: [
+        ...updatedData[tableId].data,
+        updatedData[tableId].tableDefinition.emptyRowData,
+      ],
+    };
+  });
+  return updatedData;
 }
 
-interface ComparativeDef {
-  field: string;
+export type CalculationResult = string | number;
+
+class StyleExpression {
+  constructor(public condition: string, public style: CellStyle) {}
 }
 
-class StyleRule {
-  conditions: ComparativeDef[];
-  style: CellStyle;
+class FuncCall {
+  funcName: string;
+  inputs: string[];
 
-  constructor(conditions: ComparativeDef[], style: CellStyle) {
-    this.conditions = conditions;
-    this.style = style;
+  constructor(funcName: string, inputs: string[]) {
+    this.funcName = funcName;
+    this.inputs = inputs;
   }
-}
-
-interface ColumnDefinitions {
-  headerName: string;
-  field: string;
-  editable: boolean;
-  options?: string[] | null;
-  cellStyleRules?: StyleRule[] | null;
-  calculations?: string | null;
 }
 
 class ColumnDefinitions {
-  headerName: string;
-  field: string;
-  editable: boolean;
-  options?: string[] | null;
-  cellStyleRules?: StyleRule[] | null;
-  calculations?: string | null;
-
   constructor(
-    headerName: string,
-    field: string,
-    editable: boolean,
-    options?: string[] | null,
-    cellStyleRules?: StyleRule[] | null,
-    calculations?: string | null
-  ) {
-    this.headerName = headerName;
-    this.field = field;
-    this.editable = editable;
-    this.options = options;
-    this.cellStyleRules = cellStyleRules;
-    this.calculations = calculations;
-  }
+    public headerName: string,
+    public field: string,
+    public editable: boolean,
+    public options?: string[] | null,
+    public cellStyle?: StyleExpression | null,
+    public excelFormula?: string | null,
+    public funcCall?: FuncCall | null
+  ) {}
 }
 
-class CalculationTable implements TableDefinition {
+interface CalcTableJSON {
+  tableId: string;
   description: string;
+  type: string;
   columnDefinitions: ColumnDefinitions[];
-
-  constructor(description: string, columnDefinitions: ColumnDefinitions[]) {
-    this.description = description;
-    this.columnDefinitions = columnDefinitions;
-  }
+  dependentTables?: string[];
+  externalRefs?: { [key: string]: string } | null;
 }
 
-const getColDefs = (columnDefinitions: ColumnDefinitions[]): ColDef[] => {
-  return columnDefinitions.map((cd) => ({
-    headerName: cd.headerName,
-    field: cd.field,
-    editable: cd.editable,
-    sortable: false,
-    ...(cd.cellStyleRules
-      ? {
-          cellStyle: (params: any): CellStyle => {
-            if (!cd.cellStyleRules) return {};
-            return applyStyleRules(params, cd.cellStyleRules);
-          },
-        }
-      : {}),
-    ...(cd.options
-      ? {
-          cellEditor: "agSelectCellEditor",
-          cellEditorParams: { values: cd.options },
-        }
-      : {}),
-    ...(cd.calculations
-      ? {
-          valueGetter: (params: any) => {
-            if (!cd.calculations) return {};
-            doCalculation(params, cd.calculations);
-          },
-        }
-      : {}),
-  }));
-};
+class CalcTableDefinition {
+  constructor(
+    public tableId: string,
+    public description: string,
+    public type: string,
+    public columnDefinitions: ColumnDefinitions[],
+    public dependentTables?: string[],
+    public externalRefs?: { [key: string]: string } | null
+  ) {}
 
-function applyStyleRules(params: any, rules: StyleRule[]): CellStyle {
-  console.log(params, rules);
-  for (const rule of rules) {
-    const { conditions, style } = rule;
+  static fromJson(json: CalcTableJSON): CalcTableDefinition {
+    return new CalcTableDefinition(
+      json.tableId,
+      json.description,
+      json.type,
+      json.columnDefinitions,
+      json.dependentTables,
+      json.externalRefs
+    );
+  }
 
-    const allConditionsMet = conditions.every((condition: any) => {
-      const fieldValue = params.data[condition.field];
+  get emptyRowData(): Record<string, any> {
+    return this.columnDefinitions.reduce<Record<string, any>>((acc, cd) => {
+      acc[cd.field] = "";
+      return acc;
+    }, {});
+  }
 
-      if (condition.value !== undefined && fieldValue !== condition.value) {
-        return false;
-      }
+  getColDefs(pageData: PageData, fomulaParser: FormulaParser): ColDef[] {
+    this.printTestVariables(pageData);
+    return this.columnDefinitions.map((cd) => ({
+      headerName: cd.headerName,
+      field: cd.field,
+      editable: cd.editable,
+      sortable: false,
+      ...(cd.cellStyle
+        ? {
+            cellStyle: (params: any): CellStyle => {
+              if (!cd.cellStyle) return {};
+              const evaled = evaluateCC(
+                cd.cellStyle.condition,
+                {
+                  col: params.column.colId,
+                  row: params.node.rowIndex + 1,
+                  tableId: this.tableId,
+                },
+                fomulaParser
+              );
+              if (evaled) {
+                return cd.cellStyle.style;
+              }
+              return params.colDef.editable
+                ? { backgroundColor: "lightgreen" }
+                : { backgroundColor: "lightgray" };
+            },
+          }
+        : {}),
+      ...(cd.options
+        ? {
+            cellEditor: "agSelectCellEditor",
+            cellEditorParams: { values: cd.options },
+          }
+        : {}),
+      ...(cd.funcCall
+        ? {
+            valueGetter: (params: any) => {
+              if (cd.funcCall) {
+                return doFuncCall(
+                  params,
+                  cd.funcCall,
+                  pageData[this.tableId].data
+                );
+              }
+            },
+          }
+        : {}),
+      ...(cd.excelFormula
+        ? {
+            valueGetter: (params: any) => {
+              // console.log("params", columns.indexOf(params.column.colId) - 1);
+              if (cd.excelFormula) {
+                const evaled = evaluateCC(
+                  cd.excelFormula,
+                  {
+                    col: params.column.colId,
+                    row: params.node.rowIndex + 1,
+                    tableId: this.tableId,
+                  },
+                  fomulaParser
+                );
+                this.printTest(pageData, cd.excelFormula, params, evaled);
+                // this little oneliner is working to keep things updated,
+                // but its likely we would need a setRowData useState type completion,
+                // or the angular equivalent.
+                pageData[this.tableId].data[params.node.rowIndex][
+                  params.column.colId
+                ] = evaled;
+                return evaled;
+              }
+            },
+          }
+        : {}),
+    }));
+  }
 
+  printTestVariables(pageData: PageData) {
+    if (!PRINT_TESTS_TO_CONSOLE) return;
+    console.log(
+      `${Object.values(pageData)
+        .map(
+          (tableData) =>
+            `
+            const mock${tableData.tableDefinition.tableId.replace(
+              "-",
+              "_"
+            )}: CalcTableDefinition = new CalcTableDefinition(
+              "${tableData.tableDefinition.tableId}",
+              "mock",
+              "mock",
+              [],
+              ${JSON.stringify(tableData.tableDefinition.dependentTables)},
+              ${JSON.stringify(tableData.tableDefinition.externalRefs)}
+            );
+          `
+        )
+        .join("\n")}`
+    );
+  }
+
+  printTest(
+    pageData: PageData,
+    excelFormula: string,
+    params: any,
+    evaled: Value
+  ) {
+    if (!PRINT_TESTS_TO_CONSOLE) return;
+    // sometimes the correct answer is already there, this just ensures it isnt. probably not necessary
+    const replaceTestData = (tableData: RowData[]): RowData[] => {
+      let copy = tableData;
       if (
-        condition.greaterThan !== undefined &&
-        fieldValue <= condition.greaterThan
+        params.node.rowIndex in copy &&
+        params.column.colId in copy[params.node.rowIndex]
       ) {
-        return false;
+        copy[params.node.rowIndex][params.column.colId] =
+          typeof evaled === "string" ? "" : -999;
       }
-
-      return true;
-    });
-
-    if (allConditionsMet) {
-      return style;
-    }
+      return copy;
+    };
+    console.log(
+      `
+      test("evaluates ${this.tableId}.${params.column.colId} row ${
+        params.node.rowIndex + 1
+      } formula", () => {
+        testFormula({
+          formula: '${excelFormula}',
+          row: ${params.node.rowIndex + 1},
+          tableId: "${this.tableId}",
+          expected: ${typeof evaled === "string" ? `"${evaled}"` : evaled},
+          fromTables: [\n${Object.values(pageData)
+            .map(
+              (tableData) =>
+                `new mockTable(mock${tableData.tableDefinition.tableId.replace(
+                  "-",
+                  "_"
+                )}, ${JSON.stringify(replaceTestData(tableData.data))})`
+            )
+            .join(",\n")}
+          ],
+        });
+      });
+      `
+    );
   }
-  return params.colDef.editable
-    ? { backgroundColor: "lightgreen" }
-    : { backgroundColor: "lightgray" };
 }
 
-function doCalculation(params: any, calcs: string): string {
-  console.log(calcs, params);
-  // a*c
-  // a: c:
-  return "?";
+function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
+  const { funcName, inputs } = funcCall;
+  switch (funcName) {
+    case "calculateExcelFormula":
+      const args = inputs.map((input) => params.data[input]) as [
+        number,
+        number
+      ];
+      return calculateExcelFormula(...args);
+    // Add more cases if there are other functions to call
+    default:
+      throw new Error(`Function ${funcName} is not defined.`);
+  }
 }
 
-/**
- * aggregation
- * referencing another table
- */
-
-export { CalculationTable, getColDefs };
+export { CalcTableDefinition };

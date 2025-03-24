@@ -1,0 +1,908 @@
+{
+  "(f) Liquids Unloading": [
+    {
+      "start_row": 5,
+      "start_col": 34,
+      "start_col_letter": "AH",
+      "headers": [
+        {
+          "AH": "\n\n\n\n\nSub-Basin ID\n\n\n[98.236(f)(1)(i)]"
+        },
+        {
+          "AI": "Tubing Diameter Group/Pressure Group\n\n\n\n[98.236(f)(1)(ii)]"
+        },
+        {
+          "AJ": "Were Plunger Lifts used?\n\n\n[98.236(f)(1)(iii)]"
+        },
+        {
+          "AK": "API Well Number of tested well\n\n[98.236(f)(1)(xi)(A)] \n[98.236(f)(1)(xii)(A)] "
+        },
+        {
+          "AL": "\nCasing pressure \n(psia)\n\n[98.236(f)(1)(xi)(B)]"
+        },
+        {
+          "AM": "\nInternal casing diameter\n(inches)\n\n[98.236(f)(1)(xi)(C)] "
+        },
+        {
+          "AN": "\nTubing pressure \n(psia)\n\n[98.236(f)(1)(xii)(B)]  "
+        },
+        {
+          "AO": "\nInternal tubing diameter\n(inches)\n\n[98.236(f)(1)(xii)(C)]  "
+        },
+        {
+          "AP": "Depth of the Well (feet)\n\n[98.236(f)(1)(xi)(D)] \n[98.236(f)(1)(xii)(D)]  "
+        },
+        {
+          "AQ": "Average flow rate of the measured well venting, FR\n(standard cubic feet per hour)\n\n[98.236(f)(1)(xi)(E)] \n[98.236(f)(1)(xii)(E)]  "
+        }
+      ],
+      "rows": {
+        "6": [
+          {
+            "cell_column": "AH",
+            "cell_color": "FFFFFF00",
+            "cell_value": "=IF(C26=\"\",\"\",C26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AI",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(AE6=\"\",\"\",D26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AJ",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(AE6=\"\",\"\",E26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AK",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(AE6=\"\",\"\",F26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AM",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(H26=\"\",\"\",H26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AN",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(I26=\"\",\"\",I26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AO",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(J26=\"\",\"\",J26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AP",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(AE6=\"\",\"\",K26)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "AQ",
+            "cell_color": "FFFFFF00",
+            "hidden": true,
+            "cell_value": "=IF(AE6=\"\",\"\",L26)",
+            "cell_value_type": "value"
+          }
+        ]
+      },
+      "end_column": 44,
+      "end_column_letter": "AR",
+      "end_row": 6,
+      "type": "constant"
+    },
+    {
+      "start_row": 9,
+      "start_col": 3,
+      "start_col_letter": "C",
+      "headers": [
+        {
+          "C": "Industry Segment Currently Selected:"
+        },
+        {
+          "D": "Applicable:"
+        }
+      ],
+      "rows": [],
+      "end_column": 5,
+      "end_column_letter": "E",
+      "end_row": 9,
+      "type": "reporting"
+    },
+    {
+      "start_row": 24,
+      "start_col": 3,
+      "start_col_letter": "C",
+      "headers": [
+        {
+          "C": "[Ts] Temperature at standard conditions (°F)"
+        },
+        {
+          "D": 60
+        }
+      ],
+      "rows": {
+        "25": [
+          {
+            "cell_column": "C",
+            "cell_color": "FFC0C0C0",
+            "cell_value": "[Ps] Absolute pressure at standard conditions (psia)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "D",
+            "cell_color": "FFC0C0C0",
+            "cell_value": 14.7,
+            "cell_value_type": "value"
+          }
+        ],
+        "26": [
+          {
+            "cell_column": "C",
+            "cell_color": "FFC0C0C0",
+            "cell_value": "Density of CO2 at standard conditions (kg/ft3)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "D",
+            "cell_color": "FFC0C0C0",
+            "cell_value": 0.0526,
+            "cell_value_type": "value"
+          }
+        ],
+        "27": [
+          {
+            "cell_column": "C",
+            "cell_color": "FFC0C0C0",
+            "cell_value": "Density of CH4 at standard conditions (kg/ft3)",
+            "cell_value_type": "value"
+          },
+          {
+            "cell_column": "D",
+            "cell_color": "FFC0C0C0",
+            "cell_value": 0.0192,
+            "cell_value_type": "value"
+          }
+        ]
+      },
+      "end_column": 5,
+      "end_column_letter": "E",
+      "end_row": 27,
+      "type": "constant"
+    },
+    {
+      "start_row": 33,
+      "start_col": 3,
+      "start_col_letter": "C",
+      "headers": [
+        {
+          "C": "Sub-Basin ID"
+        },
+        {
+          "D": "Tubing Diameter Group/Pressure Group"
+        },
+        {
+          "E": "Did well selected  from the tubing diameter and pressure group have a plunger lift?"
+        },
+        {
+          "F": "Was the time the well spent venting recorded?\n\n(Use \"No\" if the time is to be calculated using Eq. W-7B)"
+        },
+        {
+          "G": "Well ID Number of representative well"
+        },
+        {
+          "H": "[HRp]\nCumulative amount of time of venting for each well, p, during the monitoring period\n(hours)"
+        },
+        {
+          "I": "[MPp]\nTime period of the monitoring period for each well, p\n(days)\n\n(A minimum of 300 days in a calendar year are required)"
+        },
+        {
+          "J": "[Dp]\nTime period during which the well, p, was in production\n(days)\n\n(Use 365 if the well was in production for the entire year)"
+        },
+        {
+          "K": "[Tp]\nCumulative amount of time of venting for each well, p, of the same tubing diameter group and pressure group combination in a sub-basin during the year\n(hours)"
+        },
+        {
+          "L": "[Tp]\nCumulative amount of time of venting for each well, p, of the same tubing diameter group and pressure group combination in a sub-basin during the year\n(hours)"
+        },
+        {
+          "M": "[FR]\nAverage flow rate of the measured well venting for the diameter/pressure group for the duration of liquids unloading\n(scf/hr)"
+        }
+      ],
+      "rows": [
+        {
+          "cell_column": "H",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$F34=\"Yes\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "I",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$F34=\"Yes\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "J",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$F34=\"Yes\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "K",
+          "cell_color": "FFC0C0C0",
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$F34=\"Yes\""]
+            }
+          ],
+          "cell_value": "=IF(F34<>\"No\",\"\",IF(H34=\"\",\"\",IF(I34=\"\",\"\",IF(J34=\"\",\"\",(H34/I34)*J34))))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "L",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$F34=\"No\""]
+            }
+          ]
+        }
+      ],
+      "end_column": 14,
+      "end_column_letter": "N",
+      "end_row": 1183,
+      "type": "input"
+    },
+    {
+      "start_row": 1189,
+      "start_col": 3,
+      "start_col_letter": "C",
+      "headers": [
+        {
+          "C": "Sub-Basin ID"
+        },
+        {
+          "D": "Tubing Diameter Group/Pressure Group"
+        },
+        {
+          "E": "Were Plunger Lifts used?"
+        },
+        {
+          "F": "[h]\nTotal number of wells of this tubing diameter group/pressure group combination in this sub-basin"
+        },
+        {
+          "G": "Percentage of wells for which the monitoring period used to determine the cumulative amount of time venting was not the full calendar year\n(%)"
+        },
+        {
+          "H": "Cumulative Number of Unloadings Vented"
+        },
+        {
+          "I": "[Ta]\nTemperature at actual emission conditions\n(°F)"
+        },
+        {
+          "J": "[Pa]\nAbsolute pressure at actual emission conditions\n(psia)"
+        },
+        {
+          "K": "[Za]\nCompressibility Factor at actual conditions\n\n[default: 1]"
+        },
+        {
+          "L": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)"
+        },
+        {
+          "M": "[MCH4]\nMole fraction of CH4 in natural gas\n(decimal)"
+        },
+        {
+          "N": "[Σ Tp]\nCumulative amount of time in hours of venting for all wells of the same tubing diameter group and pressure group combination in this sub-basin\n(hours)"
+        },
+        {
+          "O": "[FR]\nAverage flow rate from all measured wells venting for the diameter/pressure group for the duration of liquids unloading\n(scf/hr)"
+        },
+        {
+          "P": "[Ea,n]\n Annual natural gas emissions for diameter/pressure group\n(acf)"
+        },
+        {
+          "Q": "[Es,n]\nAnnual natural gas emissions\n(scf)"
+        },
+        {
+          "R": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)"
+        },
+        {
+          "S": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)"
+        },
+        {
+          "T": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)"
+        },
+        {
+          "U": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)"
+        }
+      ],
+      "rows": [
+        {
+          "cell_column": "C",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(AK34=\"\",\"\",LEFT(AK34,FIND(\"_\",AK34)-1))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "D",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(AK34=\"\",\"\",MID(AK34,FIND(\"_\",AK34)+1,FIND(\"|\",AK34)-FIND(\"_\",AK34)-1))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "E",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(AK34=\"\",\"\",RIGHT(AK34,LEN(AK34)-FIND(\"|\",AK34)))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "N",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IFERROR(IF(OR(E1190=\"\",F1190=\"\"),\"\",AVERAGEIF($AI$34:$AI$1183,$AK34,$AM$34:$AM$1183)*F1190),\"\")",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "O",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IFERROR(IF(C1190=\"\",\"\",AVERAGEIF($AI$34:$AI$1183,$AK34,$M$34:$M$1183)),\"\")",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "P",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IFERROR(IF(N1190=\"\",\"\",N1190*O1190),\"\")",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "Q",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR(C1190=\"\",P1190=\"\",I1190=\"\",K1190=\"\"),\"\",(P1190*(459.67+$D$24)*J1190)/((459.67+I1190)*$D$25*K1190))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "R",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR($Q1190=\"\",L1190=\"\"),\"\",$Q1190*L1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "S",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR($Q1190=\"\",M1190=\"\"),\"\",$Q1190*M1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "T",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR($C1190=\"\",R1190=\"\"),\"\",R1190*$D$26/1000)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "U",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR($C1190=\"\",S1190=\"\"),\"\",S1190*$D$27/1000)",
+          "cell_value_type": "formula"
+        }
+      ],
+      "end_column": 22,
+      "end_column_letter": "V",
+      "end_row": 1689,
+      "type": "reporting"
+    },
+    {
+      "start_row": 1189,
+      "start_col": 23,
+      "start_col_letter": "W",
+      "headers": [
+        {
+          "W": "\n\n\n\nSub-Basin ID\n\n\n[98.236(f)(1)(i)]"
+        },
+        {
+          "X": "Tubing Diameter Group/Pressure Group\n\n\n[98.236(f)(1)(ii)]"
+        },
+        {
+          "Y": "Were Plunger Lifts used?\n\n\n[98.236(f)(1)(iii)]"
+        },
+        {
+          "Z": "Number of Wells vented for liquids unloading, h\n\n[98.236(f)(1)(iv)]"
+        },
+        {
+          "AA": "Percentage of wells for which the monitoring period used to determine the cumulative amount of time venting was not the full calendar year \n\n[98.236(f)(1)(v)]"
+        },
+        {
+          "AB": "Cumulative amount of time wells were vented, Sum of Tp Values\n(hours)\n\n[98.236(f)(1)(vi)]"
+        },
+        {
+          "AC": "Cumulative Number of Unloadings Vented\n\n\n[98.236(f)(1)(vii)]"
+        },
+        {
+          "AD": "Annual natural gas emissions from well venting for liquids unloading\n(standard cubic feet)\n\n[98.236(f)(1)(viii)]"
+        },
+        {
+          "AE": "Total CO2 Emissions \n(mt CO2)\n\n\n[98.236(f)(1)(ix)]"
+        },
+        {
+          "AF": "Total CH4 Emissions \n(mt CH4)\n\n\n[98.236(f)(1)(x)]"
+        }
+      ],
+      "rows": [
+        {
+          "cell_column": "W",
+          "cell_color": 13,
+          "cell_value": "=IF(C1190=\"\",\"\",C1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "X",
+          "cell_color": 13,
+          "cell_value": "=IF(D1190=\"\",\"\",D1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "Y",
+          "cell_color": 13,
+          "cell_value": "=IF(E1190=\"\",\"\",E1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "Z",
+          "cell_color": 13,
+          "cell_value": "=IF(F1190=\"\",\"\",F1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AA",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(G1190=\"\",\"\",G1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AB",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(N1190=\"\",\"\",N1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AC",
+          "cell_color": 13,
+          "cell_value": "=IF(H1190=\"\",\"\",H1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AD",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(Q1190=\"\",\"\",Q1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AE",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(T1190=\"\",\"\",T1190)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AF",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(U1190=\"\",\"\",U1190)",
+          "cell_value_type": "formula"
+        }
+      ],
+      "end_column": 33,
+      "end_column_letter": "AG",
+      "end_row": 1689,
+      "type": "reporting"
+    },
+    {
+      "start_row": 1698,
+      "start_col": 3,
+      "start_col_letter": "C",
+      "headers": [
+        {
+          "C": "Sub-Basin ID"
+        },
+        {
+          "D": "Well ID"
+        },
+        {
+          "E": "Were Plunger Lifts used?\n(Yes/No)"
+        },
+        {
+          "F": "[CDp]\nCasing internal diameter\n(inches)"
+        },
+        {
+          "G": "[WDp]\nWell depth from either the top of the well or the lowest packer to the bottom of the well, p\n(feet)"
+        },
+        {
+          "H": "[SPp]\nShut-in pressure or surface pressure for wells with tubing production and no packers or casing pressure for each well, p, or casing-to-tubing pressure ratio of one well from the same sub-basin multiplied by the tubing pressure of each well, p, in the sub-basin\n(psia)"
+        },
+        {
+          "I": "[TDp]\nTubing internal diameter\n(inches)"
+        },
+        {
+          "J": "[WDp]\nTubing depth to plunger bumper for each well, p\n(feet)"
+        },
+        {
+          "K": "[SPp]\nFlow-line pressure for each well, p\n(psia)"
+        },
+        {
+          "L": "[Vp]\nNumber of unloading events per year per well, p"
+        },
+        {
+          "M": "[SFRp]\nAverage flow-line rate of gas for well, p\n(scf/hr)"
+        },
+        {
+          "N": "[HRp,q]\nTime that each well, p, was left open to the atmosphere during each unloading event, q\n(hours)\n\n[NOTE: use average hours for all well unloading events.]"
+        },
+        {
+          "O": "[Zp,q]\nFor wells without plunger lifts, if HRp,q is less than 1, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 1, then Zp,q is equal to 1\n\nFor wells with plunger lifts, if HRp,q is less than 0.5, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 0.5, then Zp,q is equal to 1"
+        },
+        {
+          "P": "[Es]\nAnnual natural gas emissions\n(scf)"
+        }
+      ],
+      "rows": [
+        {
+          "cell_column": "F",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E1699=\"Yes\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "G",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E1699=\"Yes\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "H",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E1699=\"Yes\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "I",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E1699=\"No\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "J",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E1699=\"No\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "K",
+          "cell_color": 42,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E1699=\"No\""]
+            }
+          ]
+        },
+        {
+          "cell_column": "O",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR(E1699=\"\",N1699=\"\"),\"\",IF(E1699=\"No\",IF(N1699<1,0,1),IF(N1699<0.5,0,1)))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "P",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR(C1699=\"\",E1699=\"\",L1699=\"\",M1699=\"\",N1699=\"\"),\"\",((L1699*((0.37*10^-3)*IF(E1699=\"No\",(F1699^2)*G1699*H1699,(I1699^2)*J1699*K1699))+(L1699*(M1699*(N1699-IF(E1699=\"No\",1,0.5))*O1699)))))",
+          "cell_value_type": "formula"
+        }
+      ],
+      "end_column": 17,
+      "end_column_letter": "Q",
+      "end_row": 6698,
+      "type": "input"
+    },
+    {
+      "start_row": 6705,
+      "start_col": 3,
+      "start_col_letter": "C",
+      "headers": [
+        {
+          "C": "Sub-Basin"
+        },
+        {
+          "D": "Calculation Method"
+        },
+        {
+          "E": "Were Plunger Lifts used?"
+        },
+        {
+          "F": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)"
+        },
+        {
+          "G": "[MCH4]\nMole fraction of CH4 in natural gas\n(decimal)"
+        },
+        {
+          "H": "[Es,n]\nAnnual natural gas emissions from well venting during liquids unloading\n(scf)"
+        },
+        {
+          "I": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)"
+        },
+        {
+          "J": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)"
+        },
+        {
+          "K": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)"
+        },
+        {
+          "L": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)"
+        },
+        {
+          "M": "Total Number of Wells vented for liquids unloading in sub-basin"
+        },
+        {
+          "N": "[Vp]\nCumulative number of unloadings vented to the atmosphere"
+        },
+        {
+          "O": "Average internal casing diameter across sub-basin\n(inches)"
+        },
+        {
+          "P": "Average internal casing diameter across sub-basin\n(inches)"
+        }
+      ],
+      "rows": [
+        {
+          "cell_column": "C",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF($AK1699=\"\",\"\",LEFT($AK1699,FIND(\"_\",$AK1699)-1))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "D",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF($E6706=\"\",\"\",IF($E6706=\"No\",\"Calculation Methodology 2 [98.233(f)(2)]\",\"Calculation Methodology 3 [98.233(f)(3)]\"))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "E",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF($AK1699=\"\",\"\",RIGHT($AK1699,LEN($AK1699)-FIND(\"_\",$AK1699)))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "H",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF($AK1699=\"\",\"\",SUMIFS($P$1699:$P$6698,$AI$1699:$AI$6698,$AK1699))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "I",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(H6706=\"\",\"\",H6706*F6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "J",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(H6706=\"\",\"\",H6706*G6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "K",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(I6706=\"\",\"\",I6706*$D$26/1000)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "L",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(J6706=\"\",\"\",J6706*$D$27/1000)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "M",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",COUNTIFS($C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "N",
+          "cell_color": "FFC0C0C0",
+          "cell_value": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "O",
+          "cell_color": "FFC0C0C0",
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E6706=\"Yes\""]
+            }
+          ],
+          "cell_value": "=IF(E6706=\"\",\"\",IF(E6706=\"No\",AVERAGEIF($C$1699:$C$6698,C6706,$F$1699:$F$6698),\"\"))",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "P",
+          "cell_color": "FFC0C0C0",
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E6706=\"No\""]
+            }
+          ],
+          "cell_value": "=IF(E6706=\"\",\"\",IF(E6706=\"No\",\"\",AVERAGEIF($C$1699:$C$6698,C6706,$I$1699:$I$6698)))",
+          "cell_value_type": "formula"
+        }
+      ],
+      "end_column": 17,
+      "end_column_letter": "Q",
+      "end_row": 6955,
+      "type": "reporting"
+    },
+    {
+      "start_row": 6705,
+      "start_col": 23,
+      "start_col_letter": "W",
+      "headers": [
+        {
+          "W": "\n\n\nSub-Basin ID\n\n\n[98.236(f)(2)(i)]"
+        },
+        {
+          "X": "Calculation Method\n\n\n[98.236(f)(2)(ii)]"
+        },
+        {
+          "Y": "Were Plunger Lifts used?\n\n\n[98.236(f)(2)(iii)] "
+        },
+        {
+          "Z": "Number of wells vented for liquids unloading, W \n\n[98.236(f)(2)(iv)]"
+        },
+        {
+          "AA": "Cumulative number of unloadings vented to the atmosphere, Vp\n\n[98.236(f)(2)(v)]"
+        },
+        {
+          "AB": "Annual natural gas emissions from well venting for liquids unloading\n(standard cubic feet)\n\n[98.236(f)(2)(vi)]"
+        },
+        {
+          "AC": "Total CO2 Emissions \n(mt CO2)\n\n[98.236(f)(2)(vii)]"
+        },
+        {
+          "AD": "Total CH4 Emissions \n(mt CH4)\n\n[98.236(f)(2)(viii)]  "
+        },
+        {
+          "AE": "Average internal casing diameter, CDp \n(inches)\n\n(Calc. Method 2) \n\n[98.236(f)(2)(ix)]  "
+        },
+        {
+          "AF": "Average internal tubing diameter, TDp \n(inches)\n\n(Calc. Method 3)\n\n[98.236(f)(2)(x)]  "
+        }
+      ],
+      "rows": [
+        {
+          "cell_column": "W",
+          "cell_color": 13,
+          "cell_value": "=IF(C6706=\"\",\"\",C6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "X",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(D6706=\"\",\"\",D6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "Y",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(E6706=\"\",\"\",E6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "Z",
+          "cell_color": 13,
+          "cell_value": "=IF(C6706=\"\",\"\",M6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AA",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(C6706=\"\",\"\",N6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AB",
+          "cell_color": "FFFFFF00",
+          "cell_value": "=IF(C6706=\"\",\"\",H6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AC",
+          "cell_color": 13,
+          "cell_value": "=IF(C6706=\"\",\"\",K6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AD",
+          "cell_color": 13,
+          "cell_value": "=IF(G6706=\"\",\"\",L6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AE",
+          "cell_color": 13,
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E6706=\"Yes\""]
+            }
+          ],
+          "cell_value": "=IF(O6706=\"\",\"\",O6706)",
+          "cell_value_type": "formula"
+        },
+        {
+          "cell_column": "AF",
+          "cell_color": "FFFFFF00",
+          "conditional_formatting": [
+            {
+              "type": "expression",
+              "formula": ["$E6706=\"No\""]
+            }
+          ],
+          "cell_value": "=IF(P6706=\"\",\"\",P6706)",
+          "cell_value_type": "formula"
+        }
+      ],
+      "end_column": 33,
+      "end_column_letter": "AG",
+      "end_row": 6906,
+      "type": "reporting"
+    }
+  ]
+}
