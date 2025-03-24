@@ -154,11 +154,7 @@ class CalcTableDefinition {
     );
   }
 
-  getColDefs(
-    rowData: RowData[], // TODO: remove
-    pageData: PageData,
-    fomulaParser: FormulaParser
-  ): ColDef[] {
+  getColDefs(pageData: PageData, fomulaParser: FormulaParser): ColDef[] {
     this.printTestVariables(pageData);
     return this.columnDefinitions.map((cd) => ({
       headerName: cd.headerName,
@@ -197,7 +193,11 @@ class CalcTableDefinition {
         ? {
             valueGetter: (params: any) => {
               if (cd.funcCall) {
-                return doFuncCall(params, cd.funcCall, rowData);
+                return doFuncCall(
+                  params,
+                  cd.funcCall,
+                  pageData[this.tableId].data
+                );
               }
             },
           }
@@ -220,7 +220,9 @@ class CalcTableDefinition {
                 // this little oneliner is working to keep things updated,
                 // but its likely we would need a setRowData useState type completion,
                 // or the angular equivalent.
-                rowData[params.node.rowIndex][params.column.colId] = evaled;
+                pageData[this.tableId].data[params.node.rowIndex][
+                  params.column.colId
+                ] = evaled;
                 return evaled;
               }
             },

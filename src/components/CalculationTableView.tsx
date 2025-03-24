@@ -70,11 +70,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
           <AgGridReact
             ref={pageData?.[tableDefinition.tableId].ref}
             headerHeight={200}
-            columnDefs={tableDefinition.getColDefs(
-              initialData,
-              pageData,
-              fomulaParser
-            )}
+            columnDefs={tableDefinition.getColDefs(pageData, fomulaParser)}
             rowData={initialData}
             defaultColDef={defaultColDef}
             modules={[ClientSideRowModelModule]}
