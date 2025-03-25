@@ -66,7 +66,11 @@ interface CalcTableJSON {
   type: string;
   columnDefinitions: ColumnDefinitions[];
   dependentTables?: string[];
-  externalRefs?: { [key: string]: string } | null;
+  externalRefs?: { [key: string]: ExternalRef } | null;
+}
+
+class ExternalRef {
+  constructor(public column: string, public tableId: string) {}
 }
 
 class CalcTableDefinition {
@@ -76,7 +80,7 @@ class CalcTableDefinition {
     public type: string,
     public columnDefinitions: ColumnDefinitions[],
     public dependentTables?: string[],
-    public externalRefs?: { [key: string]: string } | null
+    public externalRefs?: { [key: string]: ExternalRef } | null
   ) {}
 
   static fromJson(json: CalcTableJSON): CalcTableDefinition {

@@ -3,17 +3,23 @@
   "description": "Calculation Methodologies 2 & 3, Reference Table",
   "type": "reference",
   "externalRefs": {
-    "C": "Method2-3Table1",
-    "D": "Method2-3Table1"
+    "YYY": {
+      "column": "C",
+      "tableId": "Method2-3Table1"
+    },
+    "ZZZ": {
+      "column": "E",
+      "tableId": "Method2-3Table1"
+    }
   },
   "columnDefinitions": [
     {
       "headerName": "unique id",
       "field": "AI",
       "editable": false,
-      "excelFormula": "=IF($C$=\"\",\"\",$C$&\"_\"&$E$)",
+      "excelFormula": "=IFERROR(IF($YYY$=\"\",\"\",$YYY$&\"_\"&$ZZZ$),\"\")",
       "originalFormula": "=IF(C1700=\"\",\"\",C1700&\"_\"&E1700)",
-      "notes": "C1700 -> $Method2-3Table1.C$ for reference outside table "
+      "notes": "C1700 -> $YYY$ for a cross table reference.... which then gets added to externalRefs up at the top, with a field for table, column, and potentially row if we needed to override"
     },
     {
       "headerName": "no dupes",

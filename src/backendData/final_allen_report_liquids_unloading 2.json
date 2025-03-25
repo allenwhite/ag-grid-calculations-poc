@@ -1,0 +1,558 @@
+{
+    "(f) Liquids Unloading": [
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "\n\n\n\n\nSub-Basin ID\n\n\n[98.236(f)(1)(i)]",
+                    "field": "AH"
+                },
+                {
+                    "headerName": "Tubing Diameter Group/Pressure Group\n\n\n\n[98.236(f)(1)(ii)]",
+                    "field": "AI"
+                },
+                {
+                    "headerName": "Were Plunger Lifts used?\n\n\n[98.236(f)(1)(iii)]",
+                    "field": "AJ"
+                },
+                {
+                    "headerName": "API Well Number of tested well\n\n[98.236(f)(1)(xi)(A)] \n[98.236(f)(1)(xii)(A)] ",
+                    "field": "AK"
+                },
+                {
+                    "headerName": "\nCasing pressure \n(psia)\n\n[98.236(f)(1)(xi)(B)]",
+                    "field": "AL"
+                },
+                {
+                    "headerName": "\nInternal casing diameter\n(inches)\n\n[98.236(f)(1)(xi)(C)] ",
+                    "field": "AM"
+                },
+                {
+                    "headerName": "\nTubing pressure \n(psia)\n\n[98.236(f)(1)(xii)(B)]  ",
+                    "field": "AN"
+                },
+                {
+                    "headerName": "\nInternal tubing diameter\n(inches)\n\n[98.236(f)(1)(xii)(C)]  ",
+                    "field": "AO"
+                },
+                {
+                    "headerName": "Depth of the Well (feet)\n\n[98.236(f)(1)(xi)(D)] \n[98.236(f)(1)(xii)(D)]  ",
+                    "field": "AP"
+                },
+                {
+                    "headerName": "Average flow rate of the measured well venting, FR\n(standard cubic feet per hour)\n\n[98.236(f)(1)(xi)(E)] \n[98.236(f)(1)(xii)(E)]  ",
+                    "field": "AQ"
+                }
+            ],
+            "type": "constant",
+            "start_row": 5,
+            "start_col": "AH",
+            "end_row": 6,
+            "end_col": "AQ",
+            "tableId": "AH5:AQ6"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "Industry Segment Currently Selected:",
+                    "field": "C"
+                },
+                {
+                    "headerName": "Applicable:",
+                    "field": "D"
+                }
+            ],
+            "type": "calculation",
+            "start_row": 9,
+            "start_col": "C",
+            "end_row": 9,
+            "end_col": "E",
+            "tableId": "C9:E9"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "[Ts] Temperature at standard conditions (°F)",
+                    "field": "C"
+                },
+                {
+                    "headerName": 60,
+                    "field": "D"
+                }
+            ],
+            "type": "constant",
+            "start_row": 24,
+            "start_col": "C",
+            "end_row": 27,
+            "end_col": "E",
+            "tableId": "C24:E27"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "Sub-Basin ID",
+                    "field": "C"
+                },
+                {
+                    "headerName": "Tubing Diameter Group/Pressure Group",
+                    "field": "D"
+                },
+                {
+                    "headerName": "Did well selected  from the tubing diameter and pressure group have a plunger lift?",
+                    "field": "E"
+                },
+                {
+                    "headerName": "Was the time the well spent venting recorded?\n\n(Use \"No\" if the time is to be calculated using Eq. W-7B)",
+                    "field": "F"
+                },
+                {
+                    "headerName": "Well ID Number of representative well",
+                    "field": "G"
+                },
+                {
+                    "headerName": "[HRp]\nCumulative amount of time of venting for each well, p, during the monitoring period\n(hours)",
+                    "field": "H"
+                },
+                {
+                    "headerName": "[MPp]\nTime period of the monitoring period for each well, p\n(days)\n\n(A minimum of 300 days in a calendar year are required)",
+                    "field": "I"
+                },
+                {
+                    "headerName": "[Dp]\nTime period during which the well, p, was in production\n(days)\n\n(Use 365 if the well was in production for the entire year)",
+                    "field": "J"
+                },
+                {
+                    "headerName": "[Tp]\nCumulative amount of time of venting for each well, p, of the same tubing diameter group and pressure group combination in a sub-basin during the year\n(hours)",
+                    "field": "K"
+                },
+                {
+                    "headerName": "[Tp]\nCumulative amount of time of venting for each well, p, of the same tubing diameter group and pressure group combination in a sub-basin during the year\n(hours)",
+                    "field": "L"
+                },
+                {
+                    "headerName": "[FR]\nAverage flow rate of the measured well venting for the diameter/pressure group for the duration of liquids unloading\n(scf/hr)",
+                    "field": "M"
+                }
+            ],
+            "type": "input",
+            "start_row": 33,
+            "start_col": "C",
+            "end_row": 1183,
+            "end_col": "N",
+            "tableId": "C33:N1183"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "Sub-Basin ID",
+                    "field": "C",
+                    "editable": true,
+                    "excelFormula": "=IF($AK$=\"\",\"\",LEFT($AK$,FIND(\"_\",$AK$)-1))"
+                },
+                {
+                    "headerName": "Tubing Diameter Group/Pressure Group",
+                    "field": "D",
+                    "editable": true,
+                    "excelFormula": "=IF($AK$=\"\",\"\",MID($AK$,FIND(\"_\",$AK$)+1,FIND(\"|\",$AK$)-FIND(\"_\",$AK$)-1))"
+                },
+                {
+                    "headerName": "Were Plunger Lifts used?",
+                    "field": "E",
+                    "editable": true,
+                    "excelFormula": "=IF($AK$=\"\",\"\",RIGHT($AK$,LEN($AK$)-FIND(\"|\",$AK$)))"
+                },
+                {
+                    "headerName": "[h]\nTotal number of wells of this tubing diameter group/pressure group combination in this sub-basin",
+                    "field": "F",
+                    "editable": true
+                },
+                {
+                    "headerName": "Percentage of wells for which the monitoring period used to determine the cumulative amount of time venting was not the full calendar year\n(%)",
+                    "field": "G",
+                    "editable": true
+                },
+                {
+                    "headerName": "Cumulative Number of Unloadings Vented",
+                    "field": "H",
+                    "editable": true
+                },
+                {
+                    "headerName": "[Ta]\nTemperature at actual emission conditions\n(°F)",
+                    "field": "I",
+                    "editable": true
+                },
+                {
+                    "headerName": "[Pa]\nAbsolute pressure at actual emission conditions\n(psia)",
+                    "field": "J",
+                    "editable": true
+                },
+                {
+                    "headerName": "[Za]\nCompressibility Factor at actual conditions\n\n[default: 1]",
+                    "field": "K",
+                    "editable": true
+                },
+                {
+                    "headerName": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)",
+                    "field": "L",
+                    "editable": true
+                },
+                {
+                    "headerName": "[MCH4]\nMole fraction of CH4 in natural gas\n(decimal)",
+                    "field": "M",
+                    "editable": true
+                },
+                {
+                    "headerName": "[Σ Tp]\nCumulative amount of time in hours of venting for all wells of the same tubing diameter group and pressure group combination in this sub-basin\n(hours)",
+                    "field": "N",
+                    "editable": true,
+                    "excelFormula": "=IFERROR(IF(OR($E$=\"\",$F$=\"\"),\"\",AVERAGEIF($AI$:$AI$,$AK$,$AM$:$AM$)*$F$),\"\")"
+                },
+                {
+                    "headerName": "[FR]\nAverage flow rate from all measured wells venting for the diameter/pressure group for the duration of liquids unloading\n(scf/hr)",
+                    "field": "O",
+                    "editable": true,
+                    "excelFormula": "=IFERROR(IF($C$=\"\",\"\",AVERAGEIF($AI$:$AI$,$AK$,$M$:$M$)),\"\")"
+                },
+                {
+                    "headerName": "[Ea,n]\n Annual natural gas emissions for diameter/pressure group\n(acf)",
+                    "field": "P",
+                    "editable": true,
+                    "excelFormula": "=IFERROR(IF($N$=\"\",\"\",$N$*$O$),\"\")"
+                },
+                {
+                    "headerName": "[Es,n]\nAnnual natural gas emissions\n(scf)",
+                    "field": "Q",
+                    "editable": true,
+                    "excelFormula": "=IF(OR($C$=\"\",$P$=\"\",$I$=\"\",$K$=\"\"),\"\",($P$*(459.67+$D$)*$J$)/((459.67+$I$)*$D$*$K$))"
+                },
+                {
+                    "headerName": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)",
+                    "field": "R",
+                    "editable": true,
+                    "excelFormula": "=IF(OR($Q$=\"\",$L$=\"\"),\"\",$Q$*$L$)"
+                },
+                {
+                    "headerName": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)",
+                    "field": "S",
+                    "editable": true,
+                    "excelFormula": "=IF(OR($Q$=\"\",$M$=\"\"),\"\",$Q$*$M$)"
+                },
+                {
+                    "headerName": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)",
+                    "field": "T",
+                    "editable": true,
+                    "excelFormula": "=IF(OR($C1190=\"\",$R$=\"\"),\"\",$R$*$TABLEREF(C24:E27).D$/1000)"
+                },
+                {
+                    "headerName": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)",
+                    "field": "U",
+                    "editable": false,
+                    "excelFormula": "=IF(OR($C$=\"\",$S$=\"\"),\"\",$S$*$D$/1000)"
+                }
+            ],
+            "type": "calculation",
+            "start_row": 1189,
+            "start_col": "C",
+            "end_row": 1689,
+            "end_col": "V",
+            "tableId": "C1189:V1689"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "\n\n\n\nSub-Basin ID\n\n\n[98.236(f)(1)(i)]",
+                    "field": "W",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).C$=\"\",\"\",$TABLEREF(C1189:V1689).C$)"
+                },
+                {
+                    "headerName": "Tubing Diameter Group/Pressure Group\n\n\n[98.236(f)(1)(ii)]",
+                    "field": "X",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).D$=\"\",\"\",$TABLEREF(C1189:V1689).D$)"
+                },
+                {
+                    "headerName": "Were Plunger Lifts used?\n\n\n[98.236(f)(1)(iii)]",
+                    "field": "Y",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).E$=\"\",\"\",$TABLEREF(C1189:V1689).E$)"
+                },
+                {
+                    "headerName": "Number of Wells vented for liquids unloading, h\n\n[98.236(f)(1)(iv)]",
+                    "field": "Z",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).F$=\"\",\"\",$TABLEREF(C1189:V1689).F$)"
+                },
+                {
+                    "headerName": "Percentage of wells for which the monitoring period used to determine the cumulative amount of time venting was not the full calendar year \n\n[98.236(f)(1)(v)]",
+                    "field": "AA",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).G$=\"\",\"\",$TABLEREF(C1189:V1689).G$)"
+                },
+                {
+                    "headerName": "Cumulative amount of time wells were vented, Sum of Tp Values\n(hours)\n\n[98.236(f)(1)(vi)]",
+                    "field": "AB",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).N$=\"\",\"\",$TABLEREF(C1189:V1689).N$)"
+                },
+                {
+                    "headerName": "Cumulative Number of Unloadings Vented\n\n\n[98.236(f)(1)(vii)]",
+                    "field": "AC",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).H$=\"\",\"\",$TABLEREF(C1189:V1689).H$)"
+                },
+                {
+                    "headerName": "Annual natural gas emissions from well venting for liquids unloading\n(standard cubic feet)\n\n[98.236(f)(1)(viii)]",
+                    "field": "AD",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).Q$=\"\",\"\",$TABLEREF(C1189:V1689).Q$)"
+                },
+                {
+                    "headerName": "Total CO2 Emissions \n(mt CO2)\n\n\n[98.236(f)(1)(ix)]",
+                    "field": "AE",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).T$=\"\",\"\",$TABLEREF(C1189:V1689).T$)"
+                },
+                {
+                    "headerName": "Total CH4 Emissions \n(mt CH4)\n\n\n[98.236(f)(1)(x)]",
+                    "field": "AF",
+                    "editable": false,
+                    "excelFormula": "=IF($TABLEREF(C1189:V1689).U$=\"\",\"\",$TABLEREF(C1189:V1689).U$)"
+                }
+            ],
+            "type": "calculation",
+            "start_row": 1189,
+            "start_col": "W",
+            "end_row": 1689,
+            "end_col": "AG",
+            "tableId": "W1189:AG1689"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "Sub-Basin ID",
+                    "field": "C"
+                },
+                {
+                    "headerName": "Well ID",
+                    "field": "D"
+                },
+                {
+                    "headerName": "Were Plunger Lifts used?\n(Yes/No)",
+                    "field": "E"
+                },
+                {
+                    "headerName": "[CDp]\nCasing internal diameter\n(inches)",
+                    "field": "F"
+                },
+                {
+                    "headerName": "[WDp]\nWell depth from either the top of the well or the lowest packer to the bottom of the well, p\n(feet)",
+                    "field": "G"
+                },
+                {
+                    "headerName": "[SPp]\nShut-in pressure or surface pressure for wells with tubing production and no packers or casing pressure for each well, p, or casing-to-tubing pressure ratio of one well from the same sub-basin multiplied by the tubing pressure of each well, p, in the sub-basin\n(psia)",
+                    "field": "H"
+                },
+                {
+                    "headerName": "[TDp]\nTubing internal diameter\n(inches)",
+                    "field": "I"
+                },
+                {
+                    "headerName": "[WDp]\nTubing depth to plunger bumper for each well, p\n(feet)",
+                    "field": "J"
+                },
+                {
+                    "headerName": "[SPp]\nFlow-line pressure for each well, p\n(psia)",
+                    "field": "K"
+                },
+                {
+                    "headerName": "[Vp]\nNumber of unloading events per year per well, p",
+                    "field": "L"
+                },
+                {
+                    "headerName": "[SFRp]\nAverage flow-line rate of gas for well, p\n(scf/hr)",
+                    "field": "M"
+                },
+                {
+                    "headerName": "[HRp,q]\nTime that each well, p, was left open to the atmosphere during each unloading event, q\n(hours)\n\n[NOTE: use average hours for all well unloading events.]",
+                    "field": "N"
+                },
+                {
+                    "headerName": "[Zp,q]\nFor wells without plunger lifts, if HRp,q is less than 1, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 1, then Zp,q is equal to 1\n\nFor wells with plunger lifts, if HRp,q is less than 0.5, then Zp,q is equal to 0;\nif HRp,q is greater than or equal to 0.5, then Zp,q is equal to 1",
+                    "field": "O"
+                },
+                {
+                    "headerName": "[Es]\nAnnual natural gas emissions\n(scf)",
+                    "field": "P"
+                }
+            ],
+            "type": "input",
+            "start_row": 1698,
+            "start_col": "C",
+            "end_row": 6698,
+            "end_col": "Q",
+            "tableId": "C1698:Q6698"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "Sub-Basin",
+                    "field": "C",
+                    "editable": true,
+                    "excelFormula": "=IF($AK$=\"\",\"\",LEFT($AK$,FIND(\"_\",$AK$)-1))"
+                },
+                {
+                    "headerName": "Calculation Method",
+                    "field": "D",
+                    "editable": true,
+                    "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"Calculation Methodology 2 [98.233(f)(2)]\",\"Calculation Methodology 3 [98.233(f)(3)]\"))"
+                },
+                {
+                    "headerName": "Were Plunger Lifts used?",
+                    "field": "E",
+                    "editable": true,
+                    "excelFormula": "=IF($AK$=\"\",\"\",RIGHT($AK$,LEN($AK$)-FIND(\"_\",$AK$)))"
+                },
+                {
+                    "headerName": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)",
+                    "field": "F",
+                    "editable": true
+                },
+                {
+                    "headerName": "[MCH4]\nMole fraction of CH4 in natural gas\n(decimal)",
+                    "field": "G",
+                    "editable": true
+                },
+                {
+                    "headerName": "[Es,n]\nAnnual natural gas emissions from well venting during liquids unloading\n(scf)",
+                    "field": "H",
+                    "editable": true,
+                    "excelFormula": "=IF($AK$=\"\",\"\",SUMIFS($P$:$TABLEREF(C1698:Q6698).P$,$AI$:$AI$,$AK$))"
+                },
+                {
+                    "headerName": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)",
+                    "field": "I",
+                    "editable": true,
+                    "excelFormula": "=IF($H$=\"\",\"\",$H$*$F$)"
+                },
+                {
+                    "headerName": "[ECH4]\nAnnual CH4 emissions from well venting during liquids unloading\n(scf)",
+                    "field": "J",
+                    "editable": true,
+                    "excelFormula": "=IF($H$=\"\",\"\",$H$*$G$)"
+                },
+                {
+                    "headerName": "[MassCO2]\nCO2 mass emissions\n(metric tons CO2)",
+                    "field": "K",
+                    "editable": true,
+                    "excelFormula": "=IF($I$=\"\",\"\",$I$*$TABLEREF(C24:E27).D$/1000)"
+                },
+                {
+                    "headerName": "[MassCH4]\nCH4 mass emissions\n(metric tons CH4)",
+                    "field": "L",
+                    "editable": true,
+                    "excelFormula": "=IF($J$=\"\",\"\",$J$*$D$/1000)"
+                },
+                {
+                    "headerName": "Total Number of Wells vented for liquids unloading in sub-basin",
+                    "field": "M",
+                    "editable": true,
+                    "excelFormula": "=IF(OR(C6706=\"\",$E$=\"\"),\"\",COUNTIFS($TABLEREF(C1698:Q6698).C$:$TABLEREF(C1698:Q6698).C$,C6706,$E$:$E$,$E$))"
+                },
+                {
+                    "headerName": "[Vp]\nCumulative number of unloadings vented to the atmosphere",
+                    "field": "N",
+                    "editable": true,
+                    "excelFormula": "=IF(OR(C6706=\"\",$E$=\"\"),\"\",SUMIFS($L$:$L$,$TABLEREF(C1698:Q6698).C$:$TABLEREF(C1698:Q6698).C$,C6706,$E$:$E$,$E$))"
+                },
+                {
+                    "headerName": "Average internal casing diameter across sub-basin\n(inches)",
+                    "field": "O",
+                    "editable": true,
+                    "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",AVERAGEIF($TABLEREF(C1698:Q6698).C$:$TABLEREF(C1698:Q6698).C$,C6706,$F$:$F$),\"\"))"
+                },
+                {
+                    "headerName": "Average internal casing diameter across sub-basin\n(inches)",
+                    "field": "P",
+                    "editable": false,
+                    "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"\",AVERAGEIF($TABLEREF(C1698:Q6698).C$:$TABLEREF(C1698:Q6698).C$,C6706,$I$:$I$)))"
+                }
+            ],
+            "type": "calculation",
+            "start_row": 6705,
+            "start_col": "C",
+            "end_row": 6955,
+            "end_col": "Q",
+            "tableId": "C6705:Q6955"
+        },
+        {
+            "columnDefinitions": [
+                {
+                    "headerName": "\n\n\nSub-Basin ID\n\n\n[98.236(f)(2)(i)]",
+                    "field": "W",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).C$=\"\",\"\",$TABLEREF(C6705:Q6955).C$)"
+                },
+                {
+                    "headerName": "Calculation Method\n\n\n[98.236(f)(2)(ii)]",
+                    "field": "X",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).D$=\"\",\"\",$TABLEREF(C6705:Q6955).D$)"
+                },
+                {
+                    "headerName": "Were Plunger Lifts used?\n\n\n[98.236(f)(2)(iii)] ",
+                    "field": "Y",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).E$=\"\",\"\",$TABLEREF(C6705:Q6955).E$)"
+                },
+                {
+                    "headerName": "Number of wells vented for liquids unloading, W \n\n[98.236(f)(2)(iv)]",
+                    "field": "Z",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).C$=\"\",\"\",$M$)"
+                },
+                {
+                    "headerName": "Cumulative number of unloadings vented to the atmosphere, Vp\n\n[98.236(f)(2)(v)]",
+                    "field": "AA",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).C$=\"\",\"\",$N$)"
+                },
+                {
+                    "headerName": "Annual natural gas emissions from well venting for liquids unloading\n(standard cubic feet)\n\n[98.236(f)(2)(vi)]",
+                    "field": "AB",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).C$=\"\",\"\",$H$)"
+                },
+                {
+                    "headerName": "Total CO2 Emissions \n(mt CO2)\n\n[98.236(f)(2)(vii)]",
+                    "field": "AC",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).C$=\"\",\"\",$K$)"
+                },
+                {
+                    "headerName": "Total CH4 Emissions \n(mt CH4)\n\n[98.236(f)(2)(viii)]  ",
+                    "field": "AD",
+                    "editable": true,
+                    "excelFormula": "=IF($G$=\"\",\"\",$TABLEREF(C6705:Q6955).L$)"
+                },
+                {
+                    "headerName": "Average internal casing diameter, CDp \n(inches)\n\n(Calc. Method 2) \n\n[98.236(f)(2)(ix)]  ",
+                    "field": "AE",
+                    "editable": true,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).O$=\"\",\"\",$TABLEREF(C6705:Q6955).O$)"
+                },
+                {
+                    "headerName": "Average internal tubing diameter, TDp \n(inches)\n\n(Calc. Method 3)\n\n[98.236(f)(2)(x)]  ",
+                    "field": "AF",
+                    "editable": false,
+                    "excelFormula": "=IF($TABLEREF(C6705:Q6955).P$=\"\",\"\",$TABLEREF(C6705:Q6955).P$)"
+                }
+            ],
+            "type": "calculation",
+            "start_row": 6705,
+            "start_col": "W",
+            "end_row": 6906,
+            "end_col": "AG",
+            "tableId": "W6705:AG6906"
+        }
+    ]
+}

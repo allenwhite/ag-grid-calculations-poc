@@ -141,43 +141,23 @@ export function createCCFormulaParser(
   return new FormulaParser({
     ...config,
     onCell: (ref: CellRef) => {
+      console.log(ref);
       const currentTableId = ref.sheet;
 
-      const column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
+      let column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
-      /**
-       * If the column is not present in the current table,
-       *   use the indicated column from the externalRefs lookup table.
-       * If no lookup exists, use the first table that has the given colum.
-       */
-      if (column && !(column in pageData[currentTableId]?.data[ref.row - 1])) {
-        const externalTableId =
-          pageData[currentTableId]?.tableDefinition?.externalRefs?.[column];
-        if (externalTableId) {
-          tableId = externalTableId;
-        } else {
-          Object.entries(pageData).every(([key, value]) => {
-            if (column && column in value.data[0]) {
-              tableId = key;
-              return false;
-            }
-            return true;
-          });
-        }
+      const externalRefs =
+        pageData[currentTableId]?.tableDefinition?.externalRefs ?? {};
+
+      if (column && Object.keys(externalRefs).includes(column)) {
+        tableId = externalRefs[column]?.tableId;
+        column = externalRefs[column]?.column;
       }
-      //
+
       const val = column
         ? pageData[tableId].data[ref.row - 1][column]
         : pageData[tableId].data[ref.row - 1][columns[ref.col - 1]];
-      // console.log(
-      //   "onCell val:",
-      //   val,
-      //   "ref:",
-      //   ref,
-      //   "using tableId:",
-      //   tableId,
-      //   pageData
-      // );
+
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;

@@ -39,7 +39,8 @@
       "editable": true,
       "cellStyle": {
         "condition": "=$E$=\"Yes\"",
-        "style": { "backgroundColor": "black" }
+        "style": { "backgroundColor": "black" },
+        "notes": "this will be manual step"
       }
     },
     {
@@ -109,7 +110,8 @@
       "headerName": "Test Sum up to this row",
       "field": "Q",
       "editable": false,
-      "excelFormula": "=SUM(P1:$P$)"
+      "excelFormula": "=SUM(P1:$P$)",
+      "notes": "Summing the entire column would be SUM(P:P)"
     }
   ]
 }
