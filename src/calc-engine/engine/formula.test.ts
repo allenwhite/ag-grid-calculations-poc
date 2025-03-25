@@ -142,8 +142,11 @@ describe("evaluate()", () => {
     "mock",
     "mock",
     [],
-    undefined
-    // { C: "Method2-3Table1", D: "Method2-3Table1" }
+    undefined,
+    {
+      YYY: { column: "C", tableId: "Method2-3Table1" },
+      ZZZ: { column: "E", tableId: "Method2-3Table1" },
+    }
   );
 
   test("evaluates formula", () => {
