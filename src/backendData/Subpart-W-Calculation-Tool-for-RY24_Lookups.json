@@ -1,4 +1,101 @@
 {
+  "columnDefinitions": [
+    {
+      "headerName": "",
+      "field": "A",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "B",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "C",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "D",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "E",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "F",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "G",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "H",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "I",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "J",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "K",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "L",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "M",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "N",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "O",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "P",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "Q",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "R",
+      "editable": false
+    },
+    {
+      "headerName": "",
+      "field": "S",
+      "editable": false
+    }
+  ],
   "Lookups": [
     {
       "A": "",
