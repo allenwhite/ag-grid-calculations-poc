@@ -10,7 +10,7 @@ import { Point } from "../point";
 import * as Matrix from "../matrix";
 import { CellBase } from "../types";
 import { PointSet } from "./point-set";
-import { PageData } from "../../model/tableDefinition";
+import { CustomFunctionArg, PageData } from "../../model/tableDefinition";
 
 export const FORMULA_VALUE_PREFIX = "=";
 
@@ -179,6 +179,23 @@ export function createCCFormulaParser(
       }
       // console.log("onRange:", arr)
       return arr as Value[];
+    },
+    functions: {
+      HAMHOCK: (
+        value: CustomFunctionArg,
+        second: CustomFunctionArg,
+        third: CustomFunctionArg
+      ) => {
+        console.log(
+          "HAMHOCK value",
+          value,
+          second,
+          third,
+          "oh and page data",
+          pageData
+        );
+        return 77;
+      },
     },
   });
 }

@@ -6,6 +6,21 @@ import { AgGridReact } from "@ag-grid-community/react";
 
 const PRINT_TESTS_TO_CONSOLE = false;
 
+class CustomFunctionArg {
+  /**
+    {value: 222, isArray: false, isRangeRef: false, isCellRef: false}
+    {value: Array(2), isArray: false, isRangeRef: true, isCellRef: false}
+      this seems to come back as [[3], [6]] so enjoy that idk
+    {value: '4', isArray: false, isRangeRef: false, isCellRef: true} 
+  */
+  constructor(
+    public value: Value,
+    public isArray: boolean,
+    public isRangeRef: boolean,
+    public isCellRef: boolean
+  ) {}
+}
+
 export interface RowData {
   [key: string]: any; // TODO: come back to this, could probably be Value
 }
@@ -263,4 +278,4 @@ function doFuncCall(params: any, funcCall: FuncCall, rowData: RowData[]): any {
   }
 }
 
-export { CalcTableDefinition };
+export { CalcTableDefinition, CustomFunctionArg };
