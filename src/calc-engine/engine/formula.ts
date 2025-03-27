@@ -141,7 +141,6 @@ export function createCCFormulaParser(
   return new FormulaParser({
     ...config,
     onCell: (ref: CellRef) => {
-      console.log(ref);
       const currentTableId = ref.sheet;
 
       let column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
