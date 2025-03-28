@@ -70,9 +70,9 @@ Most of the magic here happens in [formula.ts](./engine/formula.ts). Tests for t
 
 ## Approach When A Function Doesnt Work Out of the Box
 
-- Implement the missing functions (COUNTIFS, etc)
+- Implement the missing excel functions (COUNTIFS, etc)
 - Convert the excel formula to something that works (AI is actually really good at this)
-- Define our own custom function (if the other two options are overly complex, or depend on range outputs that our parser doesnt support)
+- Define our own custom function (if the other two options are overly complex, or depend on range outputs that our parser doesnt support. Ex: NOBLANKS)
 
 ## Checklist
 
