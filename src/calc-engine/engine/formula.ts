@@ -10,7 +10,8 @@ import { Point } from "../point";
 import * as Matrix from "../matrix";
 import { CellBase } from "../types";
 import { PointSet } from "./point-set";
-import { CustomFunctionArg, PageData } from "../../model/tableDefinition";
+import { PageData } from "../../model/tableDefinition";
+import customFunctions from "./customFormulas";
 
 export const FORMULA_VALUE_PREFIX = "=";
 
@@ -180,23 +181,7 @@ export function createCCFormulaParser(
       // console.log("onRange:", arr)
       return arr as Value[];
     },
-    functions: {
-      HAMHOCK: (
-        value: CustomFunctionArg,
-        second: CustomFunctionArg,
-        third: CustomFunctionArg
-      ) => {
-        console.log(
-          "HAMHOCK value",
-          value,
-          second,
-          third,
-          "oh and page data",
-          pageData
-        );
-        return 77;
-      },
-    },
+    functions: customFunctions(pageData),
   });
 }
 
@@ -290,7 +275,7 @@ export function evaluateCC(
     // );
     return returned instanceof FormulaError ? returned.toString() : returned;
   } catch (error) {
-    console.log("err", error);
+    console.log("err", error, parsedFormula, coord);
     if (error instanceof FormulaError) {
       return error.toString();
     }

@@ -63,6 +63,11 @@ Full page data to enable cross table references
 Our formula parser takes in the full PageData and is configured to return the correct data when requested. It is designed to handle the difficulty of cross table references, range references, and custom functions behind the scenes.
 Most of the magic here happens in [formula.ts](./engine/formula.ts). Tests for this interface are currently in [formula.test.ts](./engine/formula.test.ts).
 
+## Caveats
+
+- Looks like fast-formula-parser doesn't handle range outputs. For example, we can use LEN(A1) but not LEN(A1:A10)...
+- The excel workbook is not following what are considered best practices.
+
 ## Checklist
 
 - [x] full page refs working
