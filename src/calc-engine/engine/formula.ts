@@ -143,8 +143,7 @@ export function createCCFormulaParser(
     ...config,
     onCell: (ref: CellRef) => {
       const currentTableId = ref.sheet;
-
-      let column = ref.address?.replace("$", "").replace(/[0-9]/g, "");
+      let column = ref.address?.replaceAll("$", "").replace(/[0-9]/g, "");
       let tableId = currentTableId;
       const externalRefs =
         pageData[currentTableId]?.tableDefinition?.externalRefs ?? {};
@@ -153,7 +152,6 @@ export function createCCFormulaParser(
         tableId = externalRefs[column]?.tableId;
         column = externalRefs[column]?.column;
       }
-
       const val = column
         ? pageData[tableId].data[ref.row - 1][column]
         : pageData[tableId].data[ref.row - 1][columns[ref.col - 1]];
@@ -245,7 +243,7 @@ export function getReferences(
 const replaceRanges = (formula: string, currentPosition: Coord) => {
   return formula
     .replace(FORMULA_VALUE_PREFIX, "")
-    .replace(/\$([A-Za-z0-9.-]+)\$/g, (match, p1) => {
+    .replace(/\$([A-Za-z]+)\$(?!\d)/g, (match, p1) => {
       return `$${p1}${currentPosition.row}`;
     });
 };
@@ -287,14 +285,13 @@ export function evaluateCC(
 }
 
 function convertCoordToCellRef(coord: Coord): CellRef {
-  const point2 = {
+  const point = {
     row: coord.row + 1,
     col: columns.indexOf(coord.col),
-    // TODO: fill once we support multiple sheets
     sheet: coord.tableId,
     address: `${coord.col}${coord.row + 1}`,
   };
-  return point2;
+  return point;
 }
 
 export function evaluate(

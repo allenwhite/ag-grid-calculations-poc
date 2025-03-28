@@ -112,6 +112,13 @@
       "editable": false,
       "excelFormula": "=SUM(P1:$P$)",
       "notes": "Summing the entire column would be SUM(P:P)"
+    },
+    {
+      "headerName": "Test Lookups",
+      "field": "R",
+      "editable": false,
+      "excelFormula": "=Lookups!$A$21",
+      "notes": "needs to use built-in lookup tables"
     }
   ]
 }

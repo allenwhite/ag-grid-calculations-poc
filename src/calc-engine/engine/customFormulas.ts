@@ -33,7 +33,7 @@ const customFunctions = (pageData: PageData) => {
   return {
     NOBLANKS: (range: CustomFunctionArg, row: CustomFunctionArg) => {
       const currentRow = row.value as number;
-      console.log("NOBLANKS", pageData);
+      //   console.log("NOBLANKS", pageData);
       const noBlanksColumnValues = (range.value as Value[])
         .map((v) => v.toString())
         .filter((v) => v.length > 0);

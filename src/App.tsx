@@ -3,6 +3,7 @@ import CalculationTableView from "./components/CalculationTableView";
 import table1ConfigJSON from "./backendData/Method2-3Table1.json";
 import table2ConfigJSON from "./backendData/Method2-3Table2.json";
 import refTableConfigJSON from "./backendData/Method2-3RefTable.json";
+import lookupsConfigJSON from "./calc-engine/staticData/Subpart-W-Calculation-Tool-for-RY24_Lookups.json";
 import {
   addRowFor,
   CalcTableDefinition,
@@ -16,6 +17,8 @@ function App() {
   const table1Config = CalcTableDefinition.fromJson(table1ConfigJSON);
   const table2Config = CalcTableDefinition.fromJson(table2ConfigJSON);
   const refTableConfig = CalcTableDefinition.fromJson(refTableConfigJSON);
+
+  const lookupsConfig = CalcTableDefinition.fromLookupJSON(lookupsConfigJSON);
 
   /**
    * Full page data to enable cross table references
@@ -56,6 +59,11 @@ function App() {
     ref: gridRef3,
     tableDefinition: refTableConfig,
     data: [refTableConfig.emptyRowData],
+  };
+  newPageData[lookupsConfig.tableId] = {
+    ref: null,
+    tableDefinition: lookupsConfig,
+    data: lookupsConfigJSON.lookups,
   };
 
   const [pageData, setPageData] = useState<PageData>(newPageData);

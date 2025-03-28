@@ -31,7 +31,7 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
     Object.entries(pageData).forEach(([key, value]) => {
-      value.ref.current?.api.refreshCells({
+      value.ref?.current?.api.refreshCells({
         force: true,
       });
     });

@@ -11,7 +11,7 @@ export interface RowData {
 }
 
 export type TableData = {
-  ref: React.RefObject<AgGridReact<any> | null>;
+  ref: React.RefObject<AgGridReact<any> | null> | null;
   tableDefinition: CalcTableDefinition;
   data: RowData[];
 };
@@ -69,6 +69,12 @@ interface CalcTableJSON {
   externalRefs?: { [key: string]: ExternalRef } | null;
 }
 
+interface LookupTableJSON {
+  tableId: string;
+  columnDefinitions: ColumnDefinitions[];
+  lookups: Record<string, any>[];
+}
+
 class ExternalRef {
   constructor(public column: string, public tableId: string) {}
 }
@@ -91,6 +97,15 @@ class CalcTableDefinition {
       json.columnDefinitions,
       json.dependentTables,
       json.externalRefs
+    );
+  }
+
+  static fromLookupJSON(json: LookupTableJSON): CalcTableDefinition {
+    return new CalcTableDefinition(
+      json.tableId,
+      "",
+      "",
+      json.columnDefinitions
     );
   }
 
