@@ -79,7 +79,8 @@ Most of the magic here happens in [formula.ts](./engine/formula.ts). Tests for t
 - [x] full page refs working
 - [x] range support
 - [x] tests
-- [ ] Custom formulas
+- [x] Custom formulas
+- [ ] Lookups Table
 - [ ] Add result table
 - [ ] Trim unused code
 - [ ] make available as package for use elsewhere
