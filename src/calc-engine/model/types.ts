@@ -2,7 +2,7 @@ import * as React from "react";
 import FormulaParser from "fast-formula-parser";
 import { Point } from "./point";
 import { Selection } from "./selection";
-import { Model } from "./engine";
+import { Model } from "../engine";
 import { PointRange } from "./point-range";
 import { Matrix } from "./matrix";
 

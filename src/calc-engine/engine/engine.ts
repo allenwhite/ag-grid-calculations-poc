@@ -1,7 +1,7 @@
 import FormulaParser, { FormulaError, Value } from "fast-formula-parser";
-import * as Matrix from "../matrix";
-import { Point } from "../point";
-import { CellBase, CreateFormulaParser } from "../types";
+import * as Matrix from "../model/matrix";
+import { Point } from "../model/point";
+import { CellBase, CreateFormulaParser } from "../model/types";
 import * as Formula from "./formula";
 import { PointGraph } from "./point-graph";
 import { PointSet } from "./point-set";

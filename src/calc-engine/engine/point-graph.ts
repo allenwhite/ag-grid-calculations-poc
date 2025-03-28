@@ -1,4 +1,4 @@
-import { Point } from "../point";
+import { Point } from "../model/point";
 import * as pointHash from "./point-hash";
 import { PointSet } from "./point-set";
 

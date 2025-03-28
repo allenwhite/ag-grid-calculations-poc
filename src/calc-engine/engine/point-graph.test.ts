@@ -1,4 +1,4 @@
-import { Point } from "../point";
+import { Point } from "../model/point";
 import { PointSet } from "./point-set";
 import { PointGraph } from "./point-graph";
 

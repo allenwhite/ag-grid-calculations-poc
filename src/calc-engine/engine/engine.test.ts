@@ -1,6 +1,6 @@
 import FormulaParser, { FormulaError } from "fast-formula-parser";
-import { CellBase } from "../types";
-import { ORIGIN, Point } from "../point";
+import { CellBase } from "../model/types";
+import { ORIGIN, Point } from "../model/point";
 import * as Formula from "./formula";
 import { getFormulaComputedValue, updateCellValue, Model } from "./engine";
 

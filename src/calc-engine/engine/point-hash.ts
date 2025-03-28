@@ -1,4 +1,4 @@
-import { Point } from "../point";
+import { Point } from "../model/point";
 
 export function toString(point: Point): string {
   return `${point.row},${point.column}`;

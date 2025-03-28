@@ -1,4 +1,4 @@
-import * as Point from "../point";
+import * as Point from "../model/point";
 import * as pointHash from "./point-hash";
 
 /**

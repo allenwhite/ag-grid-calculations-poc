@@ -5,10 +5,10 @@ import FormulaParser, {
   FormulaParserConfig,
   Value,
 } from "fast-formula-parser";
-import { PointRange } from "../point-range";
-import { Point } from "../point";
-import * as Matrix from "../matrix";
-import { CellBase } from "../types";
+import { PointRange } from "../model/point-range";
+import { Point } from "../model/point";
+import * as Matrix from "../model/matrix";
+import { CellBase } from "../model/types";
 import { PointSet } from "./point-set";
 import { PageData } from "../../model/tableDefinition";
 import customFunctions from "./customFormulas";
