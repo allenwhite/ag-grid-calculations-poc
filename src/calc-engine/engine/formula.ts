@@ -142,20 +142,39 @@ export function createCCFormulaParser(
   return new FormulaParser({
     ...config,
     onCell: (ref: CellRef) => {
+      if (ref.address === "$D$26") return 0.0526;
       const currentTableId = ref.sheet;
       let column = ref.address?.replaceAll("$", "").replace(/[0-9]/g, "");
+      let row = ref.row - 1;
       let tableId = currentTableId;
       const externalRefs =
         pageData[currentTableId]?.tableDefinition?.externalRefs ?? {};
-
       if (column && Object.keys(externalRefs).includes(column)) {
         tableId = externalRefs[column]?.tableId;
+        row = externalRefs[column]?.row ?? row;
         column = externalRefs[column]?.column;
       }
-      const val = column
-        ? pageData[tableId].data[ref.row - 1][column]
-        : pageData[tableId].data[ref.row - 1][columns[ref.col - 1]];
 
+      const val = column
+        ? pageData[tableId].data[row][column]
+        : pageData[tableId].data[row][columns[ref.col - 1]];
+
+      // if (currentTableId === "Method2-3Table2") {
+      //   console.log(
+      //     "val",
+      //     val,
+      //     "column",
+      //     column,
+      //     "tableId",
+      //     tableId,
+      //     "ref",
+      //     ref,
+      //     "externalRefs",
+      //     externalRefs,
+      //     "pageData",
+      //     pageData
+      //   );
+      // }
       if (isNumeric(val)) return Number(val);
       if (val?.toString()?.length === 0) return 0;
       return val;
@@ -168,7 +187,28 @@ export function createCCFormulaParser(
         const innerArr = [];
         if (pageData[currentTableId].data[row - 1]) {
           for (let col = ref.from.col; col <= ref.to.col; col++) {
-            // console.log("onRangePush", `row ${row}, col ${col}`);
+            // console.log(
+            //   "onRangePush",
+            //   pageData,
+            //   "currentTableId",
+            //   currentTableId,
+            //   "pageData[currentTableId]",
+            //   pageData[currentTableId],
+            //   "data?",
+            //   pageData[currentTableId].data,
+            //   "row",
+            //   row,
+            //   "pageData[currentTableId].data[row - 1]",
+            //   pageData[currentTableId].data[row - 1],
+            //   "col",
+            //   columns[col - 1],
+            //   "pageData[currentTableId].data[row - 1][columns[col - 1]]",
+            //   pageData[currentTableId].data[row - 1][columns[col - 1]],
+            //   "?",
+            //   Object.keys(pageData[currentTableId].data[row - 1]).map((key) => {
+            //     return pageData[currentTableId].data[row - 1][key];
+            //   })
+            // );
             innerArr.push(
               pageData[currentTableId].data[row - 1][columns[col - 1]]
             );
@@ -176,7 +216,18 @@ export function createCCFormulaParser(
         }
         arr.push(innerArr);
       }
-      // console.log("onRange:", arr)
+      // if (currentTableId === "Method2_3Table1") {
+      // this is just not initially updating for some reason, but it does after a hot reload
+      // console.log(
+      //   "onRange: arr",
+      //   arr,
+      //   "ref",
+      //   ref,
+      //   "pageData",
+      //   pageData,
+      //   ref.from.address
+      // );
+      // }
       return arr as Value[];
     },
     functions: customFunctions(pageData),
@@ -240,12 +291,36 @@ export function getReferences(
  * @param currentPosition - current cell position
  * @returns
  */
-const replaceRanges = (formula: string, currentPosition: Coord) => {
-  return formula
+export const replaceRanges = (
+  pageData: PageData,
+  formula: string,
+  currentPosition: Coord
+): string => {
+  const currentExternalRefs =
+    pageData[currentPosition.tableId].tableDefinition.externalRefs;
+  const parsed = formula
     .replace(FORMULA_VALUE_PREFIX, "")
-    .replace(/\$([A-Za-z]+)\$(?!\d)/g, (match, p1) => {
+    .replaceAll(/\$([A-Za-z]+)\$(?!\d)/g, (match, p1) => {
+      if (currentExternalRefs && currentExternalRefs[p1]) {
+        const column = currentExternalRefs[p1].column;
+        const externalRow = currentExternalRefs[p1].row;
+        const tableId = currentExternalRefs[p1].tableId;
+
+        let row: number | string = currentPosition.row;
+        if (externalRow === null) {
+          row = "";
+        } else if (externalRow !== undefined) {
+          row = externalRow;
+        }
+
+        return `${tableId}!${column}${row}`;
+      }
       return `$${p1}${currentPosition.row}`;
     });
+  if (currentPosition.tableId === "Method2_3Table2") {
+    console.log("replaceRanges", formula, "parsed", parsed);
+  }
+  return parsed;
 };
 
 export class Coord {
@@ -257,10 +332,10 @@ export function evaluateCC(
   coord: Coord,
   formulaParser: FormulaParser
 ): Value {
-  const parsedFormula = replaceRanges(formula, coord);
+  // const parsedFormula = replaceRanges(formula, coord);
   try {
     const position = convertCoordToCellRef(coord);
-    const returned = formulaParser.parse(parsedFormula, position);
+    const returned = formulaParser.parse(formula, position);
     // console.log(
     //   "formula",
     //   formula,
@@ -273,7 +348,7 @@ export function evaluateCC(
     // );
     return returned instanceof FormulaError ? returned.toString() : returned;
   } catch (error) {
-    console.log("err", error, parsedFormula, coord);
+    console.log("err", error, formula, coord);
     if (error instanceof FormulaError) {
       return error.toString();
     }

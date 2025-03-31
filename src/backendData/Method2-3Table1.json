@@ -1,8 +1,8 @@
 {
-  "tableId": "Method2-3Table1",
+  "tableId": "Method2_3Table1",
   "description": "Calculation Methodologies 2 & 3, Table 1: Well-specific input data",
   "type": "entry",
-  "dependentTables": ["Method2-3RefTable"],
+  "dependentTables": ["Method2_3RefTable"],
   "columnDefinitions": [
     {
       "headerName": "Sub-Basin ID",

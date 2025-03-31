@@ -1,13 +1,31 @@
 {
-  "tableId": "Method2-3Table2",
+  "tableId": "Method2_3Table2",
   "description": "Calculation Methodologies 2 & 3, Table 2: Sub-basin-level calculations",
   "type": "entry",
+  "externalRefs": {
+    "ZZZ": {
+      "tableId": "Method2_3RefTable",
+      "column": "AK"
+    },
+    "YYY": {
+      "tableId": "Method2_3Table1",
+      "column": "P",
+      "row": null
+    },
+    "XXX": {
+      "tableId": "Method2_3RefTable",
+      "column": "AI",
+      "row": null
+    }
+  },
   "columnDefinitions": [
     {
       "headerName": "Sub-Basin",
       "field": "C",
       "editable": false,
-      "excelFormula": "=IF($AK1699=\"\",\"\",LEFT($AK1699,FIND(\"_\",$AK1699)-1))"
+      "excelFormula": "=$ZZZ$",
+      "_excelFormula": "=IF($ZZZ$=\"\",\"\",LEFT($ZZZ$,FIND(\"_\",$ZZZ$)-1))",
+      "originalFormula": "=IF($AK1699=\"\",\"\",LEFT($AK1699,FIND(\"_\",$AK1699)-1))"
     },
     {
       "headerName": "Calculation Method",
@@ -19,7 +37,8 @@
       "headerName": "Were Plunger Lifts used?",
       "field": "E",
       "editable": false,
-      "excelFormula": "=IF($AK1699=\"\",\"\",RIGHT($AK1699,LEN($AK1699)-FIND(\"_\",$AK1699)))"
+      "excelFormula": "=IF($ZZZ$=\"\",\"\",RIGHT($ZZZ$,LEN($ZZZ$)-FIND(\"_\",$ZZZ$)))",
+      "originalFormula": "=IF($AK1699=\"\",\"\",RIGHT($AK1699,LEN($AK1699)-FIND(\"_\",$AK1699)))"
     },
     {
       "headerName": "[MCO2]\nMole fraction of CO2 in natural gas\n(decimal)",
@@ -35,7 +54,9 @@
       "headerName": "[Es,n]\nAnnual natural gas emissions from well venting during liquids unloading\n(scf)",
       "field": "H",
       "editable": false,
-      "excelFormula": "=IF($AK1699=\"\",\"\",SUMIFS($P$1699:$P$6698,$AI$1699:$AI$6698,$AK1699))"
+      "excelFormula": "=SUM($YYY$:$YYY$)",
+      "_excelFormula": "=IF($ZZZ$=\"\",\"\",SUMIFS($YYY$:$YYY$,$XXX$:$XXX$,$ZZZ$))",
+      "originalFormula": "=IF($AK1699=\"\",\"\",SUMIFS($P$1699:$P$6698,$AI$1699:$AI$6698,$AK1699))"
     },
     {
       "headerName": "[ECO2]\nAnnual CO2 emissions from well venting during liquids unloading\n(scf)",
@@ -66,7 +87,9 @@
       "field": "M",
       "editable": false,
       "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",COUNTIFS($C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
-    },
+    }
+  ],
+  "almost": [
     {
       "headerName": "[Vp]\nCumulative number of unloadings vented to the atmosphere",
       "field": "N",
@@ -78,7 +101,7 @@
       "field": "O",
       "editable": false,
       "cellStyle": {
-        "condition": "$E$=\"Yes\"",
+        "condition": "=$E$=\"Yes\"",
         "style": { "backgroundColor": "black" }
       },
       "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",AVERAGEIF($C$1699:$C$6698,$C$,$F$1699:$F$6698),\"\"))"
@@ -88,7 +111,7 @@
       "field": "P",
       "editable": false,
       "cellStyle": {
-        "condition": "$E$=\"No\"",
+        "condition": "=$E$=\"No\"",
         "style": { "backgroundColor": "black" }
       },
       "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",\"\",AVERAGEIF($C$1699:$C$6698,$C$,$I$1699:$I$6698)))"

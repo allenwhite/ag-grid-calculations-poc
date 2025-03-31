@@ -85,6 +85,7 @@ function App() {
       <CalculationTableView
         tableDefinition={table1Config}
         pageData={pageData}
+        setPageData={setPageData}
         fomulaParser={fomulaParser}
         addRow={addRow}
       />
@@ -92,10 +93,18 @@ function App() {
       <CalculationTableView
         tableDefinition={refTableConfig}
         pageData={pageData}
+        setPageData={setPageData}
         fomulaParser={fomulaParser}
         addRow={addRow}
       />
-      {/* <CalculationTableView tableData={table2Data} pageData={pageData} /> */}
+      <div style={{ height: "80px" }}></div>
+      <CalculationTableView
+        tableDefinition={table2Config}
+        pageData={pageData}
+        setPageData={setPageData}
+        fomulaParser={fomulaParser}
+        addRow={addRow}
+      />
     </div>
   );
 }

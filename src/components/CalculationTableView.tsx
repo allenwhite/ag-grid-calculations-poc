@@ -15,6 +15,7 @@ import FormulaParser from "fast-formula-parser";
 interface CalculationTableViewProps {
   tableDefinition: CalcTableDefinition;
   pageData: PageData;
+  setPageData: (pageData: PageData) => void;
   fomulaParser: FormulaParser;
   addRow: (tableIds: string[]) => void;
 }
@@ -22,6 +23,7 @@ interface CalculationTableViewProps {
 const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   tableDefinition,
   pageData,
+  setPageData,
   fomulaParser,
   addRow,
 }) => {
@@ -30,8 +32,15 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
     : [];
 
   const onCellValueChanged = (event: CellValueChangedEvent) => {
-    Object.entries(pageData).forEach(([key, value]) => {
-      value.ref?.current?.api.refreshCells({
+    // we should have an actual table dependency structure here to iterate over.
+    // , which should exist in the response. In my case, im just hard coding it.
+    const dependencyOrder = [
+      "Method2_3Table1",
+      "Method2_3RefTable",
+      "Method2_3Table2",
+    ];
+    dependencyOrder.forEach((dependency) => {
+      pageData[dependency].ref?.current?.api.refreshCells({
         force: true,
       });
     });
@@ -70,7 +79,11 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
           <AgGridReact
             ref={pageData?.[tableDefinition.tableId].ref}
             headerHeight={200}
-            columnDefs={tableDefinition.getColDefs(pageData, fomulaParser)}
+            columnDefs={tableDefinition.getColDefs(
+              pageData,
+              setPageData,
+              fomulaParser
+            )}
             rowData={initialData}
             defaultColDef={defaultColDef}
             modules={[ClientSideRowModelModule]}

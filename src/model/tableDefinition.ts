@@ -1,7 +1,7 @@
 import { CellStyle, ColDef } from "@ag-grid-community/core";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser, { Value } from "fast-formula-parser";
-import { evaluateCC } from "../calc-engine/engine/formula";
+import { evaluateCC, replaceRanges } from "../calc-engine/engine/formula";
 import { AgGridReact } from "@ag-grid-community/react";
 
 const PRINT_TESTS_TO_CONSOLE = false;
@@ -76,7 +76,11 @@ interface LookupTableJSON {
 }
 
 class ExternalRef {
-  constructor(public column: string, public tableId: string) {}
+  constructor(
+    public column: string,
+    public tableId: string,
+    public row?: number | null | undefined
+  ) {}
 }
 
 class CalcTableDefinition {
@@ -116,7 +120,11 @@ class CalcTableDefinition {
     }, {});
   }
 
-  getColDefs(pageData: PageData, fomulaParser: FormulaParser): ColDef[] {
+  getColDefs(
+    pageData: PageData,
+    setPageData: (pageData: PageData) => void,
+    fomulaParser: FormulaParser
+  ): ColDef[] {
     this.printTestVariables(pageData);
     return this.columnDefinitions.map((cd) => ({
       headerName: cd.headerName,
@@ -127,15 +135,17 @@ class CalcTableDefinition {
         ? {
             cellStyle: (params: any): CellStyle => {
               if (!cd.cellStyle) return {};
-              const evaled = evaluateCC(
+              const coord = {
+                col: params.column.colId,
+                row: params.node.rowIndex + 1,
+                tableId: this.tableId,
+              };
+              const parsedFormula = replaceRanges(
+                pageData,
                 cd.cellStyle.condition,
-                {
-                  col: params.column.colId,
-                  row: params.node.rowIndex + 1,
-                  tableId: this.tableId,
-                },
-                fomulaParser
+                coord
               );
+              const evaled = evaluateCC(parsedFormula, coord, fomulaParser);
               if (evaled) {
                 return cd.cellStyle.style;
               }
@@ -169,15 +179,17 @@ class CalcTableDefinition {
             valueGetter: (params: any) => {
               // console.log("params", columns.indexOf(params.column.colId) - 1);
               if (cd.excelFormula) {
-                const evaled = evaluateCC(
+                const coord = {
+                  col: params.column.colId,
+                  row: params.node.rowIndex + 1,
+                  tableId: this.tableId,
+                };
+                const parsedFormula = replaceRanges(
+                  pageData,
                   cd.excelFormula,
-                  {
-                    col: params.column.colId,
-                    row: params.node.rowIndex + 1,
-                    tableId: this.tableId,
-                  },
-                  fomulaParser
+                  coord
                 );
+                const evaled = evaluateCC(parsedFormula, coord, fomulaParser);
                 this.printTest(pageData, cd.excelFormula, params, evaled);
                 // this little oneliner is working to keep things updated,
                 // but its likely we would need a setRowData useState type completion,
@@ -185,6 +197,8 @@ class CalcTableDefinition {
                 pageData[this.tableId].data[params.node.rowIndex][
                   params.column.colId
                 ] = evaled;
+                setPageData(pageData);
+                // console.log("evaled", pageData);
                 return evaled;
               }
             },

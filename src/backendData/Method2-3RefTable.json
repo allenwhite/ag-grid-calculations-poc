@@ -1,15 +1,15 @@
 {
-  "tableId": "Method2-3RefTable",
+  "tableId": "Method2_3RefTable",
   "description": "Calculation Methodologies 2 & 3, Reference Table",
   "type": "reference",
   "externalRefs": {
     "YYY": {
       "column": "C",
-      "tableId": "Method2-3Table1"
+      "tableId": "Method2_3Table1"
     },
     "ZZZ": {
       "column": "E",
-      "tableId": "Method2-3Table1"
+      "tableId": "Method2_3Table1"
     }
   },
   "columnDefinitions": [

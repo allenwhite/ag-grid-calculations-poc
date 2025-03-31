@@ -119,6 +119,74 @@ const customFunctions = (pageData: PageData) => {
 
       return sortedArray[k.value - 1];
     },
+    SUMIFS: (sumRange: CustomFunctionArg, ...criteria: CustomFunctionArg[]) => {
+      console.log("SUMIFS sumRange", sumRange, criteria);
+      // Convert the sum range to an array of numbers
+      const sumArray = sumRange.value as number[];
+      if (!Array.isArray(sumArray)) {
+        throw new FormulaError("Invalid sum range");
+      }
+
+      if (criteria.length % 2 !== 0) {
+        throw new FormulaError("Criteria should be in pairs");
+      }
+
+      // Initialize an array to keep track of which items match all criteria
+      const matchArray = Array(sumArray.length).fill(true);
+
+      // Process each pair of criteria
+      for (let i = 0; i < criteria.length; i += 2) {
+        const criteriaRange = criteria[i].value as any[];
+        const criteriaValue = criteria[i + 1].value;
+
+        if (
+          !Array.isArray(criteriaRange) ||
+          criteriaRange.length !== sumArray.length
+        ) {
+          throw new FormulaError(
+            "Criteria range must be an array of the same length as the sum range"
+          );
+        }
+
+        // Update matchArray based on the current criteria
+        for (let j = 0; j < criteriaRange.length; j++) {
+          if (typeof criteriaValue === "string") {
+            if (
+              criteriaValue.startsWith("<") ||
+              criteriaValue.startsWith(">")
+            ) {
+              const operator = criteriaValue[0];
+              const value = parseFloat(criteriaValue.slice(1));
+              if (
+                (operator === "<" && criteriaRange[j] >= value) ||
+                (operator === ">" && criteriaRange[j] <= value)
+              ) {
+                matchArray[j] = false;
+              }
+            } else if (criteriaValue.startsWith("=")) {
+              const value = criteriaValue.slice(1);
+              if (criteriaRange[j] !== value) {
+                matchArray[j] = false;
+              }
+            } else {
+              if (criteriaRange[j] !== criteriaValue) {
+                matchArray[j] = false;
+              }
+            }
+          } else {
+            if (criteriaRange[j] !== criteriaValue) {
+              matchArray[j] = false;
+            }
+          }
+        }
+      }
+
+      // Sum the values in sumArray where matchArray is true
+      return sumArray.reduce(
+        (acc, val, idx) => (matchArray[idx] ? acc + val : acc),
+        0
+      );
+    },
   };
 };
 
