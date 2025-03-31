@@ -63,34 +63,32 @@ const CalculationTableView: React.FC<CalculationTableViewProps> = ({
   return (
     <div
       className="ag-theme-alpine"
-      style={{ height: 400, width: "90%", marginLeft: "5%" }}
+      style={{
+        height: tableDefinition.type === "reference" ? "auto" : "400px",
+        display: "block",
+        width: "90%",
+        marginLeft: "5%",
+      }}
     >
       <h2>
         {tableDefinition.description}
         {tableDefinition.type === "reference" ? " (HIDDEN)" : ""}
       </h2>
       {fomulaParser && (
-        <div
-          style={{
-            height: tableDefinition.type === "reference?" ? "auto" : "400px",
-            display: tableDefinition.type === "reference?" ? "none" : "block",
-          }}
-        >
-          <AgGridReact
-            ref={pageData?.[tableDefinition.tableId].ref}
-            headerHeight={200}
-            columnDefs={tableDefinition.getColDefs(
-              pageData,
-              setPageData,
-              fomulaParser
-            )}
-            rowData={initialData}
-            defaultColDef={defaultColDef}
-            modules={[ClientSideRowModelModule]}
-            onCellValueChanged={onCellValueChanged}
-            onCellClicked={onCellClicked}
-          />
-        </div>
+        <AgGridReact
+          ref={pageData?.[tableDefinition.tableId].ref}
+          headerHeight={200}
+          columnDefs={tableDefinition.getColDefs(
+            pageData,
+            setPageData,
+            fomulaParser
+          )}
+          rowData={initialData}
+          defaultColDef={defaultColDef}
+          modules={[ClientSideRowModelModule]}
+          onCellValueChanged={onCellValueChanged}
+          onCellClicked={onCellClicked}
+        />
       )}
       {tableDefinition.type === "entry" && (
         <button

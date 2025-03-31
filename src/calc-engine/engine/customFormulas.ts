@@ -200,8 +200,6 @@ const customFunctions = (pageData: PageData) => {
       for (let i = 0; i < criteria.length; i += 2) {
         const criteriaRange = criteria[i].value as any[];
         const criteriaValue = criteria[i + 1].value;
-        console.log("criteriaRange", criteriaRange);
-        console.log("criteriaValue", criteriaValue);
         if (!Array.isArray(criteriaRange)) {
           throw new FormulaError("Criteria range must be an array");
         }

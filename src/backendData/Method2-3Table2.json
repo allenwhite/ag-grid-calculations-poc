@@ -88,14 +88,14 @@
       "editable": false,
       "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",COUNTIFS(C:C,$C$,E:E,$E$))",
       "originalFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",COUNTIFS($C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))"
-    }
-  ],
-  "almost": [
+    },
     {
       "headerName": "[Vp]\nCumulative number of unloadings vented to the atmosphere",
       "field": "N",
       "editable": false,
-      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",SUMIFS(L:L,C:C,$C$,E:E,$E$))",
+      "originalFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",SUMIFS($L$1699:$L$6698,$C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))",
+      "notes": "i just noticed these are external table refs"
     },
     {
       "headerName": "Average internal casing diameter across sub-basin\n(inches)",
@@ -105,8 +105,10 @@
         "condition": "=$E$=\"Yes\"",
         "style": { "backgroundColor": "black" }
       },
-      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",AVERAGEIF($C$1699:$C$6698,$C$,$F$1699:$F$6698),\"\"))"
-    },
+      "excelFormula": "=IF($E$=\"\",\"\",IF($E$=\"No\",AVERAGEIF($C:$C$6698,$C$,$F$1699:$F$6698),\"\"))"
+    }
+  ],
+  "almost": [
     {
       "headerName": "Average internal casing diameter across sub-basin\n(inches)",
       "field": "P",
