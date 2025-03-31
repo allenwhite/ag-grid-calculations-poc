@@ -1,7 +1,7 @@
 import { CellStyle, ColDef } from "@ag-grid-community/core";
 import { calculateExcelFormula } from "../utils/utils";
 import FormulaParser, { Value } from "fast-formula-parser";
-import { evaluateCC, replaceRanges } from "../calc-engine/engine/formula";
+import { evaluateCC, parse } from "../calc-engine/engine/formula";
 import { AgGridReact } from "@ag-grid-community/react";
 
 const PRINT_TESTS_TO_CONSOLE = false;
@@ -140,7 +140,7 @@ class CalcTableDefinition {
                 row: params.node.rowIndex + 1,
                 tableId: this.tableId,
               };
-              const parsedFormula = replaceRanges(
+              const parsedFormula = parse(
                 pageData,
                 cd.cellStyle.condition,
                 coord
@@ -184,11 +184,7 @@ class CalcTableDefinition {
                   row: params.node.rowIndex + 1,
                   tableId: this.tableId,
                 };
-                const parsedFormula = replaceRanges(
-                  pageData,
-                  cd.excelFormula,
-                  coord
-                );
+                const parsedFormula = parse(pageData, cd.excelFormula, coord);
                 const evaled = evaluateCC(parsedFormula, coord, fomulaParser);
                 this.printTest(pageData, cd.excelFormula, params, evaled);
                 // this little oneliner is working to keep things updated,

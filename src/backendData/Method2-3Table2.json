@@ -86,7 +86,8 @@
       "headerName": "Total Number of Wells vented for liquids unloading in sub-basin",
       "field": "M",
       "editable": false,
-      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",COUNTIFS($C$1699:$C$6698,$C$,$E$1699:$E$6698,$E$))"
+      "excelFormula": "=IF(OR($C$=\"\",$E$=\"\"),\"\",COUNTIFS(C:C,$C$,E:E,$E$))",
+      "originalFormula": "=IF(OR(C6706=\"\",E6706=\"\"),\"\",COUNTIFS($C$1699:$C$6698,C6706,$E$1699:$E$6698,E6706))"
     }
   ],
   "almost": [

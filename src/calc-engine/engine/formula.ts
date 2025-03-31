@@ -291,7 +291,7 @@ export function getReferences(
  * @param currentPosition - current cell position
  * @returns
  */
-export const replaceRanges = (
+export const parse = (
   pageData: PageData,
   formula: string,
   currentPosition: Coord
@@ -317,9 +317,9 @@ export const replaceRanges = (
       }
       return `$${p1}${currentPosition.row}`;
     });
-  if (currentPosition.tableId === "Method2_3Table2") {
-    console.log("replaceRanges", formula, "parsed", parsed);
-  }
+  // if (currentPosition.tableId === "Method2_3Table2") {
+  //   console.log("replaceRanges", formula, "parsed", parsed);
+  // }
   return parsed;
 };
 

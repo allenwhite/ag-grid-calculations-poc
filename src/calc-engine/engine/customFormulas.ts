@@ -187,6 +187,59 @@ const customFunctions = (pageData: PageData) => {
         0
       );
     },
+    COUNTIFS: (...criteria: CustomFunctionArg[]) => {
+      if (criteria.length % 2 !== 0) {
+        throw new FormulaError("Criteria should be in pairs");
+      }
+      if (!Array.isArray(criteria[0].value)) {
+        throw new FormulaError("Criteria range must be an array");
+      }
+
+      const matchArray = Array(criteria[0].value.length).fill(true);
+
+      for (let i = 0; i < criteria.length; i += 2) {
+        const criteriaRange = criteria[i].value as any[];
+        const criteriaValue = criteria[i + 1].value;
+        console.log("criteriaRange", criteriaRange);
+        console.log("criteriaValue", criteriaValue);
+        if (!Array.isArray(criteriaRange)) {
+          throw new FormulaError("Criteria range must be an array");
+        }
+
+        for (let j = 0; j < criteriaRange.length; j++) {
+          if (typeof criteriaValue === "string") {
+            if (
+              criteriaValue.startsWith("<") ||
+              criteriaValue.startsWith(">")
+            ) {
+              const operator = criteriaValue[0];
+              const value = parseFloat(criteriaValue.slice(1));
+              if (
+                (operator === "<" && criteriaRange[j] >= value) ||
+                (operator === ">" && criteriaRange[j] <= value)
+              ) {
+                matchArray[j] = false;
+              }
+            } else if (criteriaValue.startsWith("=")) {
+              const value = criteriaValue.slice(1);
+              if (criteriaRange[j] !== value) {
+                matchArray[j] = false;
+              }
+            } else {
+              if (criteriaRange[j][0] !== criteriaValue) {
+                matchArray[j] = false;
+              }
+            }
+          } else {
+            if (criteriaRange[j] !== criteriaValue) {
+              matchArray[j] = false;
+            }
+          }
+        }
+      }
+
+      return matchArray.reduce((acc, match) => (match ? acc + 1 : acc), 0);
+    },
   };
 };
 
